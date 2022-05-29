@@ -34,22 +34,34 @@ public class ControladorRegistro {
 		
 		ModelMap model = new ModelMap();
         String viewName = "home";
-		
+       if( buscarUsuario(datosRegistro.getEmail())==null) {
+    	   if(datosRegistro.getContrasenia().equals(datosRegistro.getRepetirContrasenia())) {
+           	servicioRegistro.registrar(datosRegistro.getEmail(), datosRegistro.getContrasenia());
+           	// Lo mando al login
+           	model.put("error", "Nuevo usuario creado, ya puede loguearse");
+           	model.put("datosLogin", new DatosLogin());
+           	viewName = "login";
+           } else {
+           	model.put("error", "Las claves no coinciden");
+           	model.put("datosRegistro", datosRegistro);
+           	viewName = "registro";
+           }
+   		
+    	   
+       }else {
+          	model.put("error", "Ya existe un usuario registrado con el Email indicado");
+          	model.put("datosRegistro", datosRegistro);
+          	viewName = "registro";
+          	}
         // FALTAN LA PARTE DE VALIDAR SI YA EXISTE EL USUARIO
-        if(datosRegistro.getContrasenia().equals(datosRegistro.getRepetirContrasenia())) {
-        	servicioRegistro.registrar(datosRegistro.getEmail(), datosRegistro.getContrasenia());
-        	// Lo mando al login
-        	model.put("error", "Nuevo usuario creado, ya puede loguearse");
-        	model.put("datosLogin", new DatosLogin());
-        	viewName = "login";
-        } else {
-        	model.put("error", "Las claves no coinciden");
-        	model.put("datosRegistro", datosRegistro);
-        	viewName = "registro";
-        }
-		
+        
 		return new ModelAndView(viewName, model);
 		
+	}
+	private Usuario buscarUsuario(String Email) {
+		
+		
+		return servicioRegistro.buscarUsuarioPorEmail(Email);
 	}
 
 }

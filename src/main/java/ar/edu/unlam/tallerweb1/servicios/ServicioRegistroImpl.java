@@ -28,4 +28,10 @@ public class ServicioRegistroImpl implements ServicioRegistro {
 		servicioRegistroDAO.guardar(nuevoUsuario);
 	}
 
+	@Override
+	public Usuario buscarUsuarioPorEmail(String email) {
+		// TODO Auto-generated method stub
+		return servicioRegistroDAO.buscar(email);
+	}
+
 }

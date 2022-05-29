@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioRegistro;
 
 import static org.mockito.Mockito.*;
@@ -62,6 +63,22 @@ public class ControladorRegistroTest {
 		// Then
 		assertThat(mav.getViewName()).isEqualTo("registro");
 		assertThat(mav.getModel().get("error")).isEqualTo(error);
+	}
+	@Test
+	public void testQueNoSeRepitanUsuariosPorEmail(){
+		datosRegistro.setEmail("pepe@pepe");
+		datosRegistro.setContrasenia("1234");
+		datosRegistro.setRepetirContrasenia("1234");
+		controladorRegistro.registrarNuevoUsuario(datosRegistro);
+		
+		when(servicioRegistro.buscarUsuarioPorEmail("pepe@pepe")).thenReturn(new Usuario());
+		ModelAndView mav = controladorRegistro.registrarNuevoUsuario(datosRegistro);
+		
+		String error="Ya existe un usuario registrado con el Email indicado";
+		
+		assertThat(mav.getViewName()).isEqualTo("registro");
+		assertThat(mav.getModel().get("error")).isEqualTo(error);
+		
 	}
 
 }
