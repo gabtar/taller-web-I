@@ -27,22 +27,17 @@ public class ControladorSucursal {
 	// proyecto-limpio-spring/sucursales?nombre=Ramos
 	@RequestMapping("/sucursales")
 	public ModelAndView mostrarSucursales(@RequestParam(required = false) String localidad) {
+
 		ModelMap modelo = new ModelMap();
 
 		List<Sucursal> listaDeSucursales;
 
-		try {
-			listaDeSucursales = this.servicioSucursal.buscarSucursal(localidad);
-			modelo.addAttribute("sucursales", listaDeSucursales);
-			if(listaDeSucursales == null) {
-				modelo.put("error", "No se encontraron sucursales");
-			}
+		listaDeSucursales = this.servicioSucursal.buscarSucursal(localidad);
+		modelo.addAttribute("sucursales", listaDeSucursales);
 
-		} catch (Exception e) {
+		if (listaDeSucursales.isEmpty()) {
 			modelo.put("error", "No se encontraron sucursales");
 		}
-		
-		
 
 		modelo.put("busqueda", localidad);
 
