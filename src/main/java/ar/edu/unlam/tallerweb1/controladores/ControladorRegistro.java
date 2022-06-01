@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.modelo.DatosLogin;
+import ar.edu.unlam.tallerweb1.modelo.DatosRegistro;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioRegistro;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +61,6 @@ public class ControladorRegistro {
 		
 	}
 	private Usuario buscarUsuario(String Email) {
-		
 		
 		return servicioRegistro.buscarUsuarioPorEmail(Email);
 	}

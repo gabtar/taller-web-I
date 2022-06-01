@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.unlam.tallerweb1.modelo.DatosRegistro;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioRegistro;
 
@@ -78,7 +79,8 @@ public class ControladorRegistroTest {
 		
 		assertThat(mav.getViewName()).isEqualTo("registro");
 		assertThat(mav.getModel().get("error")).isEqualTo(error);
-		
+	
 	}
+	
 
 }

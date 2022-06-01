@@ -32,4 +32,5 @@ public class ServicioRegistroTest {
 		verify(repositorioUsuario, times(1)).guardar(any(Usuario.class));
 	}
 
+
 }
