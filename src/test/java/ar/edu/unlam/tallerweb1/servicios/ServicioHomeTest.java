@@ -1,30 +1,48 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import ar.edu.unlam.tallerweb1.modelo.Locker;
-import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioLocker;
 
 public class ServicioHomeTest {
 	ServicioHomeImpl  servicioHome;
-	RepositorioLocker repositorioLocker;
+	RepositorioLocker repositorioLockerDAO;
+	Locker locker;
 	@Before
 	public void setUp() throws Exception {
-		repositorioLocker = mock(RepositorioLocker.class);
+		repositorioLockerDAO = mock(RepositorioLocker.class);
+		locker= mock(Locker.class);
+		servicioHome = new ServicioHomeImpl(repositorioLockerDAO);
 	}
 	@Test
-	public void queSePuedaGuardarUnProducto() {
-		Producto producto = new Producto();
-		Locker locker= new Locker();
-		servicioHome.guardarProducto(producto,locker);
+	public void queSePuedaAlquilarUnLocker() {
+		when(repositorioLockerDAO.getEstadoLocker(locker)).thenReturn(false);
+		Boolean actual = servicioHome.alquilarLocker(locker);
+		assertTrue(actual);
 		
-		verify(repositorioLocker, times(1)).guardarProductoEnLocker(producto,locker);
+	}
+	@Test
+	public void queNoSePuedaAlquilarUnLocker() {
+		when(repositorioLockerDAO.getEstadoLocker(locker)).thenReturn(true);
+		Boolean actual = servicioHome.alquilarLocker(locker);
+		assertFalse(actual);
+		
+	}
+	@Test
+	public void queSePuedaObtenerElEstadoDeUnLocker() {
+		when(repositorioLockerDAO.getEstadoLocker(locker)).thenReturn(false);
+		Boolean actual = servicioHome.getEstadoLocker(locker);
+		assertFalse(actual);
 	}
 
 }

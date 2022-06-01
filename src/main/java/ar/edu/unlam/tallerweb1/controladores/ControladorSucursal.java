@@ -15,7 +15,7 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioSucursal;
 @Controller
 public class ControladorSucursal {
 
-	@Autowired
+	
 	private ServicioSucursal servicioSucursal;
 
 	@Autowired

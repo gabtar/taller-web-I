@@ -1,35 +1,36 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.modelo.DatosRegistro;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
-import ar.edu.unlam.tallerweb1.modelo.Producto;
+
 import ar.edu.unlam.tallerweb1.servicios.ServicioHome;
 import ar.edu.unlam.tallerweb1.servicios.ServicioRegistro;
 
+@Controller
 public class ControladorHome {
 
 	private ServicioHome servicioHome;
-
+	
+	@Autowired
 	public ControladorHome(ServicioHome servicioHome) {
 		this.servicioHome = servicioHome;
 	}
 
-	public ModelAndView guardarProducto(Producto producto, Locker locker) {
-		ModelMap modelo = new ModelMap();
-		
-		if(servicioHome.guardarProducto(producto,locker)) {
-			modelo.put("producto", producto);
-			modelo.put("locker", locker);
-			modelo.put("error", "producto guardado con exito");
-			return new ModelAndView("home", modelo);
+	
+	public ModelAndView alquilarLocker(Locker locker) {
+		// TODO Auto-generated method stub
+		ModelMap model = new ModelMap();
+		if(servicioHome.alquilarLocker(locker)) {
 			
+			model.put("error","alquiler Exitoso");
+		}else {
+			model.put("error","Locker no disponible");
 		}
-		modelo.put("error", "sucedio un error en su solicitud");
-		return new ModelAndView ("home",modelo);
-		
-		
+		return new ModelAndView("home", model);
 	}
 }

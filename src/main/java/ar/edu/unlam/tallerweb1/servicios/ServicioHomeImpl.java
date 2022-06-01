@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.unlam.tallerweb1.modelo.Locker;
-import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioLocker;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 
@@ -21,9 +20,18 @@ public class ServicioHomeImpl implements ServicioHome{
 	}
 	
 	@Override
-	public void guardarProducto(Producto producto, Locker locker) {
-		
-		repositorioLockerDAO.guardarProductoEnLocker(producto,locker);
+	public Boolean alquilarLocker(Locker locker) {
+		if(!repositorioLockerDAO.getEstadoLocker(locker)) {
+			
+			repositorioLockerDAO.alquilarLocker(locker);
+			return true;
+		}
+		return false;
+	}
+
+	public Boolean getEstadoLocker(Locker locker) {
+		// TODO Auto-generated method stub
+		return repositorioLockerDAO.getEstadoLocker(locker);
 	}
 
 }

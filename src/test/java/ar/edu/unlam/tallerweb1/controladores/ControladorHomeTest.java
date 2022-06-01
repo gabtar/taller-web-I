@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.modelo.Locker;
-import ar.edu.unlam.tallerweb1.modelo.Producto;
+
 import ar.edu.unlam.tallerweb1.servicios.ServicioHome;
 public class ControladorHomeTest {
 	ServicioHome servicioHome;
@@ -22,39 +22,27 @@ public class ControladorHomeTest {
 		
 	}
 	@Test
-	public void queSePuedaGuardarUnProductoEnElLocker() {
-		
-		Producto producto=new Producto();
+	public void queSePuedaAlquilarUnLocker() {
 		Locker locker=new Locker();
-		when(servicioHome.guardarProducto(producto, locker)).thenReturn(true);
-		ModelAndView mav=controladorHome.guardarProducto(producto,locker);
-		String error="producto guardado con exito";
 		
-		assertThat(mav.getViewName()).isEqualTo("home");
+		ModelAndView mav = controladorHome.alquilarLocker(locker);
+		String error="alquiler Exitoso";
+		
+		assertThat("home").isEqualTo(mav.getViewName());
 		assertThat(mav.getModel().get("error")).isEqualTo(error);
+		
+	}
+	@Test
+	public void queNoSePuedaAlquilarUnLockerYaAlquilado() {
+		Locker locker=new Locker();
+		ModelAndView mav = controladorHome.alquilarLocker(locker);
+		when(servicioHome.alquilarLocker(locker)).thenReturn(false);
+		String error="Locker no disponible";
+		
+		assertThat("home").isEqualTo(mav.getViewName());
+		assertThat(mav.getModel().get("error")).isEqualTo(error);
+		
+	}
 	
-	}
-	@Test
-	public void queNoSeGuardenDosProductosEnElMismoLocker() {
-		Producto producto=new Producto();
-		Locker locker=new Locker();
-		controladorHome.guardarProducto(producto,locker);
-		when(servicioHome.guardarProducto(producto, locker)).thenReturn(false);
-		ModelAndView mav=controladorHome.guardarProducto(producto,locker);
-		String error="sucedio un error en su solicitud";
-		assertThat(mav.getViewName()).isEqualTo("home");
-		assertThat(mav.getModel().get("error")).isEqualTo(error);
-	}
-	@Test
-	public void queNoSeGuardeUnProductoMasGrandeQueElLocker() {
-		Producto producto=new Producto();
-		Locker locker=new Locker();
-		controladorHome.guardarProducto(producto,locker);
-		when(servicioHome.guardarProducto(producto, locker)).thenReturn(false);
-		ModelAndView mav=controladorHome.guardarProducto(producto,locker);
-		String error="sucedio un error en su solicitud";
-		assertThat(mav.getViewName()).isEqualTo("home");
-		assertThat(mav.getModel().get("error")).isEqualTo(error);
-	}
-
+	
 }

@@ -1,12 +1,20 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
+import java.util.List;
+
 import ar.edu.unlam.tallerweb1.modelo.Locker;
-import ar.edu.unlam.tallerweb1.modelo.Producto;
+
 
 public interface RepositorioLocker {
-	Locker buscarProductoEnLocker(Producto producto);
 
-	
+	boolean alquilarLocker(Locker locker);
 
-	boolean guardarProductoEnLocker(Producto producto, Locker locker); 
+	Boolean getEstadoLocker(Locker locker);
+
+	Object setEstadoLocker(boolean b);
+
+	List<Locker> buscarLockers();
+
+	Locker buscarLockersPorId(int id);
+
 }
