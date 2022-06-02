@@ -1,6 +1,8 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
-import org.hibernate.mapping.List;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,12 @@ public class ServicioHomeImpl implements ServicioHome{
 	public Locker verAlquileresPropios(Usuario usuario) {
 		// TODO Auto-generated method stub
 		return repositorioLockerDAO.buscarAlquileresActivosDeUsuario(usuario);
+	}
+
+	@Override
+	public List<Locker> buscarAlquileresDisponibles() {
+		// TODO Auto-generated method stub
+		return (List) repositorioLockerDAO.buscarLockers();
 	}
 
 	

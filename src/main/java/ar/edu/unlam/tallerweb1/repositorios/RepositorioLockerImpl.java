@@ -66,14 +66,14 @@ public class RepositorioLockerImpl implements RepositorioLocker{
 	public List<Locker> buscarLockers() {
 		final Session session = sessionFactory.getCurrentSession();
 		
-		return session.createCriteria(Locker.class).list();
+		return session.createCriteria(Locker.class).add(Restrictions.eq("ocupado", Boolean.FALSE )).list();
 	}
 
 	@Override
 	public Locker buscarLockersPorId(int id) {
 
 		return (Locker)  sessionFactory.getCurrentSession().createCriteria(Locker.class)
-				.add(Restrictions.like("id", id)).uniqueResult();
+				.add(Restrictions.eq("id", id)).uniqueResult();
 		
 	}
 

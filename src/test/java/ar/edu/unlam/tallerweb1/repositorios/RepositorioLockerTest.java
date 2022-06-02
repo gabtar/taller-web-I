@@ -76,7 +76,7 @@ public class RepositorioLockerTest extends SpringTest{
 		locker.setIdSucursal((long)2);
 		locker.setOcupado(false);
 		session().save(locker);
-		Locker lockerEsperado=repositorioLocker.buscarLockersPorId(1);
+		Locker lockerEsperado=repositorioLocker.buscarLockersPorId(locker.getId());
 		assertThat(lockerEsperado).isEqualTo(locker);
 	}
 	@Test @Transactional @Rollback
@@ -94,6 +94,25 @@ public class RepositorioLockerTest extends SpringTest{
 		session().save(locker);
 		Locker lockerEsperado=repositorioLocker.buscarLockersPorUsuario(usuario);
 		assertThat(lockerEsperado).isEqualTo(locker);
+		
+	}
+	@Test @Transactional @Rollback
+	public void queSeMuestreLosLockersDisponibles() {
+		
+		int id= 1;
+		Locker locker = new Locker();
+		locker.setId(id);
+		locker.setIdSucursal((long)2);
+		locker.setOcupado(false);
+		session().save(locker);
+		int id2= 2;
+		Locker locker2 = new Locker();
+		locker.setId(id);
+		locker.setIdSucursal((long)2);
+		locker.setOcupado(false);
+		session().save(locker2);
+		List lockerEsperado =repositorioLocker.buscarLockers();
+		assertThat(lockerEsperado).hasSize(2);
 		
 	}
 
