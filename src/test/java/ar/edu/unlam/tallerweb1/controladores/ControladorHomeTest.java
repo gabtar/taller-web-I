@@ -21,7 +21,7 @@ public class ControladorHomeTest {
 		controladorHome= new ControladorHome(servicioHome);
 		
 	}
-	@Test
+	//@Test
 	public void queSePuedaAlquilarUnLocker() {
 		Locker locker=new Locker();
 		
