@@ -13,6 +13,7 @@ public class Locker {
 	private Long idSucursal;
 	private Enum tamano;
 	private boolean ocupado;
+	private Long usuarioId;
 	
 	public int getId() {
 		return this.id;
@@ -31,5 +32,12 @@ public class Locker {
 	}
 	public void setOcupado(boolean ocupado) {
 		this.ocupado = ocupado;
+	}
+	public void setUsuario(Usuario usuario) {
+		// TODO Auto-generated method stub
+		this.usuarioId=usuario.getId();
+	}
+	public Long usuarioId() {
+		return usuarioId;
 	}
 }

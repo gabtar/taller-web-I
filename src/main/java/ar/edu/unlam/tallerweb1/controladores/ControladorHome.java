@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.modelo.DatosRegistro;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
-
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioHome;
 import ar.edu.unlam.tallerweb1.servicios.ServicioRegistro;
 
@@ -22,10 +22,10 @@ public class ControladorHome {
 	}
 
 	
-	public ModelAndView alquilarLocker(Locker locker) {
+	public ModelAndView alquilarLocker(Locker locker,Usuario usuario) {
 		// TODO Auto-generated method stub
 		ModelMap model = new ModelMap();
-		if(servicioHome.alquilarLocker(locker)) {
+		if(servicioHome.alquilarLocker(locker,usuario)) {
 			
 			model.put("error","alquiler Exitoso");
 		}else {

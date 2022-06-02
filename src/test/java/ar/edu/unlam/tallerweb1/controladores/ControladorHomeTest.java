@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.modelo.Locker;
-
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioHome;
 public class ControladorHomeTest {
 	ServicioHome servicioHome;
@@ -21,11 +21,12 @@ public class ControladorHomeTest {
 		controladorHome= new ControladorHome(servicioHome);
 		
 	}
-	//@Test
+	@Test
 	public void queSePuedaAlquilarUnLocker() {
 		Locker locker=new Locker();
-		
-		ModelAndView mav = controladorHome.alquilarLocker(locker);
+		Usuario usuario=new Usuario();
+		when(servicioHome.alquilarLocker(locker,usuario)).thenReturn(true);
+		ModelAndView mav = controladorHome.alquilarLocker(locker,usuario);
 		String error="alquiler Exitoso";
 		
 		assertThat("home").isEqualTo(mav.getViewName());
@@ -35,8 +36,9 @@ public class ControladorHomeTest {
 	@Test
 	public void queNoSePuedaAlquilarUnLockerYaAlquilado() {
 		Locker locker=new Locker();
-		ModelAndView mav = controladorHome.alquilarLocker(locker);
-		when(servicioHome.alquilarLocker(locker)).thenReturn(false);
+		Usuario usuario=new Usuario();
+		when(servicioHome.alquilarLocker(locker,usuario)).thenReturn(false);
+		ModelAndView mav = controladorHome.alquilarLocker(locker,usuario);
 		String error="Locker no disponible";
 		
 		assertThat("home").isEqualTo(mav.getViewName());
