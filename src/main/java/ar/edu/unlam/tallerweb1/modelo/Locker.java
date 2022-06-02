@@ -11,7 +11,20 @@ public class Locker {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private Long idSucursal;
-	private Enum tamano;
+	private String tamano;
+	
+	public String getTamano() {
+		return tamano;
+	}
+	public void setTamano(String tamano) {
+		this.tamano = tamano;
+	}
+	public Long getUsuarioId() {
+		return usuarioId;
+	}
+	public void setUsuarioId(Long usuarioId) {
+		this.usuarioId = usuarioId;
+	}
 	private boolean ocupado;
 	private Long usuarioId;
 	

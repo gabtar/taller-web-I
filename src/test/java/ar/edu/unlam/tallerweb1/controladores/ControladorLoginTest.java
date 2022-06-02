@@ -89,17 +89,6 @@ public class ControladorLoginTest {
 		assertThat(vistaObtenida.getModel().get("error")).isEqualTo(MENSAJE_USUARIO_O_CLAVE_INCORRECTA);
 	}
 	
-	@Test
-	public void testIrAHomeMeLlevaALaVistaDeLaHome() {
-		// Given
-		ModelAndView modeloEsperado = new ModelAndView("home");
-		
-		// When
-		ModelAndView modeloObtenido = controladorLogin.irAHome();
-		
-		// Then
-		assertThat(modeloEsperado.getViewName()).isEqualTo(modeloObtenido.getViewName());
-	}
 	
 	@Test
 	public void testInicioMeLlevaALaVistaDelLogin() {

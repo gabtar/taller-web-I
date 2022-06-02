@@ -37,11 +37,11 @@ public class ControladorHome {
 
 		listaDeLocker = this.servicioHome.buscarAlquileresDisponibles();
 	
-		modelo.addAttribute("sucursales", listaDeLocker);
+		modelo.addAttribute("listaAlquileres", listaDeLocker);
 		// Se va a la vista login (el nombre completo de la lista se resuelve utilizando el view resolver definido en el archivo spring-servlet.xml)
 		// y se envian los datos a la misma  dentro del modelo
 		
-		return new ModelAndView("lista-sucursales", modelo);
+		return new ModelAndView("home", modelo);
 	}
 
 	

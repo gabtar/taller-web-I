@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>W3.CSS Template</title>
+<title>Rent Lock</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -27,7 +27,8 @@ body {font-size:16px;}
     <h1 class="w3-padding-20"><b>Rent<br>Lock</b></h1>
   </div>
   <div class="w3-bar-block ">
-    <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Home</a> 
+    <a href="home" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Home</a> 
+    <a href="sucursales" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Buscar Sucursal</a> 
     <!-- 
     <a href="#showcase" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Showcase</a> 
     <a href="#services" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Services</a> 
@@ -69,13 +70,16 @@ body {font-size:16px;}
 	        <th class="w3-center">Seleccion</th>
 	      </tr>
 	    </thead>
-	  	${listaAlquileres}
+	  	
         <c:forEach var="locker" items="${listaAlquileres}">
 			<tr>
 				<td><c:out value="${locker.idSucursal}" />
 				</td>
 				<td><c:out value="${locker.tamano}" /></td>
-				<td><c:out value="${locker.id}" /></td>
+				<td>
+				<a herf="#" class="w3-button w3-black">Elegir</a>
+				
+				</td>
 			</tr>
 		</c:forEach>
         
