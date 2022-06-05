@@ -4,7 +4,7 @@
 <title>Rent Lock</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="css/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.sql.*"%>
@@ -27,8 +27,10 @@ body {font-size:16px;}
     <h1 class="w3-padding-20"><b>Rent<br>Lock</b></h1>
   </div>
   <div class="w3-bar-block ">
+  	<div class="w3-bar-item w3-button w3-hover-white ">Id usuario: ${userId}</div>
     <a href="home" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Home</a> 
     <a href="sucursales" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Buscar Sucursal</a> 
+    <a href="logout" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Logout</a> 
     <!-- 
     <a href="#showcase" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Showcase</a> 
     <a href="#services" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Services</a> 

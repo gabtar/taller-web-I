@@ -3,6 +3,8 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,19 +29,24 @@ public class ControladorHome {
 	public ControladorHome(ServicioHome servicioHome) {
 		this.servicioHome = servicioHome;
 	}
+	
 	@RequestMapping("/home")
-	public ModelAndView irHome() {
+	public ModelAndView irHome(HttpServletRequest request) {
+		
+		// Si no estas logueado te redirecciona al login
+		if (request.getSession().getAttribute("userId") == null) {
+			return new ModelAndView("redirect:/login");
+		}
 		
 		ModelMap modelo = new ModelMap();
-		// Se agrega al modelo un objeto con key 'datosLogin' para que el mismo sea asociado
-		// al model attribute del form que esta definido en la vista 'login'
+		modelo.put("userID", request.getSession().getAttribute("userId"));
+		
+		
 		List<Locker> listaDeLocker;
 
 		listaDeLocker = this.servicioHome.buscarAlquileresDisponibles();
 	
 		modelo.addAttribute("listaAlquileres", listaDeLocker);
-		// Se va a la vista login (el nombre completo de la lista se resuelve utilizando el view resolver definido en el archivo spring-servlet.xml)
-		// y se envian los datos a la misma  dentro del modelo
 		
 		return new ModelAndView("home", modelo);
 	}

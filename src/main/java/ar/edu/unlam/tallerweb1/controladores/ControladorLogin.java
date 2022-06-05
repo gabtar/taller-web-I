@@ -52,7 +52,7 @@ public class ControladorLogin {
 		// hace una llamada a otro action a traves de la URL correspondiente a esta
 		Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
 		if (usuarioBuscado != null) {
-			request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
+			request.getSession().setAttribute("userId", usuarioBuscado.getId());
 			return new ModelAndView("redirect:/home");
 		} else {
 			// si el usuario no existe agrega un mensaje de error en el modelo.
@@ -65,5 +65,15 @@ public class ControladorLogin {
 	@RequestMapping(path = "/", method = RequestMethod.GET)
 	public ModelAndView inicio() {
 		return new ModelAndView("redirect:/login");
+	}
+	
+
+	// Invalida la session
+	@RequestMapping(value = "/logout")
+	public String logout(HttpServletRequest request) {
+		request.getSession().removeAttribute("userId");
+		request.getSession().invalidate();
+
+	    return "redirect:/";
 	}
 }
