@@ -1,6 +1,5 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -57,7 +56,7 @@ public class ControladorLoginTest {
 	@Test
 	public void testValidarLoginSiElUsuarioYLaContraseniaSonValidos() {
 		//Given
-		ModelAndView vistaEsperada = new ModelAndView("redirect:/home");
+		ModelAndView vistaEsperada = new ModelAndView("homeLogeado");
 
 		// When 
 		when(request.getSession()).thenReturn(session);
@@ -91,13 +90,11 @@ public class ControladorLoginTest {
 	
 	
 	@Test
-	public void testInicioMeLlevaALaVistaDelLogin() {
+	public void testMeLlevaALaVistaDelLogin() {
 		// Given
-		ModelAndView modeloEsperado = new ModelAndView("redirect:/login");
-		
+		ModelAndView modeloEsperado = new ModelAndView("login");
 		// When
-		ModelAndView modeloObtenido = controladorLogin.inicio();
-		
+		ModelAndView modeloObtenido = controladorLogin.irALogin();
 		// Then
 		assertThat(modeloEsperado.getViewName()).isEqualTo(modeloObtenido.getViewName());
 	}
