@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.modelo.DatosRegistro;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
+import ar.edu.unlam.tallerweb1.servicios.ServicioEmail;
 import ar.edu.unlam.tallerweb1.servicios.ServicioRegistro;
 
 import static org.mockito.Mockito.*;
@@ -14,16 +15,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ControladorRegistroTest {
 	
+	private final String TEXTO_EMAIL_REGISTRO = "Bienvenido a Rent-Lock. Registro exitoso. "
+			+ "Su cuenta ya esta activada. " + "Ya puede ingresar a su cuenta y contratar nuestros servicios";
+
+	
 	private DatosRegistro datosRegistro;
 	private ControladorRegistro controladorRegistro;
 	private ServicioRegistro servicioRegistro;
+	private ServicioEmail servicioEmail;
 
 	@Before
 	public void setUp() throws Exception {
 		// datosRegistro = mock(DatosRegistro.class);
 		datosRegistro = new DatosRegistro();
 		servicioRegistro = mock(ServicioRegistro.class);
-		controladorRegistro = new ControladorRegistro(servicioRegistro);
+		servicioEmail = mock(ServicioEmail.class);
+		controladorRegistro = new ControladorRegistro(servicioRegistro, servicioEmail);
 	}
 
 	@Test
@@ -80,6 +87,28 @@ public class ControladorRegistroTest {
 		assertThat(mav.getViewName()).isEqualTo("registro");
 		assertThat(mav.getModel().get("error")).isEqualTo(error);
 	
+	}
+	
+	@Test
+	public void testQueSeEnvieUnEmailConElRegistroExitoso() {
+		dadoQueNoExisteUnUsuarioConElMail("mail@mail.com");
+		cuandoMeRegistroConLosDatos("mail@mail.com", "1234", "1234");
+		entoncesReciboUnEmailA("mail@mail.com");
+	}
+
+	private void entoncesReciboUnEmailA(String direccion) {
+		verify(servicioEmail, times(1)).enviarMail(eq(direccion), any(String.class), eq(TEXTO_EMAIL_REGISTRO));
+	}
+
+	private void cuandoMeRegistroConLosDatos(String email, String contrasenia, String repiteContrasenia) {
+		DatosRegistro datosRegistro = new DatosRegistro();
+		datosRegistro.setEmail(email);
+		datosRegistro.setContrasenia(contrasenia);
+		datosRegistro.setRepetirContrasenia(repiteContrasenia);
+		controladorRegistro.registrarNuevoUsuario(datosRegistro);
+	}
+
+	private void dadoQueNoExisteUnUsuarioConElMail(String string) {	
 	}
 	
 
