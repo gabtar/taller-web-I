@@ -10,21 +10,21 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
-import ar.edu.unlam.tallerweb1.servicios.ServicioHome;
+import ar.edu.unlam.tallerweb1.servicios.ServicioAlquiler;
 public class ControladorHomeLogeadoTest {
-	ServicioHome servicioHome;
+	ServicioAlquiler servicioAlquiler;
 	ControladorHomeLogeado controladorHomeLogeado;
 	@Before
 	public void setUp() throws Exception {
-		servicioHome = mock(ServicioHome.class);
-		controladorHomeLogeado = new ControladorHomeLogeado(servicioHome);
+		servicioAlquiler = mock(ServicioAlquiler.class);
+		controladorHomeLogeado = new ControladorHomeLogeado(servicioAlquiler);
 		
 	}
 	@Test
 	public void queSePuedaAlquilarUnLocker() {
 		Locker locker=new Locker();
 		Usuario usuario=new Usuario();
-		when(servicioHome.alquilarLocker(locker,usuario)).thenReturn(true);
+		when(servicioAlquiler.alquilarLocker(locker,usuario)).thenReturn(true);
 		ModelAndView mav = controladorHomeLogeado.alquilarLocker(locker,usuario);
 		String error="alquiler Exitoso";
 		assertThat("homeLogeado").isEqualTo(mav.getViewName());
@@ -35,12 +35,15 @@ public class ControladorHomeLogeadoTest {
 	public void queNoSePuedaAlquilarUnLockerYaAlquilado() {
 		Locker locker=new Locker();
 		Usuario usuario=new Usuario();
-		when(servicioHome.alquilarLocker(locker,usuario)).thenReturn(false);
+		when(servicioAlquiler.alquilarLocker(locker,usuario)).thenReturn(false);
 		ModelAndView mav = controladorHomeLogeado.alquilarLocker(locker,usuario);
 		String error="Locker no disponible";
 		assertThat("homeLogeado").isEqualTo(mav.getViewName());
 		assertThat(mav.getModel().get("error")).isEqualTo(error);
-		
+	}
+	@Test
+	public void elUsuarioPuedeAgregarUnaDescripcionAlLocker(){
+
 	}
 	
 	

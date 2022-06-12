@@ -32,7 +32,8 @@ public class ServicioSucursalImpl implements ServicioSucursal {
 	public List<Sucursal> listarSucursales() {
 		List <Sucursal> lista= repositorioSucursal.listarSucursales();
 		if(lista==null){
-			lista= new ArrayList<>();		}
+			lista= new ArrayList<>();
+		}
 
 		return lista;
 	}

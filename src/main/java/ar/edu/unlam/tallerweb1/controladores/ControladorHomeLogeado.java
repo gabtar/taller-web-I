@@ -13,44 +13,46 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
-import ar.edu.unlam.tallerweb1.servicios.ServicioHome;
+import ar.edu.unlam.tallerweb1.servicios.ServicioAlquiler;
 
 @Controller
 public class ControladorHomeLogeado {
 
-	private ServicioHome servicioHome;
+	private ServicioAlquiler servicioAlquiler;
 
 	@Autowired
-	public ControladorHomeLogeado(ServicioHome servicioHome) {
+	public ControladorHomeLogeado(ServicioAlquiler servicioAlquiler) {
 
-		this.servicioHome = servicioHome;
+		this.servicioAlquiler = servicioAlquiler;
 	}
 	
 	@RequestMapping("/homeLogeado")
 	public ModelAndView irHome(HttpServletRequest request) {
 		// Si no estas logueado te redirecciona al login
 		if (request.getSession().getAttribute("userId") == null) {
-			return new ModelAndView("redirect:/login");
-		}
+			return new ModelAndView("redirect:/login");		}
 		ModelMap modelo = new ModelMap();
 		modelo.put("userID", request.getSession().getAttribute("userId"));
-		
+		modelo.put("usuario", request.getSession().getClass());
+
+		// esto esta mal, no se como llamar al usuario para que se guarde como clase usuario
+		Usuario usuario = new Usuario();
+		usuario.setId((Long) request.getSession().getAttribute("userId"));
 		List<Locker> listaDeLocker;
 
-		listaDeLocker = this.servicioHome.buscarAlquileresDisponibles();
-	
+		//Esto esta mal, me tendria que traer un servicio completo con todas las cosas
+
+		listaDeLocker = this.servicioAlquiler.verAlquileresPropios(usuario);
 		modelo.addAttribute("listaAlquileres", listaDeLocker);
 		
 		return new ModelAndView("homeLogeado", modelo);
 	}
-
-
 	
 	//@RequestMapping("/home")
 	public ModelAndView alquilarLocker(Locker locker,Usuario usuario) {
 		// TODO Auto-generated method stub
 		ModelMap model = new ModelMap();
-		if(servicioHome.alquilarLocker(locker,usuario)) {
+		if(servicioAlquiler.alquilarLocker(locker,usuario)) {
 			
 			model.put("error","alquiler Exitoso");
 		}else {

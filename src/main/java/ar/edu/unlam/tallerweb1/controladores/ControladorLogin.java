@@ -54,7 +54,7 @@ public class ControladorLogin {
 		if (usuarioBuscado != null) {
 			request.getSession().setAttribute("userId", usuarioBuscado.getId());
 			request.getSession().setAttribute("nombreUsuario", usuarioBuscado.getEmail());
-			return new ModelAndView("homeLogeado");
+			return new ModelAndView("redirect:/homeLogeado");
 		} else {
 			// si el usuario no existe agrega un mensaje de error en el modelo.
 			model.put("error", "Usuario o clave incorrecta");
@@ -67,7 +67,6 @@ public class ControladorLogin {
 	public String logout(HttpServletRequest request) {
 		request.getSession().removeAttribute("userId");
 		request.getSession().invalidate();
-
 	    return "redirect:/";
 	}
 }

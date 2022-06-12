@@ -9,4 +9,6 @@ public interface RepositorioSucursal {
 	List<Sucursal> buscarPorLocalidad(String localidad);
 
     List<Sucursal> listarSucursales();
+
+     Sucursal buscarSucursalporId();
 }

@@ -7,7 +7,6 @@
     <a href="home" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Home</a>
     <a href="sucursales" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Buscar Sucursal</a>
     <a href="login" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Ingresar</a>
-    <a href="registro" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Registrarse</a>
 
     <!--
     <a href="#showcase" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Showcase</a>

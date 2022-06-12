@@ -2,17 +2,14 @@ package ar.edu.unlam.tallerweb1.repositorios;
 
 import java.util.List;
 
+import ar.edu.unlam.tallerweb1.modelo.DatosGestorAlquiler;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.unlam.tallerweb1.modelo.Locker;
-import ar.edu.unlam.tallerweb1.modelo.Sucursal;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
 @Repository("repositorioLocker")
@@ -71,7 +68,6 @@ public class RepositorioLockerImpl implements RepositorioLocker{
 
 	@Override
 	public Locker buscarLockersPorId(int id) {
-
 		return (Locker)  sessionFactory.getCurrentSession().createCriteria(Locker.class)
 				.add(Restrictions.eq("id", id)).uniqueResult();
 		
@@ -79,9 +75,9 @@ public class RepositorioLockerImpl implements RepositorioLocker{
 
 
 	@Override
-	public Locker buscarAlquileresActivosDeUsuario(Usuario usuario) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Locker> buscarAlquileresActivosDeUsuario(Usuario usuario) {
+		final Session session = sessionFactory.getCurrentSession();
+		return session.createCriteria(Locker.class).add(Restrictions.eq("usuarioId", usuario.getId())).list();
 	}
 
 
@@ -89,5 +85,13 @@ public class RepositorioLockerImpl implements RepositorioLocker{
 	public Locker buscarLockersPorUsuario(Usuario usuario) {
 		return (Locker)  sessionFactory.getCurrentSession().createCriteria(Locker.class)
 				.add(Restrictions.eq("usuarioId", usuario.getId())).uniqueResult();
+	}
+
+	@Override
+	public List<DatosGestorAlquiler> GestorAlquileresDelUsuario(Usuario usuario) {
+		final Session session = sessionFactory.getCurrentSession();
+		long numero= usuario.getId();
+		String sql="SELECT * FROM Locker JOIN Sucursal on locker.idSucursal = sucursal.id WHERE idSucursal="+numero+")";
+		return (List<DatosGestorAlquiler>) session.createNativeQuery(sql);
 	}
 }

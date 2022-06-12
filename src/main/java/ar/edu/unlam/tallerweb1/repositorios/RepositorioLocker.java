@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.repositorios;
 
 import java.util.List;
 
+import ar.edu.unlam.tallerweb1.modelo.DatosGestorAlquiler;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
@@ -18,10 +19,11 @@ public interface RepositorioLocker {
 
 	Locker buscarLockersPorId(int id);
 
-	Locker buscarAlquileresActivosDeUsuario(Usuario usuario);
+	List<Locker> buscarAlquileresActivosDeUsuario(Usuario usuario);
 
 	Locker buscarLockersPorUsuario(Usuario usuario);
 
-	
 
+
+	List<DatosGestorAlquiler> GestorAlquileresDelUsuario(Usuario usuario);
 }

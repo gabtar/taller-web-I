@@ -44,4 +44,9 @@ public class RepositorioSucursalImpl implements RepositorioSucursal {
 		return lista2;
 	}
 
+	@Override
+	public Sucursal buscarSucursalporId() {
+		return null;
+	}
+
 }

@@ -18,43 +18,38 @@
 <div class="w3-main " style="margin-left:340px;margin-right:40px">
 	<div class="w3-container">
 	<h2 class="w3-center"><p>Mis Alquileres</p></h2>
-	  <table class="w3-table-all">
-	    <thead>
-	      <tr class="w3-red ">
-	        <th class="w3-center">Sucursal</th>
-	        <th class="w3-center">Tamano</th>
-	        <th class="w3-center">Codigo de alquiler</th>
-	      </tr>
-	    </thead>
-	   
-	  </table>
 	</div>
+	<div class="container">
+		<table class="w3-table-all">
+			<c:forEach var="locker" items="${listaAlquileres}">
+				<thead>
+				<tr>
+					<td>Sucursal: <c:out value="${locker.idSucursal}" /> </td>
+					<td>Tipo de locker: <c:out value="${locker.id}" /></td>
+					<td>Tipo de locker: <c:out value="${locker.tamano}" /></td>
+					<td> $0.0</td>
+					<td><a herf="#" class="w3-button w3-light-blue">Codigo Apertura</a></td>
+					<td><a herf="#" class="w3-button w3-light-blue">CerrarLocker</a></td>
+				</tr>
+				<tr>
+				<form:form action="modificarTextoLocker" method="GET">
+					<td colspan="6">
+					<div class="input-group mb-3">
+						<input type="text" class="form-control" placeholder="${locker.textoDelUsuario}" aria-label="Recipient's username" aria-describedby="button-addon2">
+						<button class="btn btn-outline-secondary" type="submit">Modificar</button>
+					</div>
+					</td>
+					</form:form>
+				</tr>
+				</thead>
+			</c:forEach>
+
+		</table>
+	</div>
+
+
 	
 	<div class="w3-container">
-	<h2 class="w3-center"><p>Lockers Disponibles</p></h2>
-	  <table class="w3-table-all">
-	    <thead>
-	      <tr class="w3-red w3-center">
-	        <th class="w3-center">Sucursal</th>
-	        <th class="w3-center">Tamano</th>
-	        <th class="w3-center">Seleccion</th>
-	      </tr>
-	    </thead>
-	  	
-        <c:forEach var="locker" items="${listaAlquileres}">
-			<tr>
-				<td><c:out value="${locker.idSucursal}" />
-				</td>
-				<td><c:out value="${locker.tamano}" /></td>
-				<td>
-				<a herf="#" class="w3-button w3-black">Elegir</a>
-				
-				</td>
-			</tr>
-		</c:forEach>
-        
-	  </table>
-	</div>
 </div>
 
 
