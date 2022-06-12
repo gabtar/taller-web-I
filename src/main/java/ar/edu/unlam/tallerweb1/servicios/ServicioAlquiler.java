@@ -17,4 +17,6 @@ public interface ServicioAlquiler {
 	List<Locker> buscarAlquileresDisponibles();
 
 	List <DatosGestorAlquiler> GestinarAlquilerUsuario(Usuario usuario);
+
+	void ModificarNotaDeLocker(Locker locker, String texto);
 }

@@ -5,24 +5,30 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import ar.edu.unlam.tallerweb1.modelo.DatosModificarTextoLocker;
+import ar.edu.unlam.tallerweb1.servicios.ServicioSucursal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioAlquiler;
 
+
 @Controller
 public class ControladorHomeLogeado {
 
 	private ServicioAlquiler servicioAlquiler;
+	private  ServicioSucursal servicioSucursal;
 
 	@Autowired
-	public ControladorHomeLogeado(ServicioAlquiler servicioAlquiler) {
-
+	public ControladorHomeLogeado(ServicioAlquiler servicioAlquiler,ServicioSucursal servicioSucursal) {
+	this.servicioSucursal=servicioSucursal;
 		this.servicioAlquiler = servicioAlquiler;
 	}
 	
@@ -34,6 +40,7 @@ public class ControladorHomeLogeado {
 		ModelMap modelo = new ModelMap();
 		modelo.put("userID", request.getSession().getAttribute("userId"));
 		modelo.put("usuario", request.getSession().getClass());
+		modelo.put("modificarTextoLocker", new DatosModificarTextoLocker());
 
 		// esto esta mal, no se como llamar al usuario para que se guarde como clase usuario
 		Usuario usuario = new Usuario();
@@ -41,10 +48,8 @@ public class ControladorHomeLogeado {
 		List<Locker> listaDeLocker;
 
 		//Esto esta mal, me tendria que traer un servicio completo con todas las cosas
-
 		listaDeLocker = this.servicioAlquiler.verAlquileresPropios(usuario);
 		modelo.addAttribute("listaAlquileres", listaDeLocker);
-		
 		return new ModelAndView("homeLogeado", modelo);
 	}
 	
@@ -60,4 +65,17 @@ public class ControladorHomeLogeado {
 		}
 		return new ModelAndView("homeLogeado", model);
 	}
+	@RequestMapping(path = "/MetodoModificarTexto", method = RequestMethod.POST)
+	public static ModelAndView modificarTextoLocker(HttpServletRequest request, @ModelAttribute("listaAlquileres") List<Locker> listalocker){
+		// aca tengo un problema
+		/*	esto tendria que funcionar cuando el boton haga click
+		 pero nose como traer el id del bloque que esta siendo modificado en el Home Logeado
+		* */
+		ModelMap mapa = new ModelMap();
+		Locker locker = listalocker.get(0);
+		//servicioAlquiler.ModificarNotaDeLocker(locker, texto);
+
+		return new ModelAndView("redirect:/homeLogeado2");
+	}
+
 }

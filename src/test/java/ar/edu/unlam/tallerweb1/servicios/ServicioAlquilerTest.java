@@ -38,7 +38,6 @@ public class ServicioAlquilerTest {
 		locker= mock(Locker.class);
 		usuario= mock(Usuario.class);
 		servicioAlquiler = new ServicioAlquilerImpl(repositorioLockerDAO);
-
 		repositorioSucursal = mock(RepositorioSucursal.class);
 		servicioSucursal = new ServicioSucursalImpl(repositorioSucursal);
 
@@ -67,6 +66,17 @@ public class ServicioAlquilerTest {
 	public void mostrarAlquileresDeUnUsuarioLlamaAlMetodoBuscarAlquileresPropios() {
 		servicioAlquiler.verAlquileresPropios(usuario);
 		verify(repositorioLockerDAO, times(1)).buscarAlquileresActivosDeUsuario(any());
+	}
+
+
+	@Test
+	public void elServicioDeAlquilerREgresaLosDatosDelLocker(){
+		String texto = "testeo";
+		Locker locker1= new Locker();
+		//when(servicioAlquiler.ModificarNotaDeLocker(locker1,texto));
+
+
+
 	}
 	@Test
 	public void elServicioDEAlguilerTieneUnMetodoParaMostrarTodoLosDatosDeLosAlquileres(){

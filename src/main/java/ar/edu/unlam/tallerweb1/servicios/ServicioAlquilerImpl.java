@@ -1,7 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unlam.tallerweb1.modelo.DatosGestorAlquiler;
@@ -52,6 +51,11 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 	public List<DatosGestorAlquiler> GestinarAlquilerUsuario(Usuario usuario) {
 		List<DatosGestorAlquiler> gestor =repositorioLockerDAO.GestorAlquileresDelUsuario(usuario);
 		return gestor;
+	}
+
+	@Override
+	public void ModificarNotaDeLocker(Locker locker, String texto) {
+
 	}
 
 

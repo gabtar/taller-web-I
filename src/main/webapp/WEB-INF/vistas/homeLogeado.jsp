@@ -32,19 +32,23 @@
 					<td><a herf="#" class="w3-button w3-light-blue">CerrarLocker</a></td>
 				</tr>
 				<tr>
-				<form:form action="modificarTextoLocker" method="GET">
 					<td colspan="6">
-					<div class="input-group mb-3">
-						<input type="text" class="form-control" placeholder="${locker.textoDelUsuario}" aria-label="Recipient's username" aria-describedby="button-addon2">
-						<button class="btn btn-outline-secondary" type="submit">Modificar</button>
-					</div>
-					</td>
-					</form:form>
+
+										</td>
 				</tr>
 				</thead>
+				<p></p>
 			</c:forEach>
-
 		</table>
+		<p><label>Recordarorio</label>
+			<form:form action="MetodoModificarTexto" method="POST" modelAttribute="modificarTextoLocker">
+				<form:input path="textoModificado" id="textoModificado" type="text" class="w3-input" placeholder="123" />
+				<form:input path="textoModificado" id="textoModificado" type="email" class="w3-input" placeholder="Email" />
+				<input path="texto" type="text" class="w3-input" placeholder="${locker.textoDelUsuario}" aria-label="Recipient's username" aria-describedby="button-addon2">
+				<button class="btn btn-outline-secondary" type="submit">Modificar</button>
+			</form:form>
+			${modificarTextoLocker}
+		</p>
 	</div>
 
 
@@ -65,7 +69,7 @@
     <hr style="width:50px;border:5px solid red" class="w3-round">
   </div>
   -->
-  
+
 
 
 

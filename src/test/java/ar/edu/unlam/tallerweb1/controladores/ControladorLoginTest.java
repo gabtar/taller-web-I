@@ -56,7 +56,7 @@ public class ControladorLoginTest {
 	@Test
 	public void testValidarLoginSiElUsuarioYLaContraseniaSonValidos() {
 		//Given
-		ModelAndView vistaEsperada = new ModelAndView("homeLogeado");
+		ModelAndView vistaEsperada = new ModelAndView("redirect:/homeLogeado");
 
 		// When 
 		when(request.getSession()).thenReturn(session);

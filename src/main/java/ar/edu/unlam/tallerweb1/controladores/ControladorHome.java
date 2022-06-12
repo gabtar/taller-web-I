@@ -35,4 +35,6 @@ public class ControladorHome {
         modelo.put("listaSucursales", lista);
         return new ModelAndView("home", modelo);
     }
+
+
 }
