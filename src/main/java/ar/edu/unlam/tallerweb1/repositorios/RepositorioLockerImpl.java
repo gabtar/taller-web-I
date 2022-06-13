@@ -89,9 +89,27 @@ public class RepositorioLockerImpl implements RepositorioLocker{
 
 	@Override
 	public List<DatosGestorAlquiler> GestorAlquileresDelUsuario(Usuario usuario) {
+
+		// esto es lo que tenia que modificar gabriel
 		final Session session = sessionFactory.getCurrentSession();
 		long numero= usuario.getId();
 		String sql="SELECT * FROM Locker JOIN Sucursal on locker.idSucursal = sucursal.id WHERE idSucursal="+numero+")";
 		return (List<DatosGestorAlquiler>) session.createNativeQuery(sql);
+	}
+
+	@Override
+	public String NotaDelLocker(long l) {
+		//String nota= String.valueOf(sessionFactory.getCurrentSession().createNativeQuery("select textoDelUsuario from locker where id=l").setParameter("l",l));
+		final Session session = sessionFactory.getCurrentSession();
+		Locker locker = (Locker) session.createCriteria(Locker.class).add(Restrictions.eq("id",l)).uniqueResult();
+		String nota = locker.getTextoDelUsuario();
+		return nota;
+	}
+	@Override
+	public void ModificarNotaDeLocker(int lockerId, String texto) {
+		final Session session = sessionFactory.getCurrentSession();
+		Locker locker = (Locker) session.createCriteria(Locker.class).add(Restrictions.eq("id",lockerId)).uniqueResult();
+		locker.setTextoDelUsuario(texto);
+		session.update(locker);
 	}
 }

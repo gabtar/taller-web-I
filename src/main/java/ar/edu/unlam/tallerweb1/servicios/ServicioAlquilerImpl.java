@@ -54,8 +54,14 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 	}
 
 	@Override
-	public void ModificarNotaDeLocker(Locker locker, String texto) {
+	public void ModificarNotaDeLocker(int lockerId, String texto) {
+		repositorioLockerDAO.ModificarNotaDeLocker(lockerId, texto);
 
+	}
+
+	@Override
+	public String NotaDelocker(int lockerId) {
+		return repositorioLockerDAO.NotaDelLocker(lockerId);
 	}
 
 

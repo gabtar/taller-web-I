@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Calendar;
+import java.util.Date;
 
 @Entity
 public class Locker {
@@ -15,6 +16,8 @@ public class Locker {
 	private Long idSucursal;
 	private String tamano;
 	private Calendar fechaDeAlta;
+	private Date fecha;
+
 
 
 	private String textoDelUsuario;

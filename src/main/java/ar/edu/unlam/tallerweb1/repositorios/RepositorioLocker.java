@@ -26,4 +26,7 @@ public interface RepositorioLocker {
 
 
 	List<DatosGestorAlquiler> GestorAlquileresDelUsuario(Usuario usuario);
+
+    String NotaDelLocker(long l);
+	void ModificarNotaDeLocker(int lockerId, String texto);
 }

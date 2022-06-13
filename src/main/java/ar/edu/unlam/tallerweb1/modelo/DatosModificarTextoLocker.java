@@ -3,12 +3,13 @@ package ar.edu.unlam.tallerweb1.modelo;
 public class DatosModificarTextoLocker {
     private String textoModificado;
     private Locker locker;
+    private int id;
 
-    public String getTexto() {
+    public String getTextoModificado() {
         return textoModificado;
     }
 
-    public void setTexto(String texto) {
+    public void setTextoModificado(String texto) {
         this.textoModificado = texto;
     }
 
@@ -18,5 +19,13 @@ public class DatosModificarTextoLocker {
 
     public void setLocker(Locker locker) {
         this.locker = locker;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

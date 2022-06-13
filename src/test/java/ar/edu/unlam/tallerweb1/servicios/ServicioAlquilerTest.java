@@ -70,13 +70,28 @@ public class ServicioAlquilerTest {
 
 
 	@Test
-	public void elServicioDeAlquilerREgresaLosDatosDelLocker(){
-		String texto = "testeo";
+	public void elServicioDeAlquilerCambiaTextoDelLocker(){
+		Usuario usuario1= new Usuario();
+		usuario1.setId(1L);
 		Locker locker1= new Locker();
-		//when(servicioAlquiler.ModificarNotaDeLocker(locker1,texto));
-
-
-
+		locker1.setId(1);
+		locker1.setTextoDelUsuario("asd");
+		String texto="tiene Bananas";
+		when(repositorioLockerDAO.NotaDelLocker(1L)).thenReturn(texto);
+		servicioAlquiler.ModificarNotaDeLocker(locker1.getId(),texto);
+		assertThat(servicioAlquiler.NotaDelocker(locker1.getId())).isEqualTo(texto);
+	}
+	@Test
+	public void elServicioDeAlquilerCambiaTextoDelLocker2(){
+		Usuario usuario1= new Usuario();
+		usuario1.setId(1L);
+		Locker locker1= new Locker();
+		locker1.setId(1);
+		locker1.setTextoDelUsuario("asd");
+		String texto="tiene Bananas";
+		when(repositorioLockerDAO.NotaDelLocker(1L)).thenReturn(texto);
+		servicioAlquiler.ModificarNotaDeLocker(locker1.getId(),texto);
+		assertThat(servicioAlquiler.NotaDelocker(locker1.getId())).isEqualTo(texto);
 	}
 	@Test
 	public void elServicioDEAlguilerTieneUnMetodoParaMostrarTodoLosDatosDeLosAlquileres(){
