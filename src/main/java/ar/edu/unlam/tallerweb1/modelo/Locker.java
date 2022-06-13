@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Calendar;
+import java.util.Date;
+
 @Entity
 public class Locker {
 
@@ -12,6 +15,12 @@ public class Locker {
 	private int id;
 	private Long idSucursal;
 	private String tamano;
+	private Calendar fechaDeAlta;
+	private Date fecha;
+
+
+
+	private String textoDelUsuario;
 	
 	public String getTamano() {
 		return tamano;
@@ -27,6 +36,7 @@ public class Locker {
 	}
 	private boolean ocupado;
 	private Long usuarioId;
+
 	
 	public int getId() {
 		return this.id;
@@ -52,5 +62,13 @@ public class Locker {
 	}
 	public Long usuarioId() {
 		return usuarioId;
+	}
+
+	public String getTextoDelUsuario() {
+		return textoDelUsuario;
+	}
+
+	public void setTextoDelUsuario(String textoDelUsuario) {
+		this.textoDelUsuario = textoDelUsuario;
 	}
 }

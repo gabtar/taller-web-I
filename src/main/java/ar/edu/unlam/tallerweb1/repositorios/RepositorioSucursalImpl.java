@@ -31,4 +31,22 @@ public class RepositorioSucursalImpl implements RepositorioSucursal {
 				.list();
 	}
 
+	@Override
+	public  List<Sucursal> listarSucursales() {
+		// de esta forma se llama a una seccion
+		final Session session = sessionFactory.getCurrentSession();
+		// mundo DB
+		List lista1=  session.createSQLQuery("select * FROM Sucursal").list();
+		// mundo objetos Hibernet query lenguage
+		//  session.createQuery();
+		// mundo objeto
+		List lista2 = session.createCriteria(Sucursal.class).list();
+		return lista2;
+	}
+
+	@Override
+	public Sucursal buscarSucursalporId() {
+		return null;
+	}
+
 }

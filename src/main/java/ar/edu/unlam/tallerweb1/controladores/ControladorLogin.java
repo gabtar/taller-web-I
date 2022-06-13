@@ -52,8 +52,9 @@ public class ControladorLogin {
 		// hace una llamada a otro action a traves de la URL correspondiente a esta
 		Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
 		if (usuarioBuscado != null) {
-			request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
-			return new ModelAndView("redirect:/home");
+			request.getSession().setAttribute("userId", usuarioBuscado.getId());
+			request.getSession().setAttribute("nombreUsuario", usuarioBuscado.getEmail());
+			return new ModelAndView("redirect:/homeLogeado");
 		} else {
 			// si el usuario no existe agrega un mensaje de error en el modelo.
 			model.put("error", "Usuario o clave incorrecta");
@@ -61,9 +62,11 @@ public class ControladorLogin {
 		return new ModelAndView("login", model);
 	}
 
-	// Escucha la url /, y redirige a la URL /login, es lo mismo que si se invoca la url /login directamente.
-	@RequestMapping(path = "/", method = RequestMethod.GET)
-	public ModelAndView inicio() {
-		return new ModelAndView("redirect:/login");
+	// Invalida la session
+	@RequestMapping(value = "/logout")
+	public String logout(HttpServletRequest request) {
+		request.getSession().removeAttribute("userId");
+		request.getSession().invalidate();
+	    return "redirect:/";
 	}
 }

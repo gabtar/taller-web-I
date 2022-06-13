@@ -11,7 +11,6 @@ import org.hibernate.annotations.Cascade;
 
 @Entity
 public class Deposito {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

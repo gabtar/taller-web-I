@@ -7,5 +7,5 @@ import ar.edu.unlam.tallerweb1.modelo.Sucursal;
 public interface ServicioSucursal {
 	
 	List<Sucursal> buscarSucursal(String localidad);
-
+    List<Sucursal>  listarSucursales();
 }
