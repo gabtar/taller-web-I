@@ -42,10 +42,6 @@
                     <td><c:out value="${Sucursal.id}" /></td>
                     <td><c:out value="${Sucursal.nombre}" /></td>
                     <td><c:out value="${Sucursal.localidad}" /></td>
-                    <td>
-                        <a herf="#" class="w3-button w3-black">Elegir</a>
-
-                    </td>
                 </tr>
             </c:forEach>
             <!-- esto tambien, capas los puedo meter en otro carrucel?-->

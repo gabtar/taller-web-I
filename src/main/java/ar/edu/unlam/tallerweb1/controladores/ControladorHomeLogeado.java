@@ -56,19 +56,6 @@ public class ControladorHomeLogeado {
 		return new ModelAndView("homeLogeado", modelo);
 	}
 
-	// @RequestMapping("/home")
-	public ModelAndView alquilarLocker(Locker locker, Usuario usuario) {
-		// TODO Auto-generated method stub
-		ModelMap model = new ModelMap();
-		if (servicioAlquiler.alquilarLocker(locker, usuario)) {
-
-			model.put("error", "alquiler Exitoso");
-		} else {
-			model.put("error", "Locker no disponible");
-		}
-		return new ModelAndView("homeLogeado", model);
-	}
-
 	@RequestMapping(path = "/modificar-texto/{lockerId}", method = RequestMethod.POST)
 	public ModelAndView modificarTextoLocker(HttpServletRequest request, @PathVariable("lockerId") Long lockerId,
 											 @ModelAttribute("modificarTextoLocker") DatosModificarTextoLocker datosModificarTextoLocker) {

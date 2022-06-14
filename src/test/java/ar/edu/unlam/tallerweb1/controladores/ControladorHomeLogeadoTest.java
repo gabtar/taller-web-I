@@ -23,26 +23,7 @@ public class ControladorHomeLogeadoTest {
 		controladorHomeLogeado = new ControladorHomeLogeado(servicioAlquiler,servicioSucursal);
 		
 	}
-	@Test
-	public void queSePuedaAlquilarUnLocker() {
-		Locker locker=new Locker();
-		Usuario usuario=new Usuario();
-		when(servicioAlquiler.alquilarLocker(locker,usuario)).thenReturn(true);
-		ModelAndView mav = controladorHomeLogeado.alquilarLocker(locker,usuario);
-		String error="alquiler Exitoso";
-		assertThat("homeLogeado").isEqualTo(mav.getViewName());
-		assertThat(mav.getModel().get("error")).isEqualTo(error);
-	}
-	@Test
-	public void queNoSePuedaAlquilarUnLockerYaAlquilado() {
-		Locker locker=new Locker();
-		Usuario usuario=new Usuario();
-		when(servicioAlquiler.alquilarLocker(locker,usuario)).thenReturn(false);
-		ModelAndView mav = controladorHomeLogeado.alquilarLocker(locker,usuario);
-		String error="Locker no disponible";
-		assertThat("homeLogeado").isEqualTo(mav.getViewName());
-		assertThat(mav.getModel().get("error")).isEqualTo(error);
-	}
+
 	@Test
 	public void elUsuarioPuedeAgregarUnaDescripcionAlLocker(){
 

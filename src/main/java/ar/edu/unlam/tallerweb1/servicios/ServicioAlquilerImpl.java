@@ -27,7 +27,8 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 	public Boolean alquilarLocker(Locker locker,Usuario usuario) {
 		if(!repositorioLockerDAO.getEstadoLocker(locker)) {
 			repositorioLockerDAO.alquilarLocker(locker,usuario);
-			return true;		}
+			return true;
+		}
 		return false;
 	}
 
