@@ -5,6 +5,7 @@ import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Sucursal;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioAlquiler;
+import ar.edu.unlam.tallerweb1.servicios.ServicioEmail;
 import ar.edu.unlam.tallerweb1.servicios.ServicioSucursal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,11 +19,14 @@ import java.util.List;
 
 @Controller
 public class ControladorAlquiler {
-    private ServicioAlquiler servicioAlquiler;
+    
+	private ServicioAlquiler servicioAlquiler;
     private ServicioSucursal servicioSucursal;
+    private ServicioEmail servicioEmail;
     @Autowired
-    public ControladorAlquiler(ServicioAlquiler servicioAlquiler, ServicioSucursal servicioSucursal) {
+    public ControladorAlquiler(ServicioAlquiler servicioAlquiler, ServicioSucursal servicioSucursal, ServicioEmail servicioEmail) {
         this.servicioAlquiler = servicioAlquiler;
+        this.servicioEmail=servicioEmail;
         this.servicioSucursal = servicioSucursal;
     }
 
@@ -45,10 +49,14 @@ public class ControladorAlquiler {
 
     @RequestMapping(path = "/modificar-locker/{lockerId}", method = RequestMethod.POST)
     public ModelAndView alquilarLocker(HttpServletRequest request, @PathVariable("lockerId") int lockerId) {
+    	
         Long usuarioId = (Long) request.getSession().getAttribute("userId");
         ModelMap modelo = new ModelMap();
         if(servicioAlquiler.alquilarLocker(lockerId, usuarioId)){
+        	String usuario= (String) request.getSession().getAttribute("nombreUsuario");
+        	final String TEXTO_EMAIL_REGISTRO = "usted a alquilado el locker " + lockerId + " gracias "+ usuario +" por elegirnos RENTLOCK";
             modelo.put("error", "Alquiler exitoso");
+            servicioEmail.enviarMail(usuario, "Rent-Lock", TEXTO_EMAIL_REGISTRO);
             return new ModelAndView("redirect:/homeLogeado", modelo);
         }
 

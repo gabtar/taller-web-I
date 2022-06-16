@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import ar.edu.unlam.tallerweb1.modelo.DatosLogin;
 import ar.edu.unlam.tallerweb1.modelo.DatosModificarTextoLocker;
 import ar.edu.unlam.tallerweb1.servicios.ServicioSucursal;
+import ar.edu.unlam.tallerweb1.servicios.ServicioGenerarCodigoImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,17 +21,21 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioAlquiler;
+import ar.edu.unlam.tallerweb1.servicios.ServicioGenerarCodigo;
+
 
 @Controller
 public class ControladorHomeLogeado {
 
 	private ServicioAlquiler servicioAlquiler;
 	private ServicioSucursal servicioSucursal;
+	private ServicioGenerarCodigo servicioGenerarCodigo;
 
 	@Autowired
-	public ControladorHomeLogeado(ServicioAlquiler servicioAlquiler, ServicioSucursal servicioSucursal) {
+	public ControladorHomeLogeado(ServicioAlquiler servicioAlquiler, ServicioSucursal servicioSucursal, ServicioGenerarCodigo servicioGenerarCodigo) {
 		this.servicioSucursal = servicioSucursal;
 		this.servicioAlquiler = servicioAlquiler;
+		this.servicioGenerarCodigo= servicioGenerarCodigo;
 	}
 
 	@RequestMapping("/homeLogeado")
@@ -69,5 +75,16 @@ public class ControladorHomeLogeado {
 
 		return new ModelAndView("redirect:/homeLogeado");
 	}
+	
+	@RequestMapping(path = "/codigoApertura")
+	public ModelAndView generarCodigoApertura(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		String usuario=(String) request.getSession().getAttribute("nombreUsuario");
+		servicioGenerarCodigo.generarCodigo(usuario);
+		return new ModelAndView("codigo-apertura");
+	}
+
+	
+	
 
 }

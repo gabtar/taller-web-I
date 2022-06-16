@@ -53,6 +53,7 @@ public class ControladorLogin {
 		Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
 		if (usuarioBuscado != null) {
 			request.getSession().setAttribute("userId", usuarioBuscado.getId());
+			
 			request.getSession().setAttribute("nombreUsuario", usuarioBuscado.getEmail());
 			return new ModelAndView("redirect:/homeLogeado");
 		} else {

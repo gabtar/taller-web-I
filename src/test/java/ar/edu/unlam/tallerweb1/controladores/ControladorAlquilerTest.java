@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Sucursal;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioAlquiler;
+import ar.edu.unlam.tallerweb1.servicios.ServicioEmail;
 import ar.edu.unlam.tallerweb1.servicios.ServicioSucursal;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,14 +19,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
 @Transactional @Rollback
 public class ControladorAlquilerTest {
-    private ServicioAlquiler servicioAlquiler;
+   
+	private ServicioAlquiler servicioAlquiler;
     private ServicioSucursal servicioSucursal;
+    private ServicioEmail servicioEmail;
     private ControladorAlquiler controladorAlquiler;
     private Usuario usuario;
     HttpServletRequest request;
@@ -35,21 +42,28 @@ public class ControladorAlquilerTest {
     public void setUp() throws Exception {
         servicioAlquiler = mock(ServicioAlquiler.class);
         servicioSucursal = mock(ServicioSucursal.class);
+        servicioEmail=mock(ServicioEmail.class);
         request = mock(HttpServletRequest.class);
         session = mock(HttpSession.class);
-        controladorAlquiler = new ControladorAlquiler(servicioAlquiler,servicioSucursal);
+        controladorAlquiler = new ControladorAlquiler(servicioAlquiler,servicioSucursal, servicioEmail);
     }
 
     @Test
     public void queSePuedaAlquilarUnLocker() {
+    	
         int lockerId= 1;
+        final String TEXTO_EMAIL_REGISTRO = "usted a alquilado el locker " + lockerId + " gracias pepe@pepe por elegirnos RENTLOCK";
         Long usuarioId = 1L;
         Locker locker = new Locker();
-        when(servicioAlquiler.alquilarLocker(lockerId,usuarioId)).thenReturn(true);
         when(request.getSession()).thenReturn(session);
         when(request.getSession().getAttribute("userId")).thenReturn(1L);
+        when(request.getSession().getAttribute("nombreUsuario")).thenReturn("pepe@pepe");
+        when(servicioAlquiler.alquilarLocker(lockerId,usuarioId)).thenReturn(true);
+    
+      
         ModelAndView mav = controladorAlquiler.alquilarLocker(request, lockerId);
         String error="Alquiler exitoso";
+        verify(servicioEmail, times(1)).enviarMail(eq("pepe@pepe"), any(String.class), eq(TEXTO_EMAIL_REGISTRO));
         assertThat("redirect:/homeLogeado").isEqualTo(mav.getViewName());
         assertThat(mav.getModel().get("error")).isEqualTo(error);
     }

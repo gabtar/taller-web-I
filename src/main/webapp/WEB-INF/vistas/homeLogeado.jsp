@@ -52,11 +52,11 @@
 							<td class="w3-center">Tipo de locker: <c:out
 									value="${locker.tamano}" /></td>
 							<td class="w3-center">$0.0</td>
-							<td class="w3-center"><a herf="#"
+							<td class="w3-center"><a href="codigoApertura"
 								class="w3-button w3-light-blue">Codigo Apertura</a></td>
 							<td class="w3-center"><form:form
 									action="cancelar-locker/${locker.id}" method="POST">
-									<button class="w3-button w3-red" type="submit">CerrarLocker</button>
+									<button class="w3-button w3-red" type="submit">Eliminar</button>
 								</form:form></td>
 						</tr>
 						<tr>
