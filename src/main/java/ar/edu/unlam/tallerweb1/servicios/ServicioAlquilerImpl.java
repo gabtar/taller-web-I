@@ -24,17 +24,20 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 	}
 	
 	@Override
-	public Boolean alquilarLocker(Locker locker,Usuario usuario) {
-		if(!repositorioLockerDAO.getEstadoLocker(locker)) {
-			repositorioLockerDAO.alquilarLocker(locker,usuario);
+	public Boolean alquilarLocker(int lockerId, Long usuarioId) {
+		if(!repositorioLockerDAO.getEstadoLocker(lockerId)) {
+			repositorioLockerDAO.alquilarLocker(lockerId, usuarioId);
 			return true;
 		}
 		return false;
 	}
-
-	public Boolean getEstadoLocker(Locker locker) {
+	@Override
+	public void cancelarLocker(int lockerId, Long usuarioId) {
+		repositorioLockerDAO.cancelarLocker(lockerId, usuarioId);
+	}
+	public Boolean getEstadoLocker(int lockerId) {
 		// TODO Auto-generated method stub
-		return repositorioLockerDAO.getEstadoLocker(locker);
+		return repositorioLockerDAO.getEstadoLocker(lockerId);
 	}
 
 	public List<Locker> verAlquileresPropios(Usuario usuario) {

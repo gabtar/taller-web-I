@@ -21,8 +21,12 @@
 <div class="w3-main " style="margin-left: 340px; margin-right: 40px">
 	<div class="w3-container">
 		<h2 class="w3-center">
-			<p>Mis Alquileres</p>
+			<p>Mis Lockers</p>
 		</h2>
+		<c:if test="${not empty error}">
+
+			<div class="w3-panel w3-red w3-padding-16">${error}</div>
+		</c:if>
 	</div>
 	<div class="container">
 		<table class="w3-table-all">
@@ -35,8 +39,13 @@
 					<td>Tipo de locker: <c:out value="${locker.tamano}" /></td>
 					<td>$0.0</td>
 					<td><a herf="#" class="w3-button w3-light-blue">Codigo
-						Apertura</a></td>
-					<td><a herf="#" class="w3-button w3-light-blue">CerrarLocker</a></td>
+						Apertura</a>
+					</td>
+					<td><form:form
+							action="cancelar-locker/${locker.id}" method="POST">
+						<button class="w3-button w3-light-red" type="submit">CerrarLocker</button>
+					</form:form>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="6"></td>

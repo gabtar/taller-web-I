@@ -9,11 +9,11 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioSucursal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -43,15 +43,25 @@ public class ControladorAlquiler {
         return new ModelAndView("lista-alquileres", modelo);
     }
 
-    public ModelAndView alquilarLocker(Locker locker, Usuario usuario) {
+    @RequestMapping(path = "/modificar-locker/{lockerId}", method = RequestMethod.POST)
+    public ModelAndView alquilarLocker(HttpServletRequest request, @PathVariable("lockerId") int lockerId) {
+        Long usuarioId = (Long) request.getSession().getAttribute("userId");
         ModelMap modelo = new ModelMap();
-
-        if(servicioAlquiler.alquilarLocker(locker, usuario)){
+        if(servicioAlquiler.alquilarLocker(lockerId, usuarioId)){
             modelo.put("error", "Alquiler exitoso");
-            return new ModelAndView("lista-alquileres", modelo);
+            return new ModelAndView("redirect:/homeLogeado", modelo);
         }
 
         modelo.put("error", "Locker no disponible");
-        return new ModelAndView("lista-alquileres", modelo);
+        return new ModelAndView("redirect:/homeLogeado", modelo);
+    }
+
+    @RequestMapping(path = "/cancelar-locker/{lockerId}", method = RequestMethod.POST)
+    public ModelAndView cancelarLocker(HttpServletRequest request, @PathVariable("lockerId") int lockerId) {
+        Long usuarioId = (Long) request.getSession().getAttribute("userId");
+        ModelMap modelo = new ModelMap();
+        servicioAlquiler.cancelarLocker(lockerId, usuarioId);
+        modelo.put("error", "Cancelacion exitosa");
+        return new ModelAndView("redirect:/homeLogeado", modelo);
     }
 }

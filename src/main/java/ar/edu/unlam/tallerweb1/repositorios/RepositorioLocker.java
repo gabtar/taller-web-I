@@ -9,11 +9,14 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
 public interface RepositorioLocker {
 
-	boolean alquilarLocker(Locker locker,Usuario usuario);
+	boolean alquilarLocker(int lockerId, Long usuarioId);
 
-	Boolean getEstadoLocker(Locker locker);
+	void setUsuarioALocker(Long usuarioId, int lockerId);
+	void cancelarLocker(int lockerId, Long usuarioId);
 
-	void setEstadoLocker(Locker locker,Boolean b);
+	Boolean getEstadoLocker(int lockerId);
+
+	void setEstadoLocker(int lockerId);
 
 	List<Locker> buscarLockers();
 
@@ -22,8 +25,6 @@ public interface RepositorioLocker {
 	List<Locker> buscarAlquileresActivosDeUsuario(Usuario usuario);
 
 	Locker buscarLockersPorUsuario(Usuario usuario);
-
-
 
 	List<DatosGestorAlquiler> GestorAlquileresDelUsuario(Usuario usuario);
 

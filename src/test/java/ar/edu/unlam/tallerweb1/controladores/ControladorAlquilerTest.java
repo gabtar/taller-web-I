@@ -8,9 +8,12 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioSucursal;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,41 +22,49 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-
+@Transactional @Rollback
 public class ControladorAlquilerTest {
     private ServicioAlquiler servicioAlquiler;
     private ServicioSucursal servicioSucursal;
     private ControladorAlquiler controladorAlquiler;
-
+    private Usuario usuario;
     HttpServletRequest request;
+    HttpSession session;
 
     @Before
     public void setUp() throws Exception {
         servicioAlquiler = mock(ServicioAlquiler.class);
         servicioSucursal = mock(ServicioSucursal.class);
         request = mock(HttpServletRequest.class);
+        session = mock(HttpSession.class);
         controladorAlquiler = new ControladorAlquiler(servicioAlquiler,servicioSucursal);
     }
 
     @Test
     public void queSePuedaAlquilarUnLocker() {
-        Locker locker=new Locker();
-        Usuario usuario=new Usuario();
-        when(servicioAlquiler.alquilarLocker(locker,usuario)).thenReturn(true);
-        ModelAndView mav = controladorAlquiler.alquilarLocker(locker,usuario);
+        int lockerId= 1;
+        Long usuarioId = 1L;
+        Locker locker = new Locker();
+        when(servicioAlquiler.alquilarLocker(lockerId,usuarioId)).thenReturn(true);
+        when(request.getSession()).thenReturn(session);
+        when(request.getSession().getAttribute("userId")).thenReturn(1L);
+        ModelAndView mav = controladorAlquiler.alquilarLocker(request, lockerId);
         String error="Alquiler exitoso";
-        assertThat("lista-alquileres").isEqualTo(mav.getViewName());
+        assertThat("redirect:/homeLogeado").isEqualTo(mav.getViewName());
         assertThat(mav.getModel().get("error")).isEqualTo(error);
     }
 
     @Test
     public void queNoSePuedaAlquilarUnLockerYaAlquilado() {
-        Locker locker=new Locker();
-        Usuario usuario=new Usuario();
-        when(servicioAlquiler.alquilarLocker(locker,usuario)).thenReturn(false);
-        ModelAndView mav = controladorAlquiler.alquilarLocker(locker,usuario);
+        int lockerId= 1;
+        Long usuarioId = 1L;
+        Locker locker = new Locker();
+        when(servicioAlquiler.alquilarLocker(lockerId,usuarioId)).thenReturn(false);
+        when(request.getSession()).thenReturn(session);
+        when(request.getSession().getAttribute("userId")).thenReturn(1L);
+        ModelAndView mav = controladorAlquiler.alquilarLocker(request, lockerId);
         String error="Locker no disponible";
-        assertThat("lista-alquileres").isEqualTo(mav.getViewName());
+        assertThat("redirect:/homeLogeado").isEqualTo(mav.getViewName());
         assertThat(mav.getModel().get("error")).isEqualTo(error);
     }
 
@@ -67,15 +78,28 @@ public class ControladorAlquilerTest {
         listaLockers.add(A);
         listaLockers.add(B);
         listaLockers.add(C);
-        List <Locker>listaRegresada = new ArrayList<Locker>();
+        List <Locker>listaRegresada;
 
         // ejecucion
-        Mockito.when(servicioAlquiler.buscarAlquileresDisponibles()).thenReturn(listaLockers);
+        when(servicioAlquiler.buscarAlquileresDisponibles()).thenReturn(listaLockers);
         ModelAndView model = controladorAlquiler.mostrarAlquileresDisponibles(request);
-        listaRegresada = (List<Locker>) model.getModelMap().get("listaAlquileres");
+        listaRegresada = (List<Locker>) model.getModelMap().get("alquileres");
 
         //testeo
         assertThat(model.getViewName()).isEqualTo("lista-alquileres");
         assertThat(listaRegresada.size()).isEqualTo(3);
+    }
+
+    @Test
+    public void queSePuedaCancelarUnLockerAlquilado() {
+        int lockerId= 1;
+        Long usuarioId = 1L;
+        Locker locker = new Locker();
+        when(request.getSession()).thenReturn(session);
+        when(request.getSession().getAttribute("userId")).thenReturn(1L);
+        ModelAndView mav = controladorAlquiler.cancelarLocker(request, lockerId);
+        String error="Cancelacion exitosa";
+        assertThat("redirect:/homeLogeado").isEqualTo(mav.getViewName());
+        assertThat(mav.getModel().get("error")).isEqualTo(error);
     }
 }

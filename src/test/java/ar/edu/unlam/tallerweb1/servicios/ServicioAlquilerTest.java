@@ -20,7 +20,10 @@ import org.junit.Test;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioLocker;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +32,18 @@ public class ServicioAlquilerTest {
 	RepositorioLocker repositorioLockerDAO;
 	ServicioSucursal servicioSucursal;
 	RepositorioSucursal repositorioSucursal;
-	Locker locker;
+	int lockerId;
+	Long usuarioId;
 	Usuario usuario;
+
+	HttpServletRequest request;
+	HttpSession session;
 
 	@Before
 	public void setUp() throws Exception {
 		repositorioLockerDAO = mock(RepositorioLocker.class);
-		locker= mock(Locker.class);
+		request = mock(HttpServletRequest.class);
+		session = mock(HttpSession.class);
 		usuario= mock(Usuario.class);
 		servicioAlquiler = new ServicioAlquilerImpl(repositorioLockerDAO);
 		repositorioSucursal = mock(RepositorioSucursal.class);
@@ -44,22 +52,22 @@ public class ServicioAlquilerTest {
 	}
 	@Test
 	public void queSePuedaAlquilarUnLocker() {
-		when(repositorioLockerDAO.getEstadoLocker(locker)).thenReturn(false);
-		Boolean actual = servicioAlquiler.alquilarLocker(locker,usuario);
+		when(repositorioLockerDAO.getEstadoLocker(lockerId)).thenReturn(false);
+		Boolean actual = servicioAlquiler.alquilarLocker(lockerId,usuarioId);
 		assertTrue(actual);
 		
 	}
 	@Test
 	public void queNoSePuedaAlquilarUnLocker() {
-		when(repositorioLockerDAO.getEstadoLocker(locker)).thenReturn(true);
-		Boolean actual = servicioAlquiler.alquilarLocker(locker,usuario);
+		when(repositorioLockerDAO.getEstadoLocker(lockerId)).thenReturn(true);
+		Boolean actual = servicioAlquiler.alquilarLocker(lockerId,usuarioId);
 		assertFalse(actual);
 		
 	}
 	@Test
 	public void queSePuedaObtenerElEstadoDeUnLocker() {
-		when(repositorioLockerDAO.getEstadoLocker(locker)).thenReturn(false);
-		Boolean actual = servicioAlquiler.getEstadoLocker(locker);
+		when(repositorioLockerDAO.getEstadoLocker(lockerId)).thenReturn(false);
+		Boolean actual = servicioAlquiler.getEstadoLocker(lockerId);
 		assertFalse(actual);
 	}
 	@Test
@@ -114,6 +122,18 @@ public class ServicioAlquilerTest {
 		List<DatosGestorAlquiler> gestor = servicioAlquiler.GestinarAlquilerUsuario(usuario1);
 		// comparacion
 		assertThat(gestor.size()).isEqualTo(1);
+	}
+
+	@Test
+	public void queSePuedaCancelarUnLockerAlquilado() {
+		int lockerId= 1;
+		Long usuarioId = 1L;
+		Locker locker = new Locker();
+		when(request.getSession()).thenReturn(session);
+		when(request.getSession().getAttribute("userId")).thenReturn(1L);
+		when(repositorioLockerDAO.getEstadoLocker(lockerId)).thenReturn(false);
+		servicioAlquiler.cancelarLocker(lockerId, usuarioId);
+		assertThat(servicioAlquiler.getEstadoLocker(lockerId)).isFalse();
 	}
 
 }

@@ -56,9 +56,9 @@ public class Locker {
 	public void setOcupado(boolean ocupado) {
 		this.ocupado = ocupado;
 	}
-	public void setUsuario(Usuario usuario) {
+	public void setUsuario(Long usuarioId) {
 		// TODO Auto-generated method stub
-		this.usuarioId=usuario.getId();
+		this.usuarioId = usuarioId;
 	}
 	public Long usuarioId() {
 		return usuarioId;

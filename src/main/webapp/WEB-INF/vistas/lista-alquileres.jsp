@@ -14,8 +14,37 @@
 <div class="w3-main " style="margin-left: 340px; margin-right: 40px">
     <div class="w3-container">
         <h2 class="w3-center">
-            <p>Mis Alquileres</p>
+            <p>Lockers Disponibles</p>
         </h2>
+
+        <c:if test="${not empty error}">
+
+            <div class="w3-panel w3-red w3-padding-16">${error}</div>
+        </c:if>
+
+        <table class="w3-table-all">
+            <thead>
+            <tr class="w3-red w3-center">
+                <th class="w3-center">Locker</th>
+                <th class="w3-center">Tamaño</th>
+                <th class="w3-center">Texto</th>
+            </tr>
+            </thead>
+
+            <c:forEach var="locker" items="${alquileres}">
+                <tr>
+                    <td><c:out value="${locker.id}" /></td>
+                    <td><c:out value="${locker.tamano}" />
+                    <td><c:out value="${locker.textoDelUsuario}" />
+                        <form:form
+                                action="modificar-locker/${locker.id}" method="POST">
+                            <button class="btn btn-outline-secondary" type="submit">Elegir</button>
+                        </form:form>
+                    </td>
+                </tr>
+            </c:forEach>
+
+        </table>
     </div>
     <div class="w3-container">
     </div>

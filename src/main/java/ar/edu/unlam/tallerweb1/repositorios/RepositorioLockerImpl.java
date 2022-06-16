@@ -17,46 +17,62 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 public class RepositorioLockerImpl implements RepositorioLocker{
 	
 	private SessionFactory sessionFactory;
-	private RepositorioUsuario repositorioUsuario;
-	
 	@Autowired
-	public RepositorioLockerImpl(SessionFactory sessionFactory,RepositorioUsuario repositorioUsuario) {
+	public RepositorioLockerImpl(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
-		this.repositorioUsuario=repositorioUsuario;
 	}
 
 
 	@Override
-	public boolean alquilarLocker(Locker locker,Usuario usuario) {
-		if(getEstadoLocker(locker)) {
-			
-			return false;
-		}
-		setEstadoLocker(locker, true);
-		setUsuarioALocker(usuario,locker);
+	public boolean alquilarLocker(int lockerId,Long usuarioId) {
+
+		setEstadoLocker(lockerId);
+		setUsuarioALocker(usuarioId, lockerId);
 		return true;
 	}
 
-	private void setUsuarioALocker(Usuario usuario,Locker locker) {
-		locker.setUsuario(usuario);
-		
-	}
-
-
 	@Override
-	public Boolean getEstadoLocker(Locker locker) {
-		//return (Boolean) sessionFactory.getCurrentSession().createQuery("SELECT ocupado FROM Locker WHERE id = :id")
-			//	.setParameter("id", locker.getId())
-				//.uniqueResult();
-		return   locker.isOcupado();
+	public void cancelarLocker(int lockerId,Long usuarioId) {
+		setEstadoLocker(lockerId);
+		setUsuarioALocker(usuarioId, lockerId);
 	}
 
 	@Override
-	public void setEstadoLocker(Locker locker,Boolean b) {
-		//sessionFactory.getCurrentSession().createQuery("UPDATE Locker  SET ocupado = :b WHERE id = :id")
-		//.setParameter("b", b)
-		//.setParameter("id", locker.getId()).executeUpdate();
-		locker.setOcupado(b);
+	public void setUsuarioALocker(Long usuarioId, int lockerId) {
+		final Session session = sessionFactory.getCurrentSession();
+		Locker locker = (Locker) session.createCriteria(Locker.class).add(Restrictions.eq("id", lockerId)).uniqueResult();
+		if(locker.getUsuarioId() == null){
+
+			locker.setUsuario(usuarioId);
+		}
+		else{
+
+			locker.setUsuario(null);
+		}
+		session.update(locker);
+	}
+
+	@Override
+	public Boolean getEstadoLocker(int lockerId) {
+
+		final Session session = sessionFactory.getCurrentSession();
+		Locker locker = (Locker) session.createCriteria(Locker.class).add(Restrictions.eq("id", lockerId)).uniqueResult();
+		Boolean estado = locker.isOcupado();
+		return estado;
+	}
+
+	@Override
+	public void setEstadoLocker(int lockerId) {
+		final Session session = sessionFactory.getCurrentSession();
+		Locker locker = (Locker) session.createCriteria(Locker.class).add(Restrictions.eq("id",lockerId)).uniqueResult();
+		if(!locker.isOcupado()){
+			locker.setOcupado(true);
+		}
+		else{
+			locker.setOcupado(false);
+		}
+
+		session.update(locker);
 	}
 
 	@Override

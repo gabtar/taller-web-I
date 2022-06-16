@@ -5,8 +5,8 @@
   </div>
   <div class="w3-bar-block ">
     <p>Bienvenido ${nombreUsuario}</p>
-    <a href="homeLogeado" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Mis Alquileres</a>
-    <a href="alquileres" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Nuevo Alquiler</a>
+    <a href="homeLogeado" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Mis Lockers</a>
+    <a href="alquileres" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Nuevo Locker</a>
     <a href="" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Perfil</a>
     <a href="logout" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">Desconectarse</a>
   </div>
