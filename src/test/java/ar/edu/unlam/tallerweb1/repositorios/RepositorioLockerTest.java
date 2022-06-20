@@ -133,9 +133,12 @@ public class RepositorioLockerTest extends SpringTest {
 	@Rollback
 	public void testQueSePuedanBuscarLockersPorSucursal() {
 
-		dadoQueTengoUnaSucursalConLockersDisponibles();
+		Sucursal sucRamos = dadoQueTengoUnaSucursalConLockersDisponibles();
 	
-		List<Locker> lockersEncontrados = cuandoBuscoLockersPorLocalidad(ID_RAMOS);
+		List<Locker> lockersEncontrados = cuandoBuscoLockersPorLocalidad(sucRamos.getId());
+		
+		// No se porque el CI de github no me toma bien la igualdad
+		// System.out.println("SON IGUALES:" + sucRamos.getId().equals(ID_RAMOS);
 
 		entoncesEncuentroLockersDisponibles(lockersEncontrados, 2);
 	}
@@ -148,7 +151,7 @@ public class RepositorioLockerTest extends SpringTest {
 		return (List<Locker>) repositorioLocker.buscarLockersDisponiblesPorSucursal(idRamos);
 	}
 
-	private void dadoQueTengoUnaSucursalConLockersDisponibles() {
+	private Sucursal dadoQueTengoUnaSucursalConLockersDisponibles() {
 		Localidad ramos = new Localidad();
 		ramos.setNombre("Ramos");
 		ramos.setId(1L);
@@ -186,6 +189,8 @@ public class RepositorioLockerTest extends SpringTest {
 		l4.setId(4);
 		l4.setSucursal(sucHaedo);
 		session().save(l4);
+		
+		return sucRamos;
 	}
 
 }
