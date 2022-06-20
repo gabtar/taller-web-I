@@ -13,19 +13,19 @@
 		</div>
 		<div class="w3-col s6 w3-center">
 			<p>
-				<img src="img/logo.png" alt="logo rent lock" />
+				<img src="${homeUrl}img/logo.png" alt="logo rent lock" />
 			</p>
 		</div>
 	</div>
 	<div class="w3-bar-block ">
 		<p>Bienvenido ${nombreUsuario}</p>
-		<a href="homeLogeado" onclick="w3_close()"
+		<a href="${homeUrl}homeLogeado" onclick="w3_close()"
 			class="w3-bar-item w3-button w3-hover-white ">Mis Alquileres</a> <a
-			href="alquileres" onclick="w3_close()"
+			href="${homeUrl}alquileres" onclick="w3_close()"
 			class="w3-bar-item w3-button w3-hover-white ">Nuevo Alquiler</a> <a
-			href="" onclick="w3_close()"
-			class="w3-bar-item w3-button w3-hover-white ">Perfil</a> <a
-			href="logout" onclick="w3_close()"
+			href="${homeUrl}sucursales" onclick="w3_close()"
+			class="w3-bar-item w3-button w3-hover-white ">Locker Por Sucursal</a> <a
+			href="${homeUrl}logout" onclick="w3_close()"
 			class="w3-bar-item w3-button w3-hover-white ">Desconectarse</a>
 	</div>
 </nav>

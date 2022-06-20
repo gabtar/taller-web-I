@@ -46,6 +46,20 @@ public class ControladorAlquiler {
         //modelo.put("listaAlquileres", listaLockers);
         return new ModelAndView("lista-alquileres", modelo);
     }
+    
+    @RequestMapping("/alquileres/{idSucursal}")
+    public ModelAndView mostrarLockersDisponiblesPorLocalidad(HttpServletRequest request, @PathVariable("idSucursal") Long idSucursal) {
+    	ModelMap modelo = new ModelMap();
+    	
+    	List<Locker> listaLockers = servicioAlquiler.buscarLockersDisponiblesPorSucursal(idSucursal);
+    	modelo.addAttribute("alquileres", listaLockers);
+    	
+    	if (listaLockers.isEmpty()) {
+            modelo.put("error", "No se encontraron lockers");
+        }
+    	
+    	return new ModelAndView("lista-alquileres", modelo);
+    }
 
     @RequestMapping(path = "/modificar-locker/{lockerId}", method = RequestMethod.POST)
     public ModelAndView alquilarLocker(HttpServletRequest request, @PathVariable("lockerId") int lockerId) {

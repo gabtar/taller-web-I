@@ -60,7 +60,6 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 	@Override
 	public void ModificarNotaDeLocker(int lockerId, String texto) {
 		repositorioLockerDAO.ModificarNotaDeLocker(lockerId, texto);
-
 	}
 
 	@Override
@@ -68,5 +67,8 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 		return repositorioLockerDAO.NotaDelLocker(lockerId);
 	}
 
-
+	@Override
+	public List<Locker> buscarLockersDisponiblesPorSucursal(Long idSucursal) {
+		return repositorioLockerDAO.buscarLockersDisponiblesPorSucursal(idSucursal);
+	}
 }

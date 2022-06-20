@@ -22,4 +22,5 @@ public interface ServicioAlquiler {
 	void ModificarNotaDeLocker(int lockerId, String texto);
 
 	String NotaDelocker(int lockerId);
+	List<Locker> buscarLockersDisponiblesPorSucursal(Long idSucursal);
 }

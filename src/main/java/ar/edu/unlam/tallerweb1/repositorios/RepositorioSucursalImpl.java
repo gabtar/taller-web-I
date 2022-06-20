@@ -14,9 +14,9 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
 @Repository("repositorioSucursal")
 public class RepositorioSucursalImpl implements RepositorioSucursal {
-	
+
 	private SessionFactory sessionFactory;
-	
+
 	@Autowired
 	public RepositorioSucursalImpl(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
@@ -25,20 +25,19 @@ public class RepositorioSucursalImpl implements RepositorioSucursal {
 	@Override
 	public List<Sucursal> buscarPorLocalidad(String localidad) {
 		final Session session = sessionFactory.getCurrentSession();
-		
-		return session.createCriteria(Sucursal.class)
-				.add(Restrictions.like("localidad", localidad,MatchMode.ANYWHERE))
-				.list();
+
+		return session.createCriteria(Sucursal.class).createAlias("localidad", "loc")
+				.add(Restrictions.like("loc.nombre", localidad, MatchMode.ANYWHERE).ignoreCase()).list();
 	}
 
 	@Override
-	public  List<Sucursal> listarSucursales() {
+	public List<Sucursal> listarSucursales() {
 		// de esta forma se llama a una seccion
 		final Session session = sessionFactory.getCurrentSession();
 		// mundo DB
-		List lista1=  session.createSQLQuery("select * FROM Sucursal").list();
+		List lista1 = session.createSQLQuery("select * FROM Sucursal").list();
 		// mundo objetos Hibernet query lenguage
-		//  session.createQuery();
+		// session.createQuery();
 		// mundo objeto
 		List lista2 = session.createCriteria(Sucursal.class).list();
 		return lista2;

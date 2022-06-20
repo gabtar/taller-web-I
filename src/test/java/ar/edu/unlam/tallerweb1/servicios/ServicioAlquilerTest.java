@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServicioAlquilerTest {
+	private static final Long ID_RAMOS = 1L;
 	ServicioAlquiler servicioAlquiler;
 	RepositorioLocker repositorioLockerDAO;
 	ServicioSucursal servicioSucursal;
@@ -134,6 +135,12 @@ public class ServicioAlquilerTest {
 		when(repositorioLockerDAO.getEstadoLocker(lockerId)).thenReturn(false);
 		servicioAlquiler.cancelarLocker(lockerId, usuarioId);
 		assertThat(servicioAlquiler.getEstadoLocker(lockerId)).isFalse();
+	}
+	
+	@Test
+	public void testQueSePuedanBuscarLockersDisponiblesPorLocalidad() {
+		servicioAlquiler.buscarLockersDisponiblesPorSucursal(ID_RAMOS);
+		verify(repositorioLockerDAO, times(1)).buscarLockersDisponiblesPorSucursal(ID_RAMOS);
 	}
 
 }

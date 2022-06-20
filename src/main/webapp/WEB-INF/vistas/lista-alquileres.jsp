@@ -36,7 +36,7 @@
 						<td class="w3-center"><c:out value="${locker.id}" /></td>
 						<td class="w3-center"><c:out value="${locker.tamano}" /></td>
 						<td class="w3-center"><c:out value="${locker.idSucursal}" /></td>
-						<td class="w3-center"><form:form action="modificar-locker/${locker.id}"
+						<td class="w3-center"><form:form action="${homeUrl}modificar-locker/${locker.id}"
 								method="POST">
 								<button class="w3-button w3-indigo" type="submit">Elegir</button>
 							</form:form></td>
