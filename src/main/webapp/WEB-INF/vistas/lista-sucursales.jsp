@@ -25,6 +25,10 @@
 
 	<div class="w3-main w3-margin-top"
 		style="margin-left: 340px; margin-right: 40px">
+		
+		<c:if test="${not empty sessionScope.userId}">
+			<h2 class="w3-center">Buscar Lockers disponibles por Sucursal</h2>
+		</c:if>
 
 		<form:form action="sucursales" method="GET" class="w3-margin-top">
 			<p>

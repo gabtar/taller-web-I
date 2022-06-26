@@ -35,7 +35,7 @@ public class RepositorioSucursalImpl implements RepositorioSucursal {
 		// de esta forma se llama a una seccion
 		final Session session = sessionFactory.getCurrentSession();
 		// mundo DB
-		List lista1 = session.createSQLQuery("select * FROM Sucursal").list();
+		// List lista1 = session.createSQLQuery("select * FROM Sucursal").list();
 		// mundo objetos Hibernet query lenguage
 		// session.createQuery();
 		// mundo objeto
@@ -44,8 +44,11 @@ public class RepositorioSucursalImpl implements RepositorioSucursal {
 	}
 
 	@Override
-	public Sucursal buscarSucursalporId() {
-		return null;
+	public Sucursal buscarSucursalPorId(Long idSucursal) {
+		final Session session = sessionFactory.getCurrentSession();
+		return (Sucursal) session.createCriteria(Sucursal.class)
+				.add(Restrictions.eq("id", idSucursal))
+				.uniqueResult();
 	}
 
 }

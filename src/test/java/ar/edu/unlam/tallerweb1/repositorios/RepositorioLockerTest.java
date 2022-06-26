@@ -27,6 +27,8 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 public class RepositorioLockerTest extends SpringTest {
 
 	private static final Long ID_RAMOS = 1L;
+	private static final String TAMANIO_CHICO = "40x50x60";
+	private static final String TAMANIO_GRANDE = "80x80x100";
 	HttpServletRequest request;
 	HttpSession session;
 	@Autowired
@@ -135,10 +137,7 @@ public class RepositorioLockerTest extends SpringTest {
 
 		Sucursal sucRamos = dadoQueTengoUnaSucursalConLockersDisponibles();
 	
-		List<Locker> lockersEncontrados = cuandoBuscoLockersPorLocalidad(sucRamos.getId());
-		
-		// No se porque el CI de github no me toma bien la igualdad
-		// System.out.println("SON IGUALES:" + sucRamos.getId().equals(ID_RAMOS);
+		List<Locker> lockersEncontrados = cuandoBuscoLockersDisponiblesPorSucursal(sucRamos.getId());
 
 		entoncesEncuentroLockersDisponibles(lockersEncontrados, 2);
 	}
@@ -147,7 +146,7 @@ public class RepositorioLockerTest extends SpringTest {
 		assertThat(lockersEncontrados.size()).isEqualTo(lockersEsperados);
 	}
 
-	private List<Locker> cuandoBuscoLockersPorLocalidad(Long idRamos) {
+	private List<Locker> cuandoBuscoLockersDisponiblesPorSucursal(Long idRamos) {
 		return (List<Locker>) repositorioLocker.buscarLockersDisponiblesPorSucursal(idRamos);
 	}
 
@@ -173,24 +172,43 @@ public class RepositorioLockerTest extends SpringTest {
 		Locker l1 = new Locker();
 		l1.setId(1);
 		l1.setSucursal(sucRamos);
+		l1.setTamano(TAMANIO_CHICO);
 		session().save(l1);
 		Locker l2 = new Locker();
 		l2.setId(2);
 		l2.setOcupado(true);
 		l2.setSucursal(sucRamos);
+		l2.setTamano(TAMANIO_GRANDE);
 		session().save(l2);
 		Locker l3 = new Locker();
 		l3.setId(3);
 		l3.setSucursal(sucRamos);
+		l2.setTamano(TAMANIO_GRANDE);
 		session().save(l3);
 
 		// En haedo
 		Locker l4 = new Locker();
 		l4.setId(4);
 		l4.setSucursal(sucHaedo);
+		l4.setTamano(TAMANIO_CHICO);
 		session().save(l4);
 		
 		return sucRamos;
+	}
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void testQueSePuedanBuscarLockersPorSucursalYTamanio() {
+		Sucursal sucRamos = dadoQueTengoUnaSucursalConLockersDisponibles();
+		
+		List<Locker> lockersEncontrados = cuandoBuscoLockersDisponiblesPorSucursalYTamanio(sucRamos.getId(), TAMANIO_CHICO);
+
+		entoncesEncuentroLockersDisponibles(lockersEncontrados, 1);
+	}
+
+	private List<Locker> cuandoBuscoLockersDisponiblesPorSucursalYTamanio(Long id, String tamanioChico) {
+		return repositorioLocker.buscarLockersDisponiblesPorSucursalYTamanio(id, tamanioChico);
 	}
 
 }

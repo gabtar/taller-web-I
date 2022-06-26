@@ -21,10 +21,8 @@
 		<p>Bienvenido ${nombreUsuario}</p>
 		<a href="${homeUrl}homeLogeado" onclick="w3_close()"
 			class="w3-bar-item w3-button w3-hover-white ">Mis Alquileres</a> <a
-			href="${homeUrl}alquileres" onclick="w3_close()"
-			class="w3-bar-item w3-button w3-hover-white ">Nuevo Alquiler</a> <a
 			href="${homeUrl}sucursales" onclick="w3_close()"
-			class="w3-bar-item w3-button w3-hover-white ">Locker Por Sucursal</a> <a
+			class="w3-bar-item w3-button w3-hover-white ">Buscar Lockers</a> <a
 			href="${homeUrl}logout" onclick="w3_close()"
 			class="w3-bar-item w3-button w3-hover-white ">Desconectarse</a>
 	</div>

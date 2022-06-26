@@ -31,6 +31,7 @@ import static org.mockito.Mockito.when;
 public class ControladorAlquilerTest {
 
 	private static final Long RAMOS = 1L;
+	private static final String TAMANIO_CHICO = "40x50x60";
 	private ServicioAlquiler servicioAlquiler;
 	private ServicioSucursal servicioSucursal;
 	private ServicioEmail servicioEmail;
@@ -137,12 +138,24 @@ public class ControladorAlquilerTest {
 	}
 
 	private ModelAndView cuandoPidoMostrarLockersDisponiblesPorSucursal(Long idSucursal) {
-		ModelAndView mav = controladorAlquiler.mostrarLockersDisponiblesPorLocalidad(request, RAMOS);
+		ModelAndView mav = controladorAlquiler.mostrarLockersDisponiblesPorTamanio(request, RAMOS, null);
 		return mav;
 	}
 
 	private List<Locker> dadoQueUnaSucursalTieneLockersDisponibles(Long idSucursal) {
 		when(servicioAlquiler.buscarLockersDisponiblesPorSucursal(RAMOS)).thenReturn(new ArrayList());
 		return servicioAlquiler.buscarLockersDisponiblesPorSucursal(RAMOS);
+	}
+	
+	@Test
+	public void testQueSePuedanMostrarLosAlquileresDisponiblesPorSucursalYTamanio() {
+		List<Locker> lockers = dadoQueUnaSucursalTieneLockersDisponibles(RAMOS);
+
+		ModelAndView mav = cuandoPidoMostrarLockersDisponiblesPorSucursalYTamanio(RAMOS, TAMANIO_CHICO);
+	}
+	
+	private ModelAndView cuandoPidoMostrarLockersDisponiblesPorSucursalYTamanio(Long idSucursal, String tamanio) {
+		ModelAndView mav = controladorAlquiler.mostrarLockersDisponiblesPorTamanio(request, RAMOS, TAMANIO_CHICO);
+		return mav;
 	}
 }

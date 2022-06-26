@@ -29,6 +29,7 @@ import java.util.List;
 
 public class ServicioAlquilerTest {
 	private static final Long ID_RAMOS = 1L;
+	private static final String TAMANIO_CHICO = "20x50x60";
 	ServicioAlquiler servicioAlquiler;
 	RepositorioLocker repositorioLockerDAO;
 	ServicioSucursal servicioSucursal;
@@ -138,9 +139,15 @@ public class ServicioAlquilerTest {
 	}
 	
 	@Test
-	public void testQueSePuedanBuscarLockersDisponiblesPorLocalidad() {
+	public void testQueSePuedanBuscarLockersDisponiblesPorSucursal() {
 		servicioAlquiler.buscarLockersDisponiblesPorSucursal(ID_RAMOS);
 		verify(repositorioLockerDAO, times(1)).buscarLockersDisponiblesPorSucursal(ID_RAMOS);
+	}
+	
+	@Test
+	public void testQueSePuedanBuscarLockersDisponiblesPorSucursalYTamanio() {
+		servicioAlquiler.buscarLockersDisponiblesPorSucursalYTamanio(ID_RAMOS, TAMANIO_CHICO);
+		verify(repositorioLockerDAO, times(1)).buscarLockersDisponiblesPorSucursalYTamanio(ID_RAMOS, TAMANIO_CHICO);
 	}
 
 }

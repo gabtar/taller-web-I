@@ -24,7 +24,6 @@ public class ServicioSucursalImpl implements ServicioSucursal {
 
 	@Override
 	public List<Sucursal> buscarSucursal(String localidad) {
-		// TODO Auto-generated method stub
 		return repositorioSucursal.buscarPorLocalidad(localidad);
 	}
 
@@ -36,6 +35,11 @@ public class ServicioSucursalImpl implements ServicioSucursal {
 		}
 
 		return lista;
+	}
+
+	@Override
+	public Sucursal buscarSucursalPorId(Long idSucursal) {
+		return repositorioSucursal.buscarSucursalPorId(idSucursal);
 	}
 
 }

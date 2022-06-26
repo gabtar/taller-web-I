@@ -71,6 +71,7 @@ public class RepositorioLockerImpl implements RepositorioLocker {
 			locker.setOcupado(true);
 		} else {
 			locker.setOcupado(false);
+			locker.setTextoDelUsuario(null);
 		}
 
 		session.update(locker);
@@ -141,6 +142,19 @@ public class RepositorioLockerImpl implements RepositorioLocker {
 				.createAlias("sucursal", "suc")
 				.add(Restrictions.eq("suc.id", idSucursal))
 				.add(Restrictions.eq("ocupado", false))
+				.list();
+	}
+
+	@Override
+	public List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(Long idSucursal, String tamanio) {
+		// TODO Auto-generated method stub
+		final Session session = sessionFactory.getCurrentSession();
+		
+		return session.createCriteria(Locker.class)
+				.createAlias("sucursal", "suc")
+				.add(Restrictions.eq("suc.id", idSucursal))
+				.add(Restrictions.eq("ocupado", false))
+				.add(Restrictions.eq("tamano", tamanio))
 				.list();
 	}
 }

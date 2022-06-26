@@ -53,8 +53,12 @@ public class ServicioSucursalTest {
        List <Sucursal> listaEsperada= servicioSucursal.listarSucursales();
         Assertions.assertThat(listaEsperada.isEmpty()).isTrue();
     }
-
-
+    
+    @Test
+    public void testQueSePuedaBuscarSucursalPorId() {
+    	servicioSucursal.buscarSucursalPorId(1L);
+    	verify(repositorioSucursal, times(1)).buscarSucursalPorId(any(Long.class));
+    }
 
 }
 

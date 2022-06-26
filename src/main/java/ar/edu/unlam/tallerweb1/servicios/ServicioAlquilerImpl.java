@@ -71,4 +71,10 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 	public List<Locker> buscarLockersDisponiblesPorSucursal(Long idSucursal) {
 		return repositorioLockerDAO.buscarLockersDisponiblesPorSucursal(idSucursal);
 	}
+
+	@Override
+	public List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(Long idSucursal, String tamanio) {
+		// TODO Auto-generated method stub
+		return repositorioLockerDAO.buscarLockersDisponiblesPorSucursalYTamanio(idSucursal, tamanio);
+	}
 }

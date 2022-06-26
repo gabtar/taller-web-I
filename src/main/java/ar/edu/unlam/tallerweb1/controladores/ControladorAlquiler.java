@@ -26,7 +26,7 @@ public class ControladorAlquiler {
     @Autowired
     public ControladorAlquiler(ServicioAlquiler servicioAlquiler, ServicioSucursal servicioSucursal, ServicioEmail servicioEmail) {
         this.servicioAlquiler = servicioAlquiler;
-        this.servicioEmail=servicioEmail;
+        this.servicioEmail= servicioEmail;
         this.servicioSucursal = servicioSucursal;
     }
 
@@ -48,13 +48,27 @@ public class ControladorAlquiler {
     }
     
     @RequestMapping("/alquileres/{idSucursal}")
-    public ModelAndView mostrarLockersDisponiblesPorLocalidad(HttpServletRequest request, @PathVariable("idSucursal") Long idSucursal) {
+    public ModelAndView mostrarLockersDisponiblesPorTamanio(
+    		HttpServletRequest request, 
+    		@PathVariable("idSucursal") Long idSucursal,
+    		@RequestParam(required = false) String tamanio) {
     	ModelMap modelo = new ModelMap();
+    	Sucursal sucursal;
+    	List<Locker> listaLockers;
     	
-    	List<Locker> listaLockers = servicioAlquiler.buscarLockersDisponiblesPorSucursal(idSucursal);
+    	sucursal = this.servicioSucursal.buscarSucursalPorId(idSucursal);
+    	modelo.addAttribute("sucursal", sucursal);
+    	
+    	if (tamanio != null) {
+    		listaLockers = servicioAlquiler.buscarLockersDisponiblesPorSucursalYTamanio(idSucursal, tamanio);
+    	} else {
+    		listaLockers = servicioAlquiler.buscarLockersDisponiblesPorSucursal(idSucursal);
+    	}
+    	
+  
     	modelo.addAttribute("alquileres", listaLockers);
     	
-    	if (listaLockers.isEmpty()) {
+    	if (listaLockers.isEmpty() || sucursal == null) {
             modelo.put("error", "No se encontraron lockers");
         }
     	

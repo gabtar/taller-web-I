@@ -15,6 +15,7 @@ public class RepositorioSucursalTest extends SpringTest {
 
 	private static final String LOCALIDAD_MODIFICADA = "haedo";
 	private static final String LOCALIDAD_ERRONEA = "error";
+	private static final Long ID_SUCURSAL_HAEDO = 1L;
 
 	@Autowired
 	private RepositorioSucursal repositorioSucursal;
@@ -42,6 +43,7 @@ public class RepositorioSucursalTest extends SpringTest {
 		Sucursal sucHaedo = new Sucursal();
 		sucHaedo.setLocalidad(haedo);
 		sucHaedo.setNombre("Lockers Haedo");
+		sucHaedo.setId(ID_SUCURSAL_HAEDO);
 		session().save(sucHaedo);
 
 		Sucursal sucMoron = new Sucursal();
@@ -72,6 +74,39 @@ public class RepositorioSucursalTest extends SpringTest {
 	private List<Sucursal> cuandoBuscoPorLocalidadNoExistente() {
 		List<Sucursal> resultado = repositorioSucursal.buscarPorLocalidad(LOCALIDAD_ERRONEA);
 		return resultado;
+	}
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void testQueSePuedaBuscarUnaSucursalPorId() {
+		Sucursal sucursalEsperada = dadoQueTengoUnaSucursalConId(ID_SUCURSAL_HAEDO);
+		
+		Sucursal sucursalObtenida = cuandoBuscoUnaSucursalPorId(sucursalEsperada.getId());
+		
+		encuentroLaSucursalConEseId(sucursalEsperada, sucursalObtenida);
+	}
+
+	private void encuentroLaSucursalConEseId(Sucursal sucursalEsperada, Sucursal sucursalObtenida) {
+		assertThat(sucursalEsperada).isEqualTo(sucursalObtenida);
+	}
+
+	private Sucursal cuandoBuscoUnaSucursalPorId(Long idSucursalHaedo) {
+		return repositorioSucursal.buscarSucursalPorId(idSucursalHaedo);
+	}
+
+	private Sucursal dadoQueTengoUnaSucursalConId(Long idSucursalHaedo) {
+		Localidad haedo = new Localidad();
+		haedo.setNombre("Haedo");
+		session().save(haedo);
+		
+		Sucursal sucHaedo = new Sucursal();
+		sucHaedo.setLocalidad(haedo);
+		sucHaedo.setNombre("Lockers Haedo");
+		sucHaedo.setId(ID_SUCURSAL_HAEDO);
+		session().save(sucHaedo);
+		
+		return sucHaedo;
 	}
 
 }
