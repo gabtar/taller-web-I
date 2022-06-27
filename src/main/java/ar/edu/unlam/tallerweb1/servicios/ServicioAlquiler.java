@@ -12,7 +12,7 @@ import ar.edu.unlam.tallerweb1.modelo.Usuario;
 public interface ServicioAlquiler {
 
 	Boolean alquilarLocker(int lockerId, Long usuarioId);
-	void cancelarLocker(int lockerId, Long usuarioId);
+	Boolean cancelarLocker(int lockerId, Long usuarioId);
 	 Boolean getEstadoLocker(int lockerId);
 	List<Locker> verAlquileresPropios(Usuario usuario);
 	List<Locker> buscarAlquileresDisponibles();

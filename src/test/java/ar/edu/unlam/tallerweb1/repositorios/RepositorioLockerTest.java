@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,8 @@ public class RepositorioLockerTest extends SpringTest{
 	HttpSession session;
 	@Autowired
 	private RepositorioLocker repositorioLocker;
+	private int lockerId= 1;
+	private Long usuarioId = 1L;
 
 	@Before
 	public void setUp() throws Exception {
@@ -36,36 +39,57 @@ public class RepositorioLockerTest extends SpringTest{
 	}
 	@Test @Transactional @Rollback
 	public void queElLockerSeCreeSinAlquilar() {
-		int lockerId= 1;
-		int usuarioId = 1;
-		Usuario usuario=new Usuario();
-		usuario.setEmail("g@g");
-		usuario.setPassword("1234");
-		session().save(usuario);
+		Locker locker = dadoQueTengoElSiguienteLocker();
+		esperoQueCreeSinAlquilar(locker);
+	}
+
+	private void esperoQueCreeSinAlquilar(Locker locker) {
+		assertThat(repositorioLocker.getEstadoLocker(locker.getId())).isEqualTo(false);
+	}
+	@Test @Transactional @Rollback
+	public void queSePuedaBuscarUnLockerPorId() {
+		Locker locker = dadoQueTengoElSiguienteLocker();
+		Locker lockerEsperado = cuandoObtengoLosLockers(locker);
+		esperoElLocker(lockerEsperado, locker);
+	}
+
+	private Locker dadoQueTengoElSiguienteLocker() {
 		Locker locker = new Locker();
-		locker.setId(lockerId);
 		locker.setIdSucursal((long)2);
 		locker.setOcupado(false);
 		session().save(locker);
-	
-		assertThat(repositorioLocker.getEstadoLocker(locker.getId())).isEqualTo(false);
+
+		return locker;
+	}
+
+	private Locker cuandoObtengoLosLockers(Locker locker) {
+
+		return repositorioLocker.buscarLockersPorId(locker.getId());
+	}
+
+	private void esperoElLocker(Locker lockerEsperado, Locker locker) {
+
+		assertThat(lockerEsperado).isEqualTo(locker);
 	}
 
 	@Test @Transactional @Rollback
-	public void queSePuedaBuscarUnLockerPorId() {
-		Locker locker = new Locker();
-		locker.setIdSucursal((long)2);
-		locker.setOcupado(false);
-		session().save(locker);
-		Locker lockerEsperado=repositorioLocker.buscarLockersPorId(locker.getId());
-		assertThat(lockerEsperado).isEqualTo(locker);
-	}
-	@Test @Transactional @Rollback
 	public void queSeMuestreLosLockersAlquiladosDeUnCliente() {
+		Usuario usuario = dadoQueExisteElUsuario();
+		Locker locker = dadoQueElUsuarioTieneLosSiguienteLockers(usuario);
+		Locker lockerEsperado=cuandoObtengoLosLockersDelUsuario(usuario);
+		esperoElLocker(lockerEsperado, locker);
+	}
+
+	private Usuario dadoQueExisteElUsuario() {
 		Usuario usuario=new Usuario();
 		usuario.setEmail("g@g");
 		usuario.setPassword("1234");
 		session().save(usuario);
+
+		return usuario;
+	}
+	private Locker dadoQueElUsuarioTieneLosSiguienteLockers(Usuario usuario) {
+
 		int id= 1;
 		Locker locker = new Locker();
 		locker.setId(id);
@@ -73,13 +97,25 @@ public class RepositorioLockerTest extends SpringTest{
 		locker.setOcupado(false);
 		locker.setUsuario(usuario.getId());
 		session().save(locker);
-		Locker lockerEsperado=repositorioLocker.buscarLockersPorUsuario(usuario);
+
+		return locker;
+	}
+
+	private Locker cuandoObtengoLosLockersDelUsuario(Usuario usuario) {
+		return repositorioLocker.buscarLockersPorUsuario(usuario);
+	}
+
+	private void esperoLosLockersDelUsuario(Locker lockerEsperado, Locker locker) {
 		assertThat(lockerEsperado).isEqualTo(locker);
-		
 	}
 	@Test @Transactional @Rollback
 	public void queSeMuestreLosLockersDisponibles() {
-		
+		dadoQueTengoLosSiguienteLockersDisponibles();
+		List <Locker> listaEsperada = cuandoObtengoLosLockersDisponibles();
+		esperoLaListaDeLockersDisponibles(listaEsperada);
+	}
+
+	private void dadoQueTengoLosSiguienteLockersDisponibles() {
 		int id= 1;
 		Locker locker = new Locker();
 		locker.setId(id);
@@ -92,23 +128,38 @@ public class RepositorioLockerTest extends SpringTest{
 		locker.setIdSucursal((long)2);
 		locker.setOcupado(false);
 		session().save(locker2);
-		List lockerEsperado =repositorioLocker.buscarLockers();
+	}
+
+	private List<Locker> cuandoObtengoLosLockersDisponibles() {
+		return repositorioLocker.buscarLockers();
+	}
+
+	private void esperoLaListaDeLockersDisponibles(List<Locker> lockerEsperado) {
 		assertThat(lockerEsperado).hasSize(2);
-		
 	}
 
 	@Test @Transactional @Rollback
 	public void queSePuedaCancelarUnLockerAlquilado() {
-		int lockerId= 1;
-		Long usuarioId = 1L;
+		Locker locker = dadoQueTengoElSiguienteLockerAlquilado();
+		cuandoQuieroCancelar(locker);
+		esperoPoderCancelarlo(locker);
+	}
+
+	private Locker dadoQueTengoElSiguienteLockerAlquilado() {
 		Locker locker = new Locker();
 		locker.setId(lockerId);
 		locker.setUsuario(usuarioId);
 		session().save(locker);
-		when(request.getSession()).thenReturn(session);
-		when(request.getSession().getAttribute("userId")).thenReturn(1L);
 		repositorioLocker.alquilarLocker(locker.getId(), usuarioId);
-		repositorioLocker.cancelarLocker(locker.getId(), usuarioId);
+		return locker;
+	}
+
+	private Boolean cuandoQuieroCancelar(Locker locker) {
+		boolean actual = repositorioLocker.cancelarLocker(locker.getId(), usuarioId);
+		return actual;
+	}
+
+	private void esperoPoderCancelarlo(Locker locker) {
 		assertThat(locker.isOcupado()).isFalse();
 	}
 

@@ -32,9 +32,10 @@ public class RepositorioLockerImpl implements RepositorioLocker{
 	}
 
 	@Override
-	public void cancelarLocker(int lockerId,Long usuarioId) {
+	public boolean cancelarLocker(int lockerId,Long usuarioId) {
 		setEstadoLocker(lockerId);
 		setUsuarioALocker(usuarioId, lockerId);
+		return true;
 	}
 
 	@Override

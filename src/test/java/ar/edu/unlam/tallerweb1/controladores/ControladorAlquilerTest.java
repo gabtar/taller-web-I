@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,10 @@ public class ControladorAlquilerTest {
     private ServicioEmail servicioEmail;
     private ControladorAlquiler controladorAlquiler;
     private Usuario usuario;
+    private static int lockerId= 1;
+    private static Long usuarioId = 1L;
+    private static final String TEXTO_EMAIL_REGISTRO = "usted a alquilado el locker " + lockerId + " gracias pepe@pepe por elegirnos RENTLOCK";
+    private static String error="Alquiler exitoso";
     HttpServletRequest request;
     HttpSession session;
 
@@ -50,19 +55,30 @@ public class ControladorAlquilerTest {
 
     @Test
     public void queSePuedaAlquilarUnLocker() {
-    	
-        int lockerId= 1;
-        final String TEXTO_EMAIL_REGISTRO = "usted a alquilado el locker " + lockerId + " gracias pepe@pepe por elegirnos RENTLOCK";
-        Long usuarioId = 1L;
-        Locker locker = new Locker();
+        dadoQueExisteElLocker(lockerId);
+
+        ModelAndView mav = cuandoQuieroAlquilarElLocker(lockerId, usuarioId);
+
+        entoncesMeLlevaALaVista(mav);
+    }
+
+    private void dadoQueExisteElLocker(int lockerId) {
+        when(servicioAlquiler.getEstadoLocker(lockerId)).thenReturn(true);
         when(request.getSession()).thenReturn(session);
-        when(request.getSession().getAttribute("userId")).thenReturn(1L);
+        when(request.getSession().getAttribute("userId")).thenReturn(usuarioId);
         when(request.getSession().getAttribute("nombreUsuario")).thenReturn("pepe@pepe");
         when(servicioAlquiler.alquilarLocker(lockerId,usuarioId)).thenReturn(true);
-    
-      
-        ModelAndView mav = controladorAlquiler.alquilarLocker(request, lockerId);
-        String error="Alquiler exitoso";
+    }
+
+    private ModelAndView cuandoQuieroAlquilarElLocker(int lockerId, Long usuarioId) {
+        //when(servicioAlquiler.getEstadoLocker(lockerId)).thenReturn(true);
+        when(request.getSession()).thenReturn(session);
+        when(request.getSession().getAttribute("userId")).thenReturn(usuarioId);
+        when(request.getSession().getAttribute("nombreUsuario")).thenReturn("pepe@pepe");
+        return controladorAlquiler.alquilarLocker(request, lockerId);
+    }
+
+    private void entoncesMeLlevaALaVista(ModelAndView mav) {
         verify(servicioEmail, times(1)).enviarMail(eq("pepe@pepe"), any(String.class), eq(TEXTO_EMAIL_REGISTRO));
         assertThat("redirect:/homeLogeado").isEqualTo(mav.getViewName());
         assertThat(mav.getModel().get("error")).isEqualTo(error);
@@ -70,13 +86,20 @@ public class ControladorAlquilerTest {
 
     @Test
     public void queNoSePuedaAlquilarUnLockerYaAlquilado() {
-        int lockerId= 1;
-        Long usuarioId = 1L;
-        Locker locker = new Locker();
+
+        dadoQueExisteElLockerOcupado(lockerId);
+        ModelAndView mav = cuandoQuieroAlquilarElLocker(lockerId, usuarioId);
+        entoncesNoPuedoAlquilarloYMeLlevaALaSiguienteViste(mav);
+
+    }
+
+    private void dadoQueExisteElLockerOcupado(int lockerId) {
         when(servicioAlquiler.alquilarLocker(lockerId,usuarioId)).thenReturn(false);
         when(request.getSession()).thenReturn(session);
         when(request.getSession().getAttribute("userId")).thenReturn(1L);
-        ModelAndView mav = controladorAlquiler.alquilarLocker(request, lockerId);
+    }
+
+    private void entoncesNoPuedoAlquilarloYMeLlevaALaSiguienteViste(ModelAndView mav) {
         String error="Locker no disponible";
         assertThat("redirect:/homeLogeado").isEqualTo(mav.getViewName());
         assertThat(mav.getModel().get("error")).isEqualTo(error);
@@ -85,6 +108,12 @@ public class ControladorAlquilerTest {
     @Test
     public void queMustreLosAlquileresDisponibles(){
         //preparacion
+        dadoQueTengoLosSiguientesLockersDisponibles();
+        ModelAndView model = cuandoBuscoLaListaDeLocker();
+        entoncesMeLlevaALaListaDeLockersDisponibles(model);
+    }
+
+    private void dadoQueTengoLosSiguientesLockersDisponibles() {
         List<Locker> listaLockers = new ArrayList<>();
         Locker A= new Locker();
         Locker B= new Locker();
@@ -92,28 +121,39 @@ public class ControladorAlquilerTest {
         listaLockers.add(A);
         listaLockers.add(B);
         listaLockers.add(C);
-        List <Locker>listaRegresada;
 
-        // ejecucion
         when(servicioAlquiler.buscarAlquileresDisponibles()).thenReturn(listaLockers);
-        ModelAndView model = controladorAlquiler.mostrarAlquileresDisponibles(request);
+    }
+
+    private ModelAndView cuandoBuscoLaListaDeLocker() {
+        return controladorAlquiler.mostrarAlquileresDisponibles(request);
+    }
+
+    private void entoncesMeLlevaALaListaDeLockersDisponibles(ModelAndView model) {
+        List <Locker>listaRegresada;
         listaRegresada = (List<Locker>) model.getModelMap().get("alquileres");
 
-        //testeo
         assertThat(model.getViewName()).isEqualTo("lista-alquileres");
         assertThat(listaRegresada.size()).isEqualTo(3);
     }
 
     @Test
     public void queSePuedaCancelarUnLockerAlquilado() {
-        int lockerId= 1;
-        Long usuarioId = 1L;
-        Locker locker = new Locker();
-        when(request.getSession()).thenReturn(session);
-        when(request.getSession().getAttribute("userId")).thenReturn(1L);
-        ModelAndView mav = controladorAlquiler.cancelarLocker(request, lockerId);
+
+        dadoQueExisteElLocker(lockerId);
+        ModelAndView mav = cuandoQuieroCancelarElLocker();
+        entoncesPuedoCancelarElLockerYMeLlevaALaSiguienteVista(mav);
+    }
+
+    private ModelAndView cuandoQuieroCancelarElLocker() {
+        return controladorAlquiler.cancelarLocker(request, lockerId);
+    }
+
+    private void entoncesPuedoCancelarElLockerYMeLlevaALaSiguienteVista(ModelAndView mav) {
         String error="Cancelacion exitosa";
         assertThat("redirect:/homeLogeado").isEqualTo(mav.getViewName());
         assertThat(mav.getModel().get("error")).isEqualTo(error);
     }
+
+
 }

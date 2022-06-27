@@ -32,9 +32,11 @@ public class ServicioAlquilerTest {
 	RepositorioLocker repositorioLockerDAO;
 	ServicioSucursal servicioSucursal;
 	RepositorioSucursal repositorioSucursal;
-	int lockerId;
-	Long usuarioId;
+	int lockerId = 1;
+	Long usuarioId = 1L;
 	Usuario usuario;
+
+	Locker locker;
 
 	HttpServletRequest request;
 	HttpSession session;
@@ -52,28 +54,92 @@ public class ServicioAlquilerTest {
 	}
 	@Test
 	public void queSePuedaAlquilarUnLocker() {
-		when(repositorioLockerDAO.getEstadoLocker(lockerId)).thenReturn(false);
-		Boolean actual = servicioAlquiler.alquilarLocker(lockerId,usuarioId);
+		dadoQueTengoElSiguienteLockerDisponible();
+		//when(repositorioLockerDAO.getEstadoLocker(lockerId)).thenReturn(false);
+		Boolean actual = cuandoQuieroAlquilar();
+		//Boolean actual = servicioAlquiler.alquilarLocker(lockerId,usuarioId);
+		esperoPoderAlquilarlo(actual);
+		//assertTrue(actual);
+	}
+
+	private void dadoQueTengoElSiguienteLockerDisponible() {
+		locker = new Locker();
+		locker.setId(lockerId);
+		locker.setOcupado(false);
+		when(repositorioLockerDAO.getEstadoLocker(locker.getId())).thenReturn(false);
+	}
+
+	private Boolean cuandoQuieroAlquilar() {
+		boolean actual;
+		return actual = servicioAlquiler.alquilarLocker(lockerId,usuarioId);
+	}
+
+	private void esperoPoderAlquilarlo(Boolean actual) {
 		assertTrue(actual);
-		
 	}
 	@Test
 	public void queNoSePuedaAlquilarUnLocker() {
-		when(repositorioLockerDAO.getEstadoLocker(lockerId)).thenReturn(true);
-		Boolean actual = servicioAlquiler.alquilarLocker(lockerId,usuarioId);
+		dadoQueTengoElSiguienteLockerOcupado();
+		Boolean actual = cuandoQuieroAlquilar();
+		esperoNoPoderAlquilarlo(actual);
+	}
+
+	private void dadoQueTengoElSiguienteLockerOcupado() {
+		locker = new Locker();
+		locker.setId(lockerId);
+		locker.setOcupado(true);
+		when(repositorioLockerDAO.getEstadoLocker(locker.getId())).thenReturn(true);
+	}
+
+	private void esperoNoPoderAlquilarlo(Boolean actual) {
 		assertFalse(actual);
-		
 	}
 	@Test
 	public void queSePuedaObtenerElEstadoDeUnLocker() {
-		when(repositorioLockerDAO.getEstadoLocker(lockerId)).thenReturn(false);
-		Boolean actual = servicioAlquiler.getEstadoLocker(lockerId);
-		assertFalse(actual);
+		dadoQueTengoElSiguienteLockerDisponible();
+		Boolean actual = cuandoObtengoElEstado();
+		esperoElEstado(actual);
 	}
+
+	private Boolean cuandoObtengoElEstado() {
+		Boolean actual;
+		return servicioAlquiler.getEstadoLocker(lockerId);
+	}
+
 	@Test
-	public void mostrarAlquileresDeUnUsuarioLlamaAlMetodoBuscarAlquileresPropios() {
-		servicioAlquiler.verAlquileresPropios(usuario);
-		verify(repositorioLockerDAO, times(1)).buscarAlquileresActivosDeUsuario(any());
+	public void mostrarLockersDelUsuario() {
+		dadoQueElUsuarioTieneLosSiguienteLocker();
+		usuario.setId(usuarioId);
+		List lista = cuandoObtengoLaListaDeLocker(usuario);
+		esperoLaLista(lista);
+	}
+
+	private void dadoQueElUsuarioTieneLosSiguienteLocker() {
+		List <Locker>listaLocker = new ArrayList<>();
+		usuario.setId(usuarioId);
+		locker = new Locker();
+		Locker locker2 = new Locker();
+		locker.setId(lockerId);
+		locker2.setId(2);
+		locker.setOcupado(true);
+		locker2.setOcupado(true);
+		locker.setUsuario(usuario.getId());
+		locker2.setUsuario(usuario.getId());
+		listaLocker.add(locker);
+		listaLocker.add(locker2);
+		when(repositorioLockerDAO.buscarAlquileresActivosDeUsuario(usuario)).thenReturn(listaLocker);
+	}
+
+	private List<Locker> cuandoObtengoLaListaDeLocker(Usuario usuario) {
+		//usuario.setId(usuarioId);
+		return servicioAlquiler.verAlquileresPropios(usuario);
+	}
+
+	private void esperoLaLista(List lista) {
+		assertThat(lista.size()).isEqualTo(2);
+	}
+	private void esperoElEstado(Boolean actual) {
+		assertFalse(actual);
 	}
 
 
@@ -126,14 +192,18 @@ public class ServicioAlquilerTest {
 
 	@Test
 	public void queSePuedaCancelarUnLockerAlquilado() {
-		int lockerId= 1;
-		Long usuarioId = 1L;
-		Locker locker = new Locker();
-		when(request.getSession()).thenReturn(session);
-		when(request.getSession().getAttribute("userId")).thenReturn(1L);
-		when(repositorioLockerDAO.getEstadoLocker(lockerId)).thenReturn(false);
-		servicioAlquiler.cancelarLocker(lockerId, usuarioId);
-		assertThat(servicioAlquiler.getEstadoLocker(lockerId)).isFalse();
+		dadoQueTengoElSiguienteLockerOcupado();
+		Boolean actual = cuandoQuieroCancelar();
+		esperoPoderCancelarlo(actual);
+	}
+
+	private Boolean cuandoQuieroCancelar(){
+		boolean actual = servicioAlquiler.cancelarLocker(lockerId, usuarioId);
+		return actual;
+	}
+
+	private void esperoPoderCancelarlo(Boolean actual) {
+		assertTrue(actual);
 	}
 
 }

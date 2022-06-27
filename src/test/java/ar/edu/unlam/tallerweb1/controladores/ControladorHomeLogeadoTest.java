@@ -41,18 +41,24 @@ public class ControladorHomeLogeadoTest {
 	}
 
 	@Test
-	public void elUsuarioPuedeAgregarUnaDescripcionAlLocker(){
-
-	}
-	@Test
-	public void queMelleveAunaPaginaParaCargarMiCodigoDeApertura() {
-		when(request.getSession()).thenReturn(session);
+	public void queMelleveAunaPaginaParaCargarElCodigoDeApertura() {
+		dadoQueTengoLaSiguienteSesion();
+		ModelAndView vistaObtenida = cuandoGeneroElCodigoDeApertura();
 		ModelAndView vistaEsperada = new ModelAndView("codigo-apertura");
-		
-		// When
-		ModelAndView vistaObtenida = controladorHomeLogeado.generarCodigoApertura(request);	
+		esperoQueMeLleveALaPaginaParaCargarElCodigo(vistaObtenida, vistaEsperada);
+	}
+
+	private void dadoQueTengoLaSiguienteSesion() {
+		when(request.getSession()).thenReturn(session);
+	}
+
+	private ModelAndView cuandoGeneroElCodigoDeApertura() {
+		when(request.getSession()).thenReturn(session);
+		return controladorHomeLogeado.generarCodigoApertura(request);
+	}
+
+	private void esperoQueMeLleveALaPaginaParaCargarElCodigo(ModelAndView vistaObtenida, ModelAndView vistaEsperada) {
 		when(request.getSession().getAttribute("nombreUsuario")).thenReturn("pepe@pepe");
-		// Then
 		verify(servicioGenerarCodigo, times(1)).generarCodigo((String)request.getAttribute("nombreUsuario"));
 		assertThat(vistaEsperada.getViewName()).isEqualTo(vistaObtenida.getViewName());
 		assertThat(vistaEsperada.getModel()).isInstanceOf(vistaObtenida.getModel().getClass());

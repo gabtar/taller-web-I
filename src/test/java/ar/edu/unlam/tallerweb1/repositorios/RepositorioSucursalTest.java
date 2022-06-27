@@ -17,21 +17,21 @@ public class RepositorioSucursalTest extends SpringTest {
     @Test
     @Transactional @Rollback
     public void busquedaDeSucursalPorLocalidad() {
-        //preparacion
-        Sucursal haedo = new Sucursal();
-        haedo.setLocalidad(LOCALIDAD_MODIFICADA);
-        haedo.setNombre("haedo");
-        session().save(haedo);
-        Sucursal moron = new Sucursal();
-        moron.setLocalidad("moron");
-        moron.setNombre("moron");
-        session().save(moron);
+        dadoQueTengoUnaListaDeSucursales();
         //ejecucion
-        List<Sucursal> resultado = repositorioSucursal.buscarPorLocalidad(LOCALIDAD_MODIFICADA);
+        List<Sucursal> lista = cuandoBuscoLaSucursalPorLocalidad();
         //validacion
-        assertThat(resultado).hasSize(1);
+        esperoObtenerLasSucursalesPorLocalidad(lista);
     }
-    
+
+    private List<Sucursal> cuandoBuscoLaSucursalPorLocalidad() {
+        return repositorioSucursal.buscarPorLocalidad(LOCALIDAD_MODIFICADA);
+    }
+
+    private void esperoObtenerLasSucursalesPorLocalidad(List<Sucursal> lista) {
+        assertThat(lista).hasSize(1);
+    }
+
     @Test
     @Transactional @Rollback
     public void queSiNoEncentraLocalidadesDevuelvaLaListaVacias() {
