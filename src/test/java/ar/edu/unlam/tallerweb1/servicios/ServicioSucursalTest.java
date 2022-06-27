@@ -76,8 +76,12 @@ public class ServicioSucursalTest {
     private void esperoQueMeDevuelvaLasSucursalesPorLaLocalidad(List<Sucursal> listaEsperada) {
         assertThat(listaEsperada.size()).isEqualTo(2);
     }
-
-
+    
+    @Test
+    public void testQueSePuedaBuscarSucursalPorId() {
+    	servicioSucursal.buscarSucursalPorId(1L);
+    	verify(repositorioSucursal, times(1)).buscarSucursalPorId(any(Long.class));
+    }
 
 }
 

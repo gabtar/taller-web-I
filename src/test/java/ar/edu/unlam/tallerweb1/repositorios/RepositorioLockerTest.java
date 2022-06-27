@@ -20,11 +20,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.modelo.Localidad;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
+import ar.edu.unlam.tallerweb1.modelo.Sucursal;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
-public class RepositorioLockerTest extends SpringTest{
+public class RepositorioLockerTest extends SpringTest {
 
+	private static final Long ID_RAMOS = 1L;
+	private static final String TAMANIO_CHICO = "40x50x60";
+	private static final String TAMANIO_GRANDE = "80x80x100";
 	HttpServletRequest request;
 	HttpSession session;
 	@Autowired
@@ -37,8 +42,12 @@ public class RepositorioLockerTest extends SpringTest{
 		request = mock(HttpServletRequest.class);
 		session = mock(HttpSession.class);
 	}
-	@Test @Transactional @Rollback
+
+	@Test
+	@Transactional
+	@Rollback
 	public void queElLockerSeCreeSinAlquilar() {
+<<<<<<< HEAD
 		Locker locker = dadoQueTengoElSiguienteLocker();
 		esperoQueCreeSinAlquilar(locker);
 	}
@@ -91,12 +100,51 @@ public class RepositorioLockerTest extends SpringTest{
 	private Locker dadoQueElUsuarioTieneLosSiguienteLockers(Usuario usuario) {
 
 		int id= 1;
+=======
+		int lockerId = 1;
+		int usuarioId = 1;
+		Usuario usuario = new Usuario();
+		usuario.setEmail("g@g");
+		usuario.setPassword("1234");
+		session().save(usuario);
+		Locker locker = new Locker();
+		locker.setId(lockerId);
+		locker.setIdSucursal((long) 2);
+		locker.setOcupado(false);
+		session().save(locker);
+
+		assertThat(repositorioLocker.getEstadoLocker(locker.getId())).isEqualTo(false);
+	}
+
+	@Test
+	@Transactional
+	@Rollback
+	public void queSePuedaBuscarUnLockerPorId() {
+		Locker locker = new Locker();
+		locker.setIdSucursal((long) 2);
+		locker.setOcupado(false);
+		session().save(locker);
+		Locker lockerEsperado = repositorioLocker.buscarLockersPorId(locker.getId());
+		assertThat(lockerEsperado).isEqualTo(locker);
+	}
+
+	@Test
+	@Transactional
+	@Rollback
+	public void queSeMuestreLosLockersAlquiladosDeUnCliente() {
+		Usuario usuario = new Usuario();
+		usuario.setEmail("g@g");
+		usuario.setPassword("1234");
+		session().save(usuario);
+		int id = 1;
+>>>>>>> c052e64bbea9e5d7975a9c72d9a5c3f3fd69c023
 		Locker locker = new Locker();
 		locker.setId(id);
-		locker.setIdSucursal((long)2);
+		locker.setIdSucursal((long) 2);
 		locker.setOcupado(false);
 		locker.setUsuario(usuario.getId());
 		session().save(locker);
+<<<<<<< HEAD
 
 		return locker;
 	}
@@ -136,16 +184,50 @@ public class RepositorioLockerTest extends SpringTest{
 
 	private void esperoLaListaDeLockersDisponibles(List<Locker> lockerEsperado) {
 		assertThat(lockerEsperado).hasSize(2);
+=======
+		Locker lockerEsperado = repositorioLocker.buscarLockersPorUsuario(usuario);
+		assertThat(lockerEsperado).isEqualTo(locker);
+
+>>>>>>> c052e64bbea9e5d7975a9c72d9a5c3f3fd69c023
 	}
 
-	@Test @Transactional @Rollback
+	@Test
+	@Transactional
+	@Rollback
+	public void queSeMuestreLosLockersDisponibles() {
+
+		int id = 1;
+		Locker locker = new Locker();
+		locker.setId(id);
+		locker.setIdSucursal((long) 2);
+		locker.setOcupado(false);
+		session().save(locker);
+		int id2 = 2;
+		Locker locker2 = new Locker();
+		locker.setId(id);
+		locker.setIdSucursal((long) 2);
+		locker.setOcupado(false);
+		session().save(locker2);
+		List lockerEsperado = repositorioLocker.buscarLockers();
+		assertThat(lockerEsperado).hasSize(2);
+
+	}
+
+	@Test
+	@Transactional
+	@Rollback
 	public void queSePuedaCancelarUnLockerAlquilado() {
+<<<<<<< HEAD
 		Locker locker = dadoQueTengoElSiguienteLockerAlquilado();
 		cuandoQuieroCancelar(locker);
 		esperoPoderCancelarlo(locker);
 	}
 
 	private Locker dadoQueTengoElSiguienteLockerAlquilado() {
+=======
+		int lockerId = 1;
+		Long usuarioId = 1L;
+>>>>>>> c052e64bbea9e5d7975a9c72d9a5c3f3fd69c023
 		Locker locker = new Locker();
 		locker.setId(lockerId);
 		locker.setUsuario(usuarioId);
@@ -161,6 +243,87 @@ public class RepositorioLockerTest extends SpringTest{
 
 	private void esperoPoderCancelarlo(Locker locker) {
 		assertThat(locker.isOcupado()).isFalse();
+	}
+
+	@Test
+	@Transactional
+	@Rollback
+	public void testQueSePuedanBuscarLockersPorSucursal() {
+
+		Sucursal sucRamos = dadoQueTengoUnaSucursalConLockersDisponibles();
+	
+		List<Locker> lockersEncontrados = cuandoBuscoLockersDisponiblesPorSucursal(sucRamos.getId());
+
+		entoncesEncuentroLockersDisponibles(lockersEncontrados, 2);
+	}
+
+	private void entoncesEncuentroLockersDisponibles(List<Locker> lockersEncontrados, int lockersEsperados) {
+		assertThat(lockersEncontrados.size()).isEqualTo(lockersEsperados);
+	}
+
+	private List<Locker> cuandoBuscoLockersDisponiblesPorSucursal(Long idRamos) {
+		return (List<Locker>) repositorioLocker.buscarLockersDisponiblesPorSucursal(idRamos);
+	}
+
+	private Sucursal dadoQueTengoUnaSucursalConLockersDisponibles() {
+		Localidad ramos = new Localidad();
+		ramos.setNombre("Ramos");
+		ramos.setId(1L);
+		session().save(ramos);
+		Localidad haedo = new Localidad();
+		haedo.setNombre("Haedo");
+		haedo.setId(2L);
+		session().save(haedo);
+
+		Sucursal sucRamos = new Sucursal();
+		sucRamos.setId(ID_RAMOS);
+		sucRamos.setLocalidad(ramos);
+		session().save(sucRamos);
+
+		Sucursal sucHaedo = new Sucursal();
+		sucRamos.setLocalidad(haedo);
+		session().save(sucHaedo);
+
+		Locker l1 = new Locker();
+		l1.setId(1);
+		l1.setSucursal(sucRamos);
+		l1.setTamano(TAMANIO_CHICO);
+		session().save(l1);
+		Locker l2 = new Locker();
+		l2.setId(2);
+		l2.setOcupado(true);
+		l2.setSucursal(sucRamos);
+		l2.setTamano(TAMANIO_GRANDE);
+		session().save(l2);
+		Locker l3 = new Locker();
+		l3.setId(3);
+		l3.setSucursal(sucRamos);
+		l2.setTamano(TAMANIO_GRANDE);
+		session().save(l3);
+
+		// En haedo
+		Locker l4 = new Locker();
+		l4.setId(4);
+		l4.setSucursal(sucHaedo);
+		l4.setTamano(TAMANIO_CHICO);
+		session().save(l4);
+		
+		return sucRamos;
+	}
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void testQueSePuedanBuscarLockersPorSucursalYTamanio() {
+		Sucursal sucRamos = dadoQueTengoUnaSucursalConLockersDisponibles();
+		
+		List<Locker> lockersEncontrados = cuandoBuscoLockersDisponiblesPorSucursalYTamanio(sucRamos.getId(), TAMANIO_CHICO);
+
+		entoncesEncuentroLockersDisponibles(lockersEncontrados, 1);
+	}
+
+	private List<Locker> cuandoBuscoLockersDisponiblesPorSucursalYTamanio(Long id, String tamanioChico) {
+		return repositorioLocker.buscarLockersDisponiblesPorSucursalYTamanio(id, tamanioChico);
 	}
 
 }

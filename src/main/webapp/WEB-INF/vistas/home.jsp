@@ -47,11 +47,10 @@
 						<tr>
 							<td class="w3-center"><c:out value="${Sucursal.id}" /></td>
 							<td class="w3-center"><c:out value="${Sucursal.nombre}" /></td>
-							<td class="w3-center"><c:out value="${Sucursal.localidad}" /></td>
+							<td class="w3-center"><c:out value="${Sucursal.localidad.nombre}" /></td>
 						</tr>
 					</c:forEach>
 					<!-- esto tambien, capas los puedo meter en otro carrucel?-->
-
 				</table>
 			</div>
 		</div>
@@ -63,7 +62,6 @@
 	<script>
 		var myIndex = 0;
 		carousel();
-
 		function carousel() {
 			var i;
 			var x = document.getElementsByClassName("mySlides");

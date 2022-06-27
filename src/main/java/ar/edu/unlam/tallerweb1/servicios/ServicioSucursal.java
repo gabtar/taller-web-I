@@ -8,4 +8,5 @@ public interface ServicioSucursal {
 	
 	List<Sucursal> buscarSucursal(String localidad);
     List<Sucursal>  listarSucursales();
+	Sucursal buscarSucursalPorId(Long idSucursal);
 }

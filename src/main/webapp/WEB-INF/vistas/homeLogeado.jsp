@@ -1,5 +1,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +46,7 @@
 					<thead>
 						<tr>
 							<td class="w3-center">Sucursal: <c:out
-									value="${locker.idSucursal}" />
+									value="${locker.sucursal.nombre}" />
 							</td class="w3-center">
 							<td class="w3-center">Número locker: <c:out
 									value="${locker.id}" /></td>

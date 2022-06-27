@@ -4,23 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-
-import org.hibernate.annotations.Cascade;
 
 @Entity
-public class Sucursal {
-
+public class Localidad {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@OneToOne
-	@JoinColumn(name = "localidad_id")
-	@Cascade(org.hibernate.annotations.CascadeType.ALL)
-	private Localidad localidad;
-
+	
 	private String nombre;
 
 	public Long getId() {
@@ -37,13 +28,5 @@ public class Sucursal {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public Localidad getLocalidad() {
-		return localidad;
-	}
-
-	public void setLocalidad(Localidad localidad) {
-		this.localidad = localidad;
 	}
 }

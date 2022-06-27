@@ -30,4 +30,8 @@ public interface RepositorioLocker {
 
     String NotaDelLocker(long l);
 	void ModificarNotaDeLocker(int lockerId, String texto);
+
+	List<Locker> buscarLockersDisponiblesPorSucursal(Long idSucursal);
+
+	List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(Long idRamos, String tamanio);
 }

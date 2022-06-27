@@ -10,5 +10,5 @@ public interface RepositorioSucursal {
 
     List<Sucursal> listarSucursales();
 
-     Sucursal buscarSucursalporId();
+    Sucursal buscarSucursalPorId(Long idSucursal);
 }
