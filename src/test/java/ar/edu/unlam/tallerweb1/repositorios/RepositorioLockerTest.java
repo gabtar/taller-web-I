@@ -47,7 +47,6 @@ public class RepositorioLockerTest extends SpringTest {
 	@Transactional
 	@Rollback
 	public void queElLockerSeCreeSinAlquilar() {
-<<<<<<< HEAD
 		Locker locker = dadoQueTengoElSiguienteLocker();
 		esperoQueCreeSinAlquilar(locker);
 	}
@@ -100,51 +99,12 @@ public class RepositorioLockerTest extends SpringTest {
 	private Locker dadoQueElUsuarioTieneLosSiguienteLockers(Usuario usuario) {
 
 		int id= 1;
-=======
-		int lockerId = 1;
-		int usuarioId = 1;
-		Usuario usuario = new Usuario();
-		usuario.setEmail("g@g");
-		usuario.setPassword("1234");
-		session().save(usuario);
-		Locker locker = new Locker();
-		locker.setId(lockerId);
-		locker.setIdSucursal((long) 2);
-		locker.setOcupado(false);
-		session().save(locker);
-
-		assertThat(repositorioLocker.getEstadoLocker(locker.getId())).isEqualTo(false);
-	}
-
-	@Test
-	@Transactional
-	@Rollback
-	public void queSePuedaBuscarUnLockerPorId() {
-		Locker locker = new Locker();
-		locker.setIdSucursal((long) 2);
-		locker.setOcupado(false);
-		session().save(locker);
-		Locker lockerEsperado = repositorioLocker.buscarLockersPorId(locker.getId());
-		assertThat(lockerEsperado).isEqualTo(locker);
-	}
-
-	@Test
-	@Transactional
-	@Rollback
-	public void queSeMuestreLosLockersAlquiladosDeUnCliente() {
-		Usuario usuario = new Usuario();
-		usuario.setEmail("g@g");
-		usuario.setPassword("1234");
-		session().save(usuario);
-		int id = 1;
->>>>>>> c052e64bbea9e5d7975a9c72d9a5c3f3fd69c023
 		Locker locker = new Locker();
 		locker.setId(id);
 		locker.setIdSucursal((long) 2);
 		locker.setOcupado(false);
 		locker.setUsuario(usuario.getId());
 		session().save(locker);
-<<<<<<< HEAD
 
 		return locker;
 	}
@@ -184,55 +144,26 @@ public class RepositorioLockerTest extends SpringTest {
 
 	private void esperoLaListaDeLockersDisponibles(List<Locker> lockerEsperado) {
 		assertThat(lockerEsperado).hasSize(2);
-=======
-		Locker lockerEsperado = repositorioLocker.buscarLockersPorUsuario(usuario);
-		assertThat(lockerEsperado).isEqualTo(locker);
-
->>>>>>> c052e64bbea9e5d7975a9c72d9a5c3f3fd69c023
-	}
-
-	@Test
-	@Transactional
-	@Rollback
-	public void queSeMuestreLosLockersDisponibles() {
-
-		int id = 1;
-		Locker locker = new Locker();
-		locker.setId(id);
-		locker.setIdSucursal((long) 2);
-		locker.setOcupado(false);
-		session().save(locker);
-		int id2 = 2;
-		Locker locker2 = new Locker();
-		locker.setId(id);
-		locker.setIdSucursal((long) 2);
-		locker.setOcupado(false);
-		session().save(locker2);
-		List lockerEsperado = repositorioLocker.buscarLockers();
-		assertThat(lockerEsperado).hasSize(2);
-
 	}
 
 	@Test
 	@Transactional
 	@Rollback
 	public void queSePuedaCancelarUnLockerAlquilado() {
-<<<<<<< HEAD
 		Locker locker = dadoQueTengoElSiguienteLockerAlquilado();
 		cuandoQuieroCancelar(locker);
 		esperoPoderCancelarlo(locker);
 	}
 
 	private Locker dadoQueTengoElSiguienteLockerAlquilado() {
-=======
 		int lockerId = 1;
 		Long usuarioId = 1L;
->>>>>>> c052e64bbea9e5d7975a9c72d9a5c3f3fd69c023
 		Locker locker = new Locker();
 		locker.setId(lockerId);
 		locker.setUsuario(usuarioId);
 		session().save(locker);
 		repositorioLocker.alquilarLocker(locker.getId(), usuarioId);
+		
 		return locker;
 	}
 

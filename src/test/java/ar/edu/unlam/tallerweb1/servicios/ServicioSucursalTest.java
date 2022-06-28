@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.modelo.Localidad;
 import ar.edu.unlam.tallerweb1.modelo.Sucursal;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioSucursal;
 import org.assertj.core.api.Assertions.*;
@@ -60,10 +61,12 @@ public class ServicioSucursalTest {
 
     private void dadoQueTengoLaSucursalesDeHaedo() {
         List <Sucursal> lista = new ArrayList<>();
+        Localidad loc = new Localidad();
+        loc.setNombre(localidad);
         Sucursal a = new Sucursal();
         Sucursal b = new Sucursal();
-        a.setLocalidad(localidad);
-        b.setLocalidad(localidad);
+        a.setLocalidad(loc);
+        b.setLocalidad(loc);
         lista.add(a);
         lista.add(b);
         when(repositorioSucursal.buscarPorLocalidad(localidad)).thenReturn(lista);

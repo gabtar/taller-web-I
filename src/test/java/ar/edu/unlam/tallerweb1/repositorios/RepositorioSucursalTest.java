@@ -13,11 +13,13 @@ import java.util.List;
 
 public class RepositorioSucursalTest extends SpringTest {
 
-<<<<<<< HEAD
     private static final String LOCALIDAD_MODIFICADA = "haedo";
     private static final String LOCALIDAD_ERRONEA = "error";
+	private static final Long ID_SUCURSAL_HAEDO = 1L;
+    
     @Autowired
     private RepositorioSucursal repositorioSucursal;
+    
     @Test
     @Transactional @Rollback
     public void busquedaDeSucursalPorLocalidad() {
@@ -35,39 +37,6 @@ public class RepositorioSucursalTest extends SpringTest {
     private void esperoObtenerLasSucursalesPorLocalidad(List<Sucursal> lista) {
         assertThat(lista).hasSize(1);
     }
-
-    @Test
-    @Transactional @Rollback
-    public void queSiNoEncentraLocalidadesDevuelvaLaListaVacias() {
-        //preparacion
-        dadoQueTengoUnaListaDeSucursales();
-        
-        //ejecucion
-        List<Sucursal> localidadesEncontradas = cuandoBuscoPorLocalidadNoExistente();
-        
-        //validacion
-        esperoUnaListaVacia(localidadesEncontradas);
-    }
-=======
-	private static final String LOCALIDAD_MODIFICADA = "haedo";
-	private static final String LOCALIDAD_ERRONEA = "error";
-	private static final Long ID_SUCURSAL_HAEDO = 1L;
->>>>>>> c052e64bbea9e5d7975a9c72d9a5c3f3fd69c023
-
-	@Autowired
-	private RepositorioSucursal repositorioSucursal;
-
-	@Test
-	@Transactional
-	@Rollback
-	public void busquedaDeSucursalPorLocalidad() {
-
-		dadoQueTengoUnaListaDeSucursales();
-
-		List<Sucursal> resultado = repositorioSucursal.buscarPorLocalidad(LOCALIDAD_MODIFICADA);
-
-		assertThat(resultado).hasSize(1);
-	}
 
 	private void dadoQueTengoUnaListaDeSucursales() {
 		Localidad haedo = new Localidad();

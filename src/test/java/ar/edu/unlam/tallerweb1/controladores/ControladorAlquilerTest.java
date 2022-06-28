@@ -34,7 +34,7 @@ public class ControladorAlquilerTest {
 	private static final Long RAMOS = 1L;
 	private static final String TAMANIO_CHICO = "40x50x60";
 	private ServicioAlquiler servicioAlquiler;
-<<<<<<< HEAD
+
     private ServicioSucursal servicioSucursal;
     private ServicioEmail servicioEmail;
     private ControladorAlquiler controladorAlquiler;
@@ -45,14 +45,6 @@ public class ControladorAlquilerTest {
     private static String error="Alquiler exitoso";
     HttpServletRequest request;
     HttpSession session;
-=======
-	private ServicioSucursal servicioSucursal;
-	private ServicioEmail servicioEmail;
-	private ControladorAlquiler controladorAlquiler;
-	private Usuario usuario;
-	HttpServletRequest request;
-	HttpSession session;
->>>>>>> c052e64bbea9e5d7975a9c72d9a5c3f3fd69c023
 
 	@Before
 	public void setUp() throws Exception {
@@ -64,7 +56,6 @@ public class ControladorAlquilerTest {
 		controladorAlquiler = new ControladorAlquiler(servicioAlquiler, servicioSucursal, servicioEmail);
 	}
 
-<<<<<<< HEAD
     @Test
     public void queSePuedaAlquilarUnLocker() {
         dadoQueExisteElLocker(lockerId);
@@ -167,77 +158,6 @@ public class ControladorAlquilerTest {
         assertThat(mav.getModel().get("error")).isEqualTo(error);
     }
 
-
-=======
-	@Test
-	public void queSePuedaAlquilarUnLocker() {
-
-		int lockerId = 1;
-		final String TEXTO_EMAIL_REGISTRO = "usted a alquilado el locker " + lockerId
-				+ " gracias pepe@pepe por elegirnos RENTLOCK";
-		Long usuarioId = 1L;
-		Locker locker = new Locker();
-		when(request.getSession()).thenReturn(session);
-		when(request.getSession().getAttribute("userId")).thenReturn(1L);
-		when(request.getSession().getAttribute("nombreUsuario")).thenReturn("pepe@pepe");
-		when(servicioAlquiler.alquilarLocker(lockerId, usuarioId)).thenReturn(true);
-
-		ModelAndView mav = controladorAlquiler.alquilarLocker(request, lockerId);
-		String error = "Alquiler exitoso";
-		verify(servicioEmail, times(1)).enviarMail(eq("pepe@pepe"), any(String.class), eq(TEXTO_EMAIL_REGISTRO));
-		assertThat("redirect:/homeLogeado").isEqualTo(mav.getViewName());
-		assertThat(mav.getModel().get("error")).isEqualTo(error);
-	}
-
-	@Test
-	public void queNoSePuedaAlquilarUnLockerYaAlquilado() {
-		int lockerId = 1;
-		Long usuarioId = 1L;
-		Locker locker = new Locker();
-		when(servicioAlquiler.alquilarLocker(lockerId, usuarioId)).thenReturn(false);
-		when(request.getSession()).thenReturn(session);
-		when(request.getSession().getAttribute("userId")).thenReturn(1L);
-		ModelAndView mav = controladorAlquiler.alquilarLocker(request, lockerId);
-		String error = "Locker no disponible";
-		assertThat("redirect:/homeLogeado").isEqualTo(mav.getViewName());
-		assertThat(mav.getModel().get("error")).isEqualTo(error);
-	}
-
-	@Test
-	public void queMustreLosAlquileresDisponibles() {
-		// preparacion
-		List<Locker> listaLockers = new ArrayList<>();
-		Locker A = new Locker();
-		Locker B = new Locker();
-		Locker C = new Locker();
-		listaLockers.add(A);
-		listaLockers.add(B);
-		listaLockers.add(C);
-		List<Locker> listaRegresada;
-
-		// ejecucion
-		when(servicioAlquiler.buscarAlquileresDisponibles()).thenReturn(listaLockers);
-		ModelAndView model = controladorAlquiler.mostrarAlquileresDisponibles(request);
-		listaRegresada = (List<Locker>) model.getModelMap().get("alquileres");
-
-		// testeo
-		assertThat(model.getViewName()).isEqualTo("lista-alquileres");
-		assertThat(listaRegresada.size()).isEqualTo(3);
-	}
-
-	@Test
-	public void queSePuedaCancelarUnLockerAlquilado() {
-		int lockerId = 1;
-		Long usuarioId = 1L;
-		Locker locker = new Locker();
-		when(request.getSession()).thenReturn(session);
-		when(request.getSession().getAttribute("userId")).thenReturn(1L);
-		ModelAndView mav = controladorAlquiler.cancelarLocker(request, lockerId);
-		String error = "Cancelacion exitosa";
-		assertThat("redirect:/homeLogeado").isEqualTo(mav.getViewName());
-		assertThat(mav.getModel().get("error")).isEqualTo(error);
-	}
-
 	@Test
 	public void testQueSePuedanMostrarLosAlquileresDisponiblesPorSucursal() {
 		List<Locker> lockers = dadoQueUnaSucursalTieneLockersDisponibles(RAMOS);
@@ -277,5 +197,4 @@ public class ControladorAlquilerTest {
 		ModelAndView mav = controladorAlquiler.mostrarLockersDisponiblesPorTamanio(request, RAMOS, TAMANIO_CHICO);
 		return mav;
 	}
->>>>>>> c052e64bbea9e5d7975a9c72d9a5c3f3fd69c023
 }
