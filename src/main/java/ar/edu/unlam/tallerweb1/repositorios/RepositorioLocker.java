@@ -12,7 +12,7 @@ public interface RepositorioLocker {
 	boolean alquilarLocker(int lockerId, Long usuarioId);
 
 	void setUsuarioALocker(Long usuarioId, int lockerId);
-	void cancelarLocker(int lockerId, Long usuarioId);
+	boolean cancelarLocker(int lockerId, Long usuarioId);
 
 	Boolean getEstadoLocker(int lockerId);
 

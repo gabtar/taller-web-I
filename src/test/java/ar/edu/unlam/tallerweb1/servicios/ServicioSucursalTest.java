@@ -1,8 +1,10 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.modelo.Localidad;
 import ar.edu.unlam.tallerweb1.modelo.Sucursal;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioSucursal;
-import org.assertj.core.api.Assertions;
+import org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import static org.mockito.Mockito.*;
 public class ServicioSucursalTest {
     private ServicioSucursal servicioSucursal;
     private RepositorioSucursal repositorioSucursal;
+    private String localidad = "haedo";
 
     @Before
     public void init(){
@@ -23,35 +26,58 @@ public class ServicioSucursalTest {
         servicioSucursal= new ServicioSucursalImpl(repositorioSucursal);
     }
 
-    /*
-    @Test
-    public void elServicioRegresaListaDeSucuralesNull(){
-        List <Sucursal> lista = null;
-        when(repositorioSucursal.listarSucursales()).thenReturn(lista);
-        servicioSucursal= new ServicioSucursalImpl(repositorioSucursal);
-        List <Sucursal> listaEsperada = servicioSucursal.listarSucursales();
-        Assertions.assertThat(listaEsperada).isNull();
-    }*/
     @Test
     public void elServicioRecibeSucursalesDesdeElREpositorio(){
         //preparacion
-        List <Sucursal> lista = new ArrayList<Sucursal>();
+        dadoQueTengoUnaListaDeSucursales();
+        // ejecucion
+        List <Sucursal> listaEsperada = cuandoObtengoLaListaDeSucursales();
+        //comparacion
+
+        esperoQueListeLasSucursales(listaEsperada);
+    }
+
+    private void dadoQueTengoUnaListaDeSucursales() {
+        List <Sucursal> lista = new ArrayList<>();
         Sucursal a = new Sucursal();
         lista.add(a);
         when(repositorioSucursal.listarSucursales()).thenReturn(lista);
-        // ejecucion
-        servicioSucursal= new ServicioSucursalImpl(repositorioSucursal);
-        List <Sucursal> listaEsperada = servicioSucursal.listarSucursales();
-        //comparacion
-        Assertions.assertThat(listaEsperada.size()).isEqualTo(1);
     }
+
+    private List<Sucursal> cuandoObtengoLaListaDeSucursales() {
+        return servicioSucursal.listarSucursales();
+    }
+
+    private void esperoQueListeLasSucursales(List<Sucursal> listaEsperada) {
+        assertThat(listaEsperada.size()).isEqualTo(1);
+    }
+
     @Test
-    public void elServicioCambiaLaListaDeNullAVacia(){
-        List <Sucursal> lista=null;
-        when(repositorioSucursal.listarSucursales()).thenReturn(null);
-        servicioSucursal= new ServicioSucursalImpl(repositorioSucursal);
-       List <Sucursal> listaEsperada= servicioSucursal.listarSucursales();
-        Assertions.assertThat(listaEsperada.isEmpty()).isTrue();
+    public void queSePuedaBuscarLaSucursalPorLocalidad() {
+        dadoQueTengoLaSucursalesDeHaedo();
+        List<Sucursal> listaEsperada = cuandoBuscoLasSucursalesPorLocalidad(localidad);
+        esperoQueMeDevuelvaLasSucursalesPorLaLocalidad(listaEsperada);
+    }
+
+    private void dadoQueTengoLaSucursalesDeHaedo() {
+        List <Sucursal> lista = new ArrayList<>();
+        Localidad loc = new Localidad();
+        loc.setNombre(localidad);
+        Sucursal a = new Sucursal();
+        Sucursal b = new Sucursal();
+        a.setLocalidad(loc);
+        b.setLocalidad(loc);
+        lista.add(a);
+        lista.add(b);
+        when(repositorioSucursal.buscarPorLocalidad(localidad)).thenReturn(lista);
+    }
+
+    private List<Sucursal> cuandoBuscoLasSucursalesPorLocalidad(String localidad) {
+        return servicioSucursal.buscarSucursal(localidad);
+    }
+
+    private void esperoQueMeDevuelvaLasSucursalesPorLaLocalidad(List<Sucursal> listaEsperada) {
+        assertThat(listaEsperada.size()).isEqualTo(2);
     }
     
     @Test

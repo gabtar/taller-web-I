@@ -29,7 +29,12 @@ public class ControladorHomeTest {
 
     @Test
     public void cuandoSeCargaInicioSeCargaListaDeSucursales(){
-        //preparacion
+        dadoQueTengoUnaListaDeSucursales();
+        ModelAndView model = cuandoBuscoLaListaDeSucursales();
+        esperoQueMeMuestreLaListaDeSucursales(model);
+    }
+
+    private void dadoQueTengoUnaListaDeSucursales() {
         List<Sucursal> listaSucursales = new ArrayList<>();
         Sucursal A= new Sucursal();
         Sucursal B= new Sucursal();
@@ -37,29 +42,24 @@ public class ControladorHomeTest {
         listaSucursales.add(A);
         listaSucursales.add(B);
         listaSucursales.add(C);
+
+        when(servicioSucursal.listarSucursales()).thenReturn(listaSucursales);
+    }
+
+    private ModelAndView cuandoBuscoLaListaDeSucursales() {
+        return controladorHome.inicio();
+    }
+
+    private void esperoQueMeMuestreLaListaDeSucursales(ModelAndView model) {
         List <Sucursal>listaRegresada = new ArrayList<Sucursal>();
-        // ejecucion
-
-        Mockito.when(servicioSucursal.listarSucursales()).thenReturn(listaSucursales);
-        ModelAndView model =controladorHome.inicio();
         listaRegresada= (List<Sucursal>) model.getModelMap().get("listaSucursales");
-
-        //testeo
         assertThat(model.getViewName()).isEqualTo("home");
         assertThat(listaRegresada.size()).isEqualTo(3);
     }
-    /*   esto se tiene que cambiar para que el metodo cheequee el la exepcion
-    @Test
-    public void cuandoSeCargaElInicioSiFallaSeTiraExcepcion(){
-        when(servicioSucursal.listarSucursales()).thenThrow(new RuntimeException());
-        ModelAndView modelo = ControladorHome.inicio();
-        assertThat(modelo.getViewName()).isEqualTo("home");
 
-    }*/
     @Test
     public void cuandoSeCargaElInicioSeLLamaAlServicioUnaVEz(){
         ModelAndView modelo = controladorHome.inicio();
         verify(servicioSucursal, times(1)).listarSucursales();
-
     }
 }

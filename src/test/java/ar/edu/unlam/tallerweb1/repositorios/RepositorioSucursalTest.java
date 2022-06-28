@@ -13,24 +13,30 @@ import java.util.List;
 
 public class RepositorioSucursalTest extends SpringTest {
 
-	private static final String LOCALIDAD_MODIFICADA = "haedo";
-	private static final String LOCALIDAD_ERRONEA = "error";
+    private static final String LOCALIDAD_MODIFICADA = "haedo";
+    private static final String LOCALIDAD_ERRONEA = "error";
 	private static final Long ID_SUCURSAL_HAEDO = 1L;
+    
+    @Autowired
+    private RepositorioSucursal repositorioSucursal;
+    
+    @Test
+    @Transactional @Rollback
+    public void busquedaDeSucursalPorLocalidad() {
+        dadoQueTengoUnaListaDeSucursales();
+        //ejecucion
+        List<Sucursal> lista = cuandoBuscoLaSucursalPorLocalidad();
+        //validacion
+        esperoObtenerLasSucursalesPorLocalidad(lista);
+    }
 
-	@Autowired
-	private RepositorioSucursal repositorioSucursal;
+    private List<Sucursal> cuandoBuscoLaSucursalPorLocalidad() {
+        return repositorioSucursal.buscarPorLocalidad(LOCALIDAD_MODIFICADA);
+    }
 
-	@Test
-	@Transactional
-	@Rollback
-	public void busquedaDeSucursalPorLocalidad() {
-
-		dadoQueTengoUnaListaDeSucursales();
-
-		List<Sucursal> resultado = repositorioSucursal.buscarPorLocalidad(LOCALIDAD_MODIFICADA);
-
-		assertThat(resultado).hasSize(1);
-	}
+    private void esperoObtenerLasSucursalesPorLocalidad(List<Sucursal> lista) {
+        assertThat(lista).hasSize(1);
+    }
 
 	private void dadoQueTengoUnaListaDeSucursales() {
 		Localidad haedo = new Localidad();

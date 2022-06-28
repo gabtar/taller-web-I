@@ -32,8 +32,13 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 		return false;
 	}
 	@Override
-	public void cancelarLocker(int lockerId, Long usuarioId) {
-		repositorioLockerDAO.cancelarLocker(lockerId, usuarioId);
+	public Boolean cancelarLocker(int lockerId, Long usuarioId) {
+		if(repositorioLockerDAO.getEstadoLocker(lockerId)) {
+			repositorioLockerDAO.cancelarLocker(lockerId, usuarioId);
+			return true;
+		}
+
+		return false;
 	}
 	public Boolean getEstadoLocker(int lockerId) {
 		// TODO Auto-generated method stub

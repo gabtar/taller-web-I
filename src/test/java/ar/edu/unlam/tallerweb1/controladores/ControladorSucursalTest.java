@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.*;
 import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlam.tallerweb1.modelo.Localidad;
@@ -22,7 +23,6 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioLocalidad;
 import ar.edu.unlam.tallerweb1.servicios.ServicioSucursal;
 
 public class ControladorSucursalTest {
-
 	private ServicioSucursal servicioSucursal;
 	private ControladorSucursal controladorSucursal;
 	private ServicioLocalidad servicioLocalidad;
@@ -38,26 +38,51 @@ public class ControladorSucursalTest {
 
 	@Test
 	public void testQueSeMuestreElListadoDeSucursales() {
+		dadoQueTengoUnaListaDeSucursales();
+		ModelAndView mav = cuandoBuscoLaListaDeSucursales();
+		esperoQueMeMuestreLaVistaConLasSucursales(mav);
+	}
+		
+	private void dadoQueTengoUnaListaDeSucursales() {
+		List<Sucursal> listaSucursales = new ArrayList<>();
+		Sucursal A= new Sucursal();
+		Sucursal B= new Sucursal();
+		Sucursal C= new Sucursal();
+		listaSucursales.add(A);
+		listaSucursales.add(B);
+		listaSucursales.add(C);
 
 		when(servicioLocalidad.obtenerLocalidades()).thenReturn(new ArrayList<Localidad>());
-		when(servicioSucursal.buscarSucursal("ramos")).thenReturn(new ArrayList<Sucursal>());
-		ModelAndView mav = controladorSucursal.mostrarSucursales("ramos", session);
+		when(servicioSucursal.buscarSucursal("ramos")).thenReturn(listaSucursales);
+	}
 
+	private ModelAndView cuandoBuscoLaListaDeSucursales() {
+
+		return controladorSucursal.mostrarSucursales("ramos", session);
+	}
+
+	private void esperoQueMeMuestreLaVistaConLasSucursales(ModelAndView mav) {
 		List<Sucursal> lista = (List<Sucursal>) mav.getModel().get("sucursales");
-
-		assertThat(lista).hasSize(0);
-
+		assertThat(lista).hasSize(3);
 	}
 
 	@Test
 	public void testQueSiNoEncuentraSucursalesSeMuestreElMensajeDeError() {
+		dadoQueNoTengoLaSucursal();
+		ModelAndView mav = cuandoObtengoLaSucursal();
+		esperoElSiguienteError(mav);
+	}
 
-		when(servicioLocalidad.obtenerLocalidades()).thenReturn(new ArrayList<Localidad>());
+	private void dadoQueNoTengoLaSucursal() {
 		when(servicioSucursal.buscarSucursal("ramos")).thenReturn(new ArrayList<Sucursal>());
-		ModelAndView mav = controladorSucursal.mostrarSucursales("ramos", session);
+	}
 
+	private ModelAndView cuandoObtengoLaSucursal() {
+		return controladorSucursal.mostrarSucursales("ramos", session);
+	}
+
+	private void esperoElSiguienteError(ModelAndView mav) {
 		assertThat(mav.getModel().get("error")).isEqualTo("No se encontraron sucursales. Busque por otra localidad");
-
 	}
 
 }
