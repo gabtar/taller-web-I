@@ -1,6 +1,19 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%><%@ taglib
 	prefix="c" uri="http://java.sun.com/jsp/jstl/core"%><!DOCTYPE html>
 <html lang="en">
+<script>
+function Confirmar(){
+	var retVal = confirm("¿Desea alquilar este locker?");
+    if( retVal == true ){
+        
+        return true;
+    }else{
+        
+        return false;
+    }
+}
+</script>
+
 <head>
 <!-- esta linea llama al jsp de la carpeta vistaGEnerales-->
 <%@ include file="vistaGenerales/head.jsp"%></head>
@@ -60,7 +73,7 @@
 							<td class="w3-center"><c:out value="${locker.tamano}" /></td>
 							<td class="w3-center"><form:form action="${homeUrl}modificar-locker/${locker.id}"
 									method="POST">
-									<button class="w3-button w3-indigo" type="submit">Elegir</button>
+									<button class="w3-button w3-indigo" type="submit" onclick="Confirmar();">Elegir</button>
 								</form:form></td>
 						</tr>
 					</c:forEach>

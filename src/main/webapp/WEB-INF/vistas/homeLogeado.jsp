@@ -7,6 +7,18 @@
 <!-- esta linea llama al jsp de la carpeta vistaGEnerales-->
 <%@ include file="vistaGenerales/head.jsp"%>
 </head>
+<script>
+function Confirmar(){
+	var retVal = confirm("¿Desea Eliminar este locker de su alquiler?");
+    if( retVal == true ){
+        
+        return true;
+    }else{
+        
+        return false;
+    }
+}
+</script>
 <body>
 
 	<!-- Sidebar/menu   de esta forma se llaman los jsp por partes-->
@@ -57,7 +69,8 @@
 								class="w3-button w3-light-blue">Codigo Producto</a></td>
 							<td class="w3-center"><form:form
 									action="cancelar-locker/${locker.id}" method="POST">
-									<button class="w3-button w3-red" type="submit">Eliminar</button>
+									<button class="w3-button w3-indigo" type="submit" onclick="Confirmar();">Eliminar</button>
+									
 								</form:form></td>
 						</tr>
 						<tr>
