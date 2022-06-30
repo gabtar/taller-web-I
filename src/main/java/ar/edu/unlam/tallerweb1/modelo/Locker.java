@@ -22,6 +22,7 @@ public class Locker {
 	private String tamano;
 	private Calendar fechaDeAlta;
 	private Date fecha;
+	private String codigo_agregar_producto;
 
 	@OneToOne
 	@JoinColumn(name = "sucursal_id")
@@ -96,5 +97,11 @@ public class Locker {
 
 	public void setTextoDelUsuario(String textoDelUsuario) {
 		this.textoDelUsuario = textoDelUsuario;
+	}
+	public String getCodigo() {
+		return codigo_agregar_producto;
+	}
+	public void setCodigo(String codigo_agregar_producto) {
+		this.codigo_agregar_producto = codigo_agregar_producto;
 	}
 }

@@ -158,4 +158,25 @@ public class RepositorioLockerImpl implements RepositorioLocker {
 				.add(Restrictions.eq("tamano", tamanio))
 				.list();
 	}
+
+	@Override
+	public void guardarCodigo(int lockerId, String codigo) {
+		final Session session = sessionFactory.getCurrentSession();
+		Locker locker = (Locker) session.createCriteria(Locker.class).add(Restrictions.eq("id", lockerId))
+				.uniqueResult();
+
+		locker.setCodigo(codigo);
+		session.update(locker);
+	}
+
+	@Override
+	public Boolean validarCodigo(int lockerId, String nombre, String codigo) {
+		final Session session = sessionFactory.getCurrentSession();
+		Locker locker =  (Locker) session.createCriteria(Locker.class)
+				.add(Restrictions.eq("id", lockerId))
+				.add(Restrictions.eq("codigo_agregar_producto", codigo))
+				.uniqueResult();
+		return locker != null;
+	}
+
 }

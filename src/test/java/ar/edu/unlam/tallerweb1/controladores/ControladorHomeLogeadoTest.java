@@ -53,13 +53,15 @@ public class ControladorHomeLogeadoTest {
 	}
 
 	private ModelAndView cuandoGeneroElCodigoDeApertura() {
+		int lockerId = 1;
 		when(request.getSession()).thenReturn(session);
-		return controladorHomeLogeado.generarCodigoApertura(request);
+		return controladorHomeLogeado.generarCodigoApertura(request, lockerId);
 	}
 
 	private void esperoQueMeLleveALaPaginaParaCargarElCodigo(ModelAndView vistaObtenida, ModelAndView vistaEsperada) {
+		int lockerId = 1;
 		when(request.getSession().getAttribute("nombreUsuario")).thenReturn("pepe@pepe");
-		verify(servicioGenerarCodigo, times(1)).generarCodigo((String)request.getAttribute("nombreUsuario"));
+		verify(servicioGenerarCodigo, times(1)).generarCodigo((String)request.getAttribute("nombreUsuario"), lockerId);
 		assertThat(vistaEsperada.getViewName()).isEqualTo(vistaObtenida.getViewName());
 		assertThat(vistaEsperada.getModel()).isInstanceOf(vistaObtenida.getModel().getClass());
 	}

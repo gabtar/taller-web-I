@@ -4,8 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import ar.edu.unlam.tallerweb1.modelo.DatosLogin;
-import ar.edu.unlam.tallerweb1.modelo.DatosModificarTextoLocker;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioSucursal;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGenerarCodigoImpl;
 
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.unlam.tallerweb1.modelo.Locker;
-import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioAlquiler;
 import ar.edu.unlam.tallerweb1.servicios.ServicioGenerarCodigo;
 
@@ -76,15 +73,29 @@ public class ControladorHomeLogeado {
 		return new ModelAndView("redirect:/homeLogeado");
 	}
 	
-	@RequestMapping(path = "/codigoApertura")
-	public ModelAndView generarCodigoApertura(HttpServletRequest request) {
+	@RequestMapping(path = "/codigoApertura/{lockerId}")
+	public ModelAndView generarCodigoApertura(HttpServletRequest request, @PathVariable("lockerId") int lockerId) {
 		// TODO Auto-generated method stub
 		String usuario=(String) request.getSession().getAttribute("nombreUsuario");
-		servicioGenerarCodigo.generarCodigo(usuario);
+		servicioGenerarCodigo.generarCodigo(usuario, lockerId);
 		return new ModelAndView("codigo-apertura");
 	}
 
-	
+	@RequestMapping(path = "/retirarProducto")
+	public ModelAndView retirarProducto(HttpServletRequest request) {
+		ModelMap modelo = new ModelMap();
+		modelo.put("tipoOperacion", "Para poder retirar un producto necesitamos que coloque el codigo que recibio por email");
+		modelo.put("validarCodigo", new ValidarCodigo());
+		return new ModelAndView("retirar-producto", modelo);
+	}
+
+	@RequestMapping(path = "/agregarProducto")
+	public ModelAndView agregarProducto(HttpServletRequest request) {
+		ModelMap modelo = new ModelMap();
+		modelo.put("tipoOperacion", "Para poder agregar un producto necesitamos que coloque el codigo que recibio por email");
+		modelo.put("validarCodigo", new ValidarCodigo());
+		return new ModelAndView("agregar-producto", modelo);
+	}
 	
 
 }

@@ -8,7 +8,7 @@
 </head>
 <body>
 <p>
-<div class="w3-panel w3-red w3-padding-16">El codigo fue enviado exitosamente a su email</div>
+    <div class="w3-panel w3-red w3-padding-16">${error}</div>
 </p>
 </body>
 </html>
