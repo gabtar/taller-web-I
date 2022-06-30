@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.repositorios;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -259,5 +260,86 @@ public class RepositorioLockerTest extends SpringTest {
 	private List<Locker> cuandoBuscoLockersDisponiblesPorSucursalYTamanio(Long id, String tamanioChico) {
 		return repositorioLocker.buscarLockersDisponiblesPorSucursalYTamanio(id, tamanioChico);
 	}
+	@Test
+	@Transactional
+	@Rollback
+	public void testQueSePuedaGuardarUnCodigo() {
+		Locker locker=dadoQueTengoElCodigoYElLocker();
+		guardoElCodigoEnLaBase(locker);
+		verificoSiSeGuardoCorrectamente(locker);
+	}
+
+	private void verificoSiSeGuardoCorrectamente(Locker locker) {
+		// TODO Auto-generated method stub
+		String codigo="123456";
+		assertThat(locker.getCodigo()).isEqualTo(codigo);
+	}
+
+	private void guardoElCodigoEnLaBase(Locker locker) {
+		// TODO Auto-generated method stub
+		
+		String codigo="123456";
+		repositorioLocker.guardarCodigo(locker.getId(), codigo);
+	}
+
+	private Locker dadoQueTengoElCodigoYElLocker() {
+		// TODO Auto-generated method stub
+		Localidad ramos = new Localidad();
+		ramos.setNombre("Ramos");
+		ramos.setId(1L);
+		session().save(ramos);
+		Sucursal sucRamos = new Sucursal();
+		sucRamos.setId(ID_RAMOS);
+		sucRamos.setLocalidad(ramos);
+		session().save(sucRamos);
+		Locker locker=new Locker();
+		locker.setId(1);
+		locker.setSucursal(sucRamos);
+		locker.setTamano(TAMANIO_CHICO);
+		session().save(locker);
+		String codigo="123456";
+		return locker;
+	}
+	@Test
+	@Transactional
+	@Rollback
+	public void testQueSePuedaValidarUnCodigo() {
+		Locker locker=dadoQueTengoElCodigo();
+		Boolean resultadoObtenido=prueboQueSeValide(locker);
+		verificoSiSalioExitoso(resultadoObtenido);
+	}
+
+	private void verificoSiSalioExitoso(Boolean resultadoObtenido) {
+		// TODO Auto-generated method stub
+		assertTrue(resultadoObtenido);
+		
+	}
+
+	private Boolean prueboQueSeValide(Locker locker) {
+		// TODO Auto-generated method stub
+		Boolean resultado=repositorioLocker.validarCodigo(locker.getId(),locker.getTamano(),locker.getCodigo());
+		return true;
+	}
+
+	private Locker dadoQueTengoElCodigo() {
+		String codigo="123456";
+		Localidad ramos = new Localidad();
+		ramos.setNombre("Ramos");
+		ramos.setId(1L);
+		session().save(ramos);
+		Sucursal sucRamos = new Sucursal();
+		sucRamos.setId(ID_RAMOS);
+		sucRamos.setLocalidad(ramos);
+		session().save(sucRamos);
+		Locker locker=new Locker();
+		locker.setId(1);
+		locker.setSucursal(sucRamos);
+		locker.setTamano(TAMANIO_CHICO);
+		locker.setCodigo(codigo);
+		session().save(locker);
+		
+		return locker;
+	}
+	
 
 }
