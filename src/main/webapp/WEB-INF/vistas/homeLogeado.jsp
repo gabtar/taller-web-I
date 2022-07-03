@@ -50,9 +50,8 @@ function Confirmar(){
 				<div class="w3-container w3-center">
 					<h1 class="w3-text-red w3-margin-bottom">No posee alquileres
 						activos.</h1>
-					<a href="alquileres" style="text-decoration: none;">
-						<button class="w3-button w3-indigo w3-round">Ir a
-							alquileres disponibles</button>
+					<a href="${homeUrl}sucursales" style="text-decoration: none;">
+						<button class="w3-button w3-indigo w3-round">Buscar Lockers</button>
 					</a>
 				</div>
 			</c:if>

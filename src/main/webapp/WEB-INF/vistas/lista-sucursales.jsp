@@ -63,6 +63,64 @@
 								<p>Sucursales para ${busqueda}</p>
 							</c:otherwise>
 						</c:choose>
+						  <div id="mapdiv"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.11/lib/OpenLayers.js"></script> 
+  <script type="text/javascript">
+    map = new OpenLayers.Map("mapdiv");
+    map.addLayer(new OpenLayers.Layer.OSM());
+    
+    epsg4326 =  new OpenLayers.Projection("EPSG:4326"); //WGS 1984 projection
+    projectTo = map.getProjectionObject(); //The map projection (Spherical Mercator)
+   
+    // Centro fijo Cerca de Ramos
+    var lonLat = new OpenLayers.LonLat( -58.54906, -34.64014 ).transform(epsg4326, projectTo);
+          
+    var zoom=14;
+    map.setCenter (lonLat, zoom);
+
+    var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
+    
+    // Por cada sucursal encontrala la agrega al mapa
+    <c:forEach var="sucursal" items="${sucursales}">
+        var feature = new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.Point( '<c:out value="${sucursal.longitud}"/>', '<c:out value="${sucursal.latitud}"/>'  ).transform(epsg4326, projectTo),
+                {description:'<c:out value="${sucursal.nombre}"/>'} ,
+                {externalGraphic: 'img/location.png', graphicHeight: 25, graphicWidth: 21, graphicXOffset:-12, graphicYOffset:-25  }
+            );    
+        vectorLayer.addFeatures(feature);
+    </c:forEach>
+   
+    map.addLayer(vectorLayer);
+ 
+    //Add a selector control to the vectorLayer with popup functions
+    var controls = {
+      selector: new OpenLayers.Control.SelectFeature(vectorLayer, { onSelect: createPopup, onUnselect: destroyPopup })
+    };
+
+    function createPopup(feature) {
+      feature.popup = new OpenLayers.Popup.FramedCloud("pop",
+          feature.geometry.getBounds().getCenterLonLat(),
+          null,
+          '<div class="markerContent">'+feature.attributes.description+'</div>',
+          null,
+          true,
+          function() { controls['selector'].unselectAll(); }
+      );
+      //feature.popup.closeOnMove = true;
+      map.addPopup(feature.popup);
+    }
+
+    function destroyPopup(feature) {
+      feature.popup.destroy();
+      feature.popup = null;
+    }
+    
+    map.addControl(controls['selector']);
+    controls['selector'].activate();
+      
+  </script>
+						
+						
 					</h2>
 					<table class="w3-table-all">
 						<thead>
@@ -94,6 +152,7 @@
 			</c:otherwise>
 		</c:choose>
 	</div>
+	<br>
 
 
 	<!-- Overlay effect when opening sidebar on small screens -->

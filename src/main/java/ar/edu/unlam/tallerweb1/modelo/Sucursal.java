@@ -22,6 +22,10 @@ public class Sucursal {
 	private Localidad localidad;
 
 	private String nombre;
+	
+	private Double latitud;
+	
+	private Double longitud;
 
 	public Long getId() {
 		return id;
@@ -45,5 +49,21 @@ public class Sucursal {
 
 	public void setLocalidad(Localidad localidad) {
 		this.localidad = localidad;
+	}
+
+	public Double getLatitud() {
+		return latitud;
+	}
+
+	public void setLatitud(Double latitud) {
+		this.latitud = latitud;
+	}
+
+	public Double getLongitud() {
+		return longitud;
+	}
+
+	public void setLongitud(Double longitud) {
+		this.longitud = longitud;
 	}
 }
