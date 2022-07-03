@@ -40,6 +40,10 @@ function Confirmar(){
 
 				<div class="w3-panel w3-red w3-padding-16">${error}</div>
 			</c:if>
+			<c:if test="${not empty mensaje}">
+
+				<div class="w3-panel w3-green w3-padding-16">${mensaje}</div>
+			</c:if>
 		</div>
 		<div class="container">
 			<c:if test="${empty listaAlquileres}">
@@ -60,12 +64,12 @@ function Confirmar(){
 							<td class="w3-center">Sucursal: <c:out
 									value="${locker.sucursal.nombre}" />
 							</td class="w3-center">
-							<td class="w3-center">Nï¿½mero locker: <c:out
+							<td class="w3-center">Número locker: <c:out
 									value="${locker.id}" /></td>
 							<td class="w3-center">Tipo de locker: <c:out
 									value="${locker.tamano}" /></td>
 							<td class="w3-center">$0.0</td>
-							<td class="w3-center"><a href="codigoApertura/${locker.id}"
+							<td class="w3-center"><a href="codigo/generar/${locker.id}"
 								class="w3-button w3-light-blue">Codigo Producto</a></td>
 							<td class="w3-center"><form:form
 									action="cancelar-locker/${locker.id}" method="POST">

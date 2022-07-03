@@ -83,7 +83,7 @@ public class ControladorAlquiler {
         if(servicioAlquiler.alquilarLocker(lockerId, usuarioId)){
         	String usuario= (String) request.getSession().getAttribute("nombreUsuario");
         	final String TEXTO_EMAIL_REGISTRO = "usted a alquilado el locker " + lockerId + " gracias "+ usuario +" por elegirnos RENTLOCK";
-            modelo.put("error", "Alquiler exitoso");
+        	modelo.put("error", "Alquiler exitoso");
             servicioEmail.enviarMail(usuario, "Rent-Lock", TEXTO_EMAIL_REGISTRO);
             return new ModelAndView("redirect:/homeLogeado", modelo);
         }

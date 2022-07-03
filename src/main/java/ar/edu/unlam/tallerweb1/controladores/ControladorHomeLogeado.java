@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.servicios.ServicioSucursal;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGenerarCodigoImpl;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCodigoImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ar.edu.unlam.tallerweb1.servicios.ServicioAlquiler;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGenerarCodigo;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCodigo;
 
 
 @Controller
@@ -26,17 +27,17 @@ public class ControladorHomeLogeado {
 
 	private ServicioAlquiler servicioAlquiler;
 	private ServicioSucursal servicioSucursal;
-	private ServicioGenerarCodigo servicioGenerarCodigo;
+	private ServicioCodigo servicioGenerarCodigo;
 
 	@Autowired
-	public ControladorHomeLogeado(ServicioAlquiler servicioAlquiler, ServicioSucursal servicioSucursal, ServicioGenerarCodigo servicioGenerarCodigo) {
+	public ControladorHomeLogeado(ServicioAlquiler servicioAlquiler, ServicioSucursal servicioSucursal, ServicioCodigo servicioGenerarCodigo) {
 		this.servicioSucursal = servicioSucursal;
 		this.servicioAlquiler = servicioAlquiler;
 		this.servicioGenerarCodigo= servicioGenerarCodigo;
 	}
 
 	@RequestMapping("/homeLogeado")
-	public ModelAndView irHome(HttpServletRequest request) {
+	public ModelAndView irHome(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		// Si no estas logueado te redirecciona al login
 		if (request.getSession().getAttribute("userId") == null) {
 			return new ModelAndView("redirect:/login");
@@ -67,9 +68,6 @@ public class ControladorHomeLogeado {
 		int id= Math.toIntExact(lockerId);
 		servicioAlquiler.ModificarNotaDeLocker(id,textoAModificar);
 
-		System.out.println(lockerId);
-		System.out.println(textoAModificar);
-
 		return new ModelAndView("redirect:/homeLogeado");
 	}
 	
@@ -80,22 +78,4 @@ public class ControladorHomeLogeado {
 		servicioGenerarCodigo.generarCodigo(usuario, lockerId);
 		return new ModelAndView("codigo-apertura");
 	}
-
-	@RequestMapping(path = "/retirarProducto")
-	public ModelAndView retirarProducto(HttpServletRequest request) {
-		ModelMap modelo = new ModelMap();
-		modelo.put("tipoOperacion", "Para poder retirar un producto necesitamos que coloque el codigo que recibio por email");
-		modelo.put("validarCodigo", new ValidarCodigo());
-		return new ModelAndView("retirar-producto", modelo);
-	}
-
-	@RequestMapping(path = "/agregarProducto")
-	public ModelAndView agregarProducto(HttpServletRequest request) {
-		ModelMap modelo = new ModelMap();
-		modelo.put("tipoOperacion", "Para poder agregar un producto necesitamos que coloque el codigo que recibio por email");
-		modelo.put("validarCodigo", new ValidarCodigo());
-		return new ModelAndView("agregar-producto", modelo);
-	}
-	
-
 }

@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.modelo.Codigo;
 import ar.edu.unlam.tallerweb1.modelo.Localidad;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Sucursal;
@@ -60,12 +61,15 @@ public class RepositorioLockerTest extends SpringTest {
 	public void queSePuedaBuscarUnLockerPorId() {
 		Locker locker = dadoQueTengoElSiguienteLocker();
 		Locker lockerEsperado = cuandoObtengoLosLockers(locker);
-		esperoElLocker(lockerEsperado, locker);
+		esperoElLocker(locker, lockerEsperado);
+	}
+
+	private void esperoElLocker(Locker locker, Locker lockerEsperado) {
+		assertThat(lockerEsperado).isEqualTo(locker);
 	}
 
 	private Locker dadoQueTengoElSiguienteLocker() {
 		Locker locker = new Locker();
-		locker.setIdSucursal((long) 2);
 		locker.setOcupado(false);
 		session().save(locker);
 		return locker;
@@ -73,20 +77,20 @@ public class RepositorioLockerTest extends SpringTest {
 
 	private Locker cuandoObtengoLosLockers(Locker locker) {
 
-		return repositorioLocker.buscarLockersPorId(locker.getId());
+		return repositorioLocker.buscarLockerPorId(locker.getId());
 	}
 
-	private void esperoElLocker(Locker lockerEsperado, Locker locker) {
+	private void esperoQueContengaElLocker(List<Locker> lockerEsperados, Locker locker) {
 
-		assertThat(lockerEsperado).isEqualTo(locker);
+		assertThat(lockerEsperados).contains(locker);
 	}
 
 	@Test @Transactional @Rollback
 	public void queSeMuestreLosLockersAlquiladosDeUnCliente() {
 		Usuario usuario = dadoQueExisteElUsuario();
 		Locker locker = dadoQueElUsuarioTieneLosSiguienteLockers(usuario);
-		Locker lockerEsperado=cuandoObtengoLosLockersDelUsuario(usuario);
-		esperoElLocker(lockerEsperado, locker);
+		List<Locker> lockerEsperados=cuandoObtengoLosLockersDelUsuario(usuario);
+		esperoQueContengaElLocker(lockerEsperados, locker);
 	}
 
 	private Usuario dadoQueExisteElUsuario() {
@@ -102,20 +106,19 @@ public class RepositorioLockerTest extends SpringTest {
 		int id= 1;
 		Locker locker = new Locker();
 		locker.setId(id);
-		locker.setIdSucursal((long) 2);
 		locker.setOcupado(false);
-		locker.setUsuario(usuario.getId());
+		locker.setPropietario(usuario);
 		session().save(locker);
 
 		return locker;
 	}
 
-	private Locker cuandoObtengoLosLockersDelUsuario(Usuario usuario) {
+	private List<Locker> cuandoObtengoLosLockersDelUsuario(Usuario usuario) {
 		return repositorioLocker.buscarLockersPorUsuario(usuario);
 	}
 
-	private void esperoLosLockersDelUsuario(Locker lockerEsperado, Locker locker) {
-		assertThat(lockerEsperado).isEqualTo(locker);
+	private void esperoLosLockersDelUsuario(List<Locker> lockerEsperados, Locker locker) {
+		assertThat(lockerEsperados).contains(locker);
 	}
 
 	@Test
@@ -131,19 +134,17 @@ public class RepositorioLockerTest extends SpringTest {
 		int id= 1;
 		Locker locker = new Locker();
 		locker.setId(id);
-		locker.setIdSucursal((long) 2);
 		locker.setOcupado(false);
 		session().save(locker);
 		int id2 = 2;
 		Locker locker2 = new Locker();
 		locker.setId(id);
-		locker.setIdSucursal((long) 2);
 		locker.setOcupado(false);
 		session().save(locker2);
 	}
 
 	private List<Locker> cuandoObtengoLosLockersDisponibles() {
-		return repositorioLocker.buscarLockers();
+		return repositorioLocker.buscarLockersLibres();
 	}
 
 	private void esperoLaListaDeLockersDisponibles(List<Locker> lockerEsperado) {
@@ -161,10 +162,12 @@ public class RepositorioLockerTest extends SpringTest {
 
 	private Locker dadoQueTengoElSiguienteLockerAlquilado() {
 		int lockerId = 1;
-		Long usuarioId = 1L;
+		Usuario usuario = new Usuario(); 
+		usuario.setId(usuarioId);
+		session().save(usuario);
 		Locker locker = new Locker();
 		locker.setId(lockerId);
-		locker.setUsuario(usuarioId);
+		locker.setPropietario(usuario);
 		session().save(locker);
 		repositorioLocker.alquilarLocker(locker.getId(), usuarioId);
 		
@@ -272,7 +275,7 @@ public class RepositorioLockerTest extends SpringTest {
 	private void verificoSiSeGuardoCorrectamente(Locker locker) {
 		// TODO Auto-generated method stub
 		String codigo="123456";
-		assertThat(locker.getCodigo()).isEqualTo(codigo);
+		assertThat(locker.getCodigoApertura().getCodigo()).isEqualTo(codigo);
 	}
 
 	private void guardoElCodigoEnLaBase(Locker locker) {
@@ -300,45 +303,52 @@ public class RepositorioLockerTest extends SpringTest {
 		String codigo="123456";
 		return locker;
 	}
-	@Test
-	@Transactional
-	@Rollback
-	public void testQueSePuedaValidarUnCodigo() {
-		Locker locker=dadoQueTengoElCodigo();
-		Boolean resultadoObtenido=prueboQueSeValide(locker);
-		verificoSiSalioExitoso(resultadoObtenido);
-	}
 
-	private void verificoSiSalioExitoso(Boolean resultadoObtenido) {
-		// TODO Auto-generated method stub
-		assertTrue(resultadoObtenido);
+	private Locker dadoQueTengoElLockerConElSiguienteCodigo(String codigo) {
 		
-	}
-
-	private Boolean prueboQueSeValide(Locker locker) {
-		// TODO Auto-generated method stub
-		Boolean resultado=repositorioLocker.validarCodigo(locker.getId(),locker.getTamano(),locker.getCodigo());
-		return true;
-	}
-
-	private Locker dadoQueTengoElCodigo() {
-		String codigo="123456";
+		Codigo codigoApertura = new Codigo();
+		codigoApertura.setCodigo(codigo);
+		session().save(codigoApertura);
+		
 		Localidad ramos = new Localidad();
 		ramos.setNombre("Ramos");
 		ramos.setId(1L);
 		session().save(ramos);
+
 		Sucursal sucRamos = new Sucursal();
 		sucRamos.setId(ID_RAMOS);
 		sucRamos.setLocalidad(ramos);
 		session().save(sucRamos);
+		
 		Locker locker=new Locker();
 		locker.setId(1);
 		locker.setSucursal(sucRamos);
 		locker.setTamano(TAMANIO_CHICO);
-		locker.setCodigo(codigo);
+		locker.setCodigoApertura(codigoApertura);
+		
 		session().save(locker);
+		session().refresh(locker);
 		
 		return locker;
+	}
+	
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void testQueSePuedaBorrarElCodigoAUnLocker() {
+		Locker locker = dadoQueTengoElLockerConElSiguienteCodigo("123456");
+		cuandoQuieroBorrarElCodigoDelLocker(locker);
+		entoncesElLockerNoTieneCodigo(locker);
+	}
+
+	private void entoncesElLockerNoTieneCodigo(Locker locker) {
+		Locker lockerBuscado = repositorioLocker.buscarLockerPorId(locker.getId());
+		assertThat(lockerBuscado.getCodigoApertura()).isNull();
+	}
+
+	private void cuandoQuieroBorrarElCodigoDelLocker(Locker locker) {
+		repositorioLocker.borrarCodigoALocker(locker.getId());
 	}
 	
 

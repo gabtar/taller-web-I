@@ -18,16 +18,25 @@ public class Locker {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private Long idSucursal;
+	
 	private String tamano;
-	private Calendar fechaDeAlta;
-	private Date fecha;
-	private String codigo_agregar_producto;
+	private boolean ocupado;
+	private Date fechaInicioAlquiler;
 
 	@OneToOne
 	@JoinColumn(name = "sucursal_id")
 	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	private Sucursal sucursal;
+	
+	@OneToOne
+	@JoinColumn(name = "usuario_id")
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
+	private Usuario propietario;
+	
+	@OneToOne
+	@JoinColumn(name = "codigo_id")
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
+	private Codigo codigoApertura;
 
 	private String textoDelUsuario;
 
@@ -47,31 +56,12 @@ public class Locker {
 		this.tamano = tamano;
 	}
 
-	public Long getUsuarioId() {
-		return usuarioId;
-	}
-
-	public void setUsuarioId(Long usuarioId) {
-		this.usuarioId = usuarioId;
-	}
-
-	private boolean ocupado;
-	private Long usuarioId;
-
 	public int getId() {
 		return this.id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Long getIdSucursal() {
-		return idSucursal;
-	}
-
-	public void setIdSucursal(Long idSucursal) {
-		this.idSucursal = idSucursal;
 	}
 
 	public boolean isOcupado() {
@@ -82,15 +72,6 @@ public class Locker {
 		this.ocupado = ocupado;
 	}
 
-	public void setUsuario(Long usuarioId) {
-		// TODO Auto-generated method stub
-		this.usuarioId = usuarioId;
-	}
-
-	public Long usuarioId() {
-		return usuarioId;
-	}
-
 	public String getTextoDelUsuario() {
 		return textoDelUsuario;
 	}
@@ -98,10 +79,28 @@ public class Locker {
 	public void setTextoDelUsuario(String textoDelUsuario) {
 		this.textoDelUsuario = textoDelUsuario;
 	}
-	public String getCodigo() {
-		return codigo_agregar_producto;
+	
+	public Codigo getCodigoApertura() {
+		return codigoApertura;
 	}
-	public void setCodigo(String codigo_agregar_producto) {
-		this.codigo_agregar_producto = codigo_agregar_producto;
+
+	public void setCodigoApertura(Codigo codigoApertura) {
+		this.codigoApertura = codigoApertura;
+	}
+
+	public Date getFechaInicioAlquiler() {
+		return fechaInicioAlquiler;
+	}
+
+	public void setFechaInicioAlquiler(Date fechaInicioAlquiler) {
+		this.fechaInicioAlquiler = fechaInicioAlquiler;
+	}
+
+	public Usuario getPropietario() {
+		return propietario;
+	}
+
+	public void setPropietario(Usuario propietario) {
+		this.propietario = propietario;
 	}
 }

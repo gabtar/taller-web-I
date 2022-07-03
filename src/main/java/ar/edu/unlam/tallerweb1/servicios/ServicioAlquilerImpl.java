@@ -3,7 +3,6 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import java.util.List;
 
-import ar.edu.unlam.tallerweb1.modelo.DatosGestorAlquiler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,35 +40,22 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 		return false;
 	}
 	public Boolean getEstadoLocker(int lockerId) {
-		// TODO Auto-generated method stub
 		return repositorioLockerDAO.getEstadoLocker(lockerId);
 	}
 
 	public List<Locker> verAlquileresPropios(Usuario usuario) {
-		// TODO Auto-generated method stub
-		return repositorioLockerDAO.buscarAlquileresActivosDeUsuario(usuario);
+		return repositorioLockerDAO.buscarLockersPorUsuario(usuario);
 	}
 
 	@Override
 	public List<Locker> buscarAlquileresDisponibles() {
 		// TODO Auto-generated method stub
-		return (List) repositorioLockerDAO.buscarLockers();
-	}
-
-	@Override
-	public List<DatosGestorAlquiler> GestinarAlquilerUsuario(Usuario usuario) {
-		List<DatosGestorAlquiler> gestor =repositorioLockerDAO.GestorAlquileresDelUsuario(usuario);
-		return gestor;
+		return (List) repositorioLockerDAO.buscarLockersLibres();
 	}
 
 	@Override
 	public void ModificarNotaDeLocker(int lockerId, String texto) {
-		repositorioLockerDAO.ModificarNotaDeLocker(lockerId, texto);
-	}
-
-	@Override
-	public String NotaDelocker(int lockerId) {
-		return repositorioLockerDAO.NotaDelLocker(lockerId);
+		repositorioLockerDAO.modificarNotaDeLocker(lockerId, texto);
 	}
 
 	@Override
@@ -79,7 +65,6 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 
 	@Override
 	public List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(Long idSucursal, String tamanio) {
-		// TODO Auto-generated method stub
 		return repositorioLockerDAO.buscarLockersDisponiblesPorSucursalYTamanio(idSucursal, tamanio);
 	}
 }

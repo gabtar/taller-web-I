@@ -10,9 +10,9 @@ public class RepositorioProductoImpl implements RepositorioProducto {
     public boolean validacionDatos(String nombre, String codigo, int lockerId) {
         Locker locker = new Locker();
         Usuario usuario = new Usuario();
-        if(codigo == locker.getCodigo() && nombre == usuario.getEmail()) {
-            return true;
-        }
+//        if(codigo == locker.getCodigo() && nombre == usuario.getEmail()) {
+//            return true;
+//        }
 
         return false;
     }

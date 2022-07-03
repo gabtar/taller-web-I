@@ -20,24 +20,25 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioAlquiler;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGenerarCodigo;
-import ar.edu.unlam.tallerweb1.servicios.ServicioGenerarCodigoTest;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCodigo;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCodigoTest;
+
 public class ControladorHomeLogeadoTest {
 	ServicioAlquiler servicioAlquiler;
 	ControladorHomeLogeado controladorHomeLogeado;
-	ServicioGenerarCodigo servicioGenerarCodigo;
-	 ServicioSucursal servicioSucursal;
-	 HttpServletRequest request;
-	 HttpSession session;
+	ServicioCodigo servicioGenerarCodigo;
+	ServicioSucursal servicioSucursal;
+	HttpServletRequest request;
+	HttpSession session;
+
 	@Before
 	public void setUp() throws Exception {
-		servicioGenerarCodigo=mock(ServicioGenerarCodigo.class);
+		servicioGenerarCodigo = mock(ServicioCodigo.class);
 		servicioAlquiler = mock(ServicioAlquiler.class);
-		servicioSucursal =mock(ServicioSucursal.class);
+		servicioSucursal = mock(ServicioSucursal.class);
 		session = mock(HttpSession.class);
 		request = mock(HttpServletRequest.class);
-		controladorHomeLogeado = new ControladorHomeLogeado(servicioAlquiler,servicioSucursal,servicioGenerarCodigo);
-		
+		controladorHomeLogeado = new ControladorHomeLogeado(servicioAlquiler, servicioSucursal, servicioGenerarCodigo);
 	}
 
 	@Test
@@ -61,9 +62,8 @@ public class ControladorHomeLogeadoTest {
 	private void esperoQueMeLleveALaPaginaParaCargarElCodigo(ModelAndView vistaObtenida, ModelAndView vistaEsperada) {
 		int lockerId = 1;
 		when(request.getSession().getAttribute("nombreUsuario")).thenReturn("pepe@pepe");
-		verify(servicioGenerarCodigo, times(1)).generarCodigo((String)request.getAttribute("nombreUsuario"), lockerId);
+		verify(servicioGenerarCodigo, times(1)).generarCodigo((String) request.getAttribute("nombreUsuario"), lockerId);
 		assertThat(vistaEsperada.getViewName()).isEqualTo(vistaObtenida.getViewName());
 		assertThat(vistaEsperada.getModel()).isInstanceOf(vistaObtenida.getModel().getClass());
 	}
-	
 }

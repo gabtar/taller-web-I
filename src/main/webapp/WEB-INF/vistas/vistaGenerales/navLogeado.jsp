@@ -23,11 +23,14 @@
 			class="w3-bar-item w3-button w3-hover-white ">Mis Alquileres</a> <a
 			href="${homeUrl}sucursales" onclick="w3_close()"
 			class="w3-bar-item w3-button w3-hover-white ">Buscar Lockers</a> <a
-			href="${homeUrl}agregarProducto" onclick="w3_close()"
-			class="w3-bar-item w3-button w3-hover-white ">Agregar Producto</a> <a
-			href="${homeUrl}retirarProducto" onclick="w3_close()"
-			class="w3-bar-item w3-button w3-hover-white ">Retirar Producto</a> <a
 			href="${homeUrl}logout" onclick="w3_close()"
 			class="w3-bar-item w3-button w3-hover-white ">Desconectarse</a>
+			<br>
+			<br>
+			<br>
+			<br>
+			<a href="${homeUrl}codigo/validar" target="_blank" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white ">
+				Menu En Sucursal
+			</a>
 	</div>
 </nav>

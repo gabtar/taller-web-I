@@ -1,6 +1,6 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-public class ValidarCodigo {
+public class DatosValidarCodigo {
 
     private String nombre;
     private String codigo;

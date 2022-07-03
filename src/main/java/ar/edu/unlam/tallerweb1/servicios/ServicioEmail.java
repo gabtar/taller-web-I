@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 
 @Service("servicioEmail")
-
 public class ServicioEmail {
 	
 	private JavaMailSender mailSender;

@@ -11,7 +11,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import ar.edu.unlam.tallerweb1.modelo.DatosGestorAlquiler;
 import ar.edu.unlam.tallerweb1.modelo.Sucursal;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioSucursal;
 import org.junit.Before;
@@ -35,7 +34,7 @@ public class ServicioAlquilerTest {
 	ServicioSucursal servicioSucursal;
 	RepositorioSucursal repositorioSucursal;
 	int lockerId = 1;
-	Long usuarioId = 1L;
+	private static final Long USUARIO_ID = 1L;
 	Usuario usuario;
 
 	Locker locker;
@@ -73,7 +72,7 @@ public class ServicioAlquilerTest {
 
 	private Boolean cuandoQuieroAlquilar() {
 		boolean actual;
-		return actual = servicioAlquiler.alquilarLocker(lockerId,usuarioId);
+		return actual = servicioAlquiler.alquilarLocker(lockerId,USUARIO_ID);
 	}
 
 	private void esperoPoderAlquilarlo(Boolean actual) {
@@ -110,30 +109,29 @@ public class ServicioAlquilerTest {
 
 	@Test
 	public void mostrarLockersDelUsuario() {
-		dadoQueElUsuarioTieneLosSiguienteLocker();
-		usuario.setId(usuarioId);
-		List lista = cuandoObtengoLaListaDeLocker(usuario);
+		List lockersUsuario = dadoQueElUsuarioTieneLosSiguienteLocker();
+		List lista = cuandoObtengoLaListaDeLocker(usuario, lockersUsuario);
 		esperoLaLista(lista);
 	}
 
-	private void dadoQueElUsuarioTieneLosSiguienteLocker() {
+	private List<Locker> dadoQueElUsuarioTieneLosSiguienteLocker() {
 		List <Locker>listaLocker = new ArrayList<>();
-		usuario.setId(usuarioId);
+		usuario.setId(USUARIO_ID);
 		locker = new Locker();
 		Locker locker2 = new Locker();
 		locker.setId(lockerId);
 		locker2.setId(2);
 		locker.setOcupado(true);
 		locker2.setOcupado(true);
-		locker.setUsuario(usuario.getId());
-		locker2.setUsuario(usuario.getId());
+		locker.setPropietario(usuario);
+		locker2.setPropietario(usuario);
 		listaLocker.add(locker);
 		listaLocker.add(locker2);
-		when(repositorioLockerDAO.buscarAlquileresActivosDeUsuario(usuario)).thenReturn(listaLocker);
+		return listaLocker;
 	}
 
-	private List<Locker> cuandoObtengoLaListaDeLocker(Usuario usuario) {
-		//usuario.setId(usuarioId);
+	private List<Locker> cuandoObtengoLaListaDeLocker(Usuario usuario, List lista) {
+		when(repositorioLockerDAO.buscarLockersPorUsuario(usuario)).thenReturn(lista);
 		return servicioAlquiler.verAlquileresPropios(usuario);
 	}
 
@@ -144,54 +142,6 @@ public class ServicioAlquilerTest {
 		assertFalse(actual);
 	}
 
-
-	@Test
-	public void elServicioDeAlquilerCambiaTextoDelLocker(){
-		Usuario usuario1= new Usuario();
-		usuario1.setId(1L);
-		Locker locker1= new Locker();
-		locker1.setId(1);
-		locker1.setTextoDelUsuario("asd");
-		String texto="tiene Bananas";
-		when(repositorioLockerDAO.NotaDelLocker(1L)).thenReturn(texto);
-		servicioAlquiler.ModificarNotaDeLocker(locker1.getId(),texto);
-		assertThat(servicioAlquiler.NotaDelocker(locker1.getId())).isEqualTo(texto);
-	}
-	@Test
-	public void elServicioDeAlquilerCambiaTextoDelLocker2(){
-		Usuario usuario1= new Usuario();
-		usuario1.setId(1L);
-		Locker locker1= new Locker();
-		locker1.setId(1);
-		locker1.setTextoDelUsuario("asd");
-		String texto="tiene Bananas";
-		when(repositorioLockerDAO.NotaDelLocker(1L)).thenReturn(texto);
-		servicioAlquiler.ModificarNotaDeLocker(locker1.getId(),texto);
-		assertThat(servicioAlquiler.NotaDelocker(locker1.getId())).isEqualTo(texto);
-	}
-	@Test
-	public void elServicioDEAlguilerTieneUnMetodoParaMostrarTodoLosDatosDeLosAlquileres(){
-		// preparacion
-		Usuario usuario1 = new Usuario();
-		usuario1.setId(1L);
-		Sucursal sucursal1=new Sucursal();
-		sucursal1.setId(1L);
-		Locker locker1 = new Locker();
-		locker1.setId(1);
-		locker1.setIdSucursal(1L);
-		locker1.setUsuarioId(1L);
-
-		List <DatosGestorAlquiler> lista= new ArrayList<>();
-		DatosGestorAlquiler datos= new DatosGestorAlquiler();
-		lista.add(datos);
-		when(repositorioLockerDAO.GestorAlquileresDelUsuario(usuario1)).thenReturn(lista);
-
-		// ejecucion
-		List<DatosGestorAlquiler> gestor = servicioAlquiler.GestinarAlquilerUsuario(usuario1);
-		// comparacion
-		assertThat(gestor.size()).isEqualTo(1);
-	}
-
 	@Test
 	public void queSePuedaCancelarUnLockerAlquilado() {
 		dadoQueTengoElSiguienteLockerOcupado();
@@ -200,7 +150,7 @@ public class ServicioAlquilerTest {
 	}
 
 	private Boolean cuandoQuieroCancelar(){
-		boolean actual = servicioAlquiler.cancelarLocker(lockerId, usuarioId);
+		boolean actual = servicioAlquiler.cancelarLocker(lockerId, USUARIO_ID);
 		return actual;
 	}
 

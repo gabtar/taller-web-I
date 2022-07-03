@@ -47,32 +47,37 @@
 </style>
 <body>
 
-<h3>${tipoOperacion}</h3>
+<div class="w3-center">
+	<h2>Rent-Lock</h2>
+	<h3>Ingrese los datos para abrir el locker</h3>
+</div>
 
 <div>
     <%--@elvariable id="validarCodigo" type=""--%>
-    <form:form action="agregar-producto" method="POST"
+	<c:if test="${not empty error}">
+            <div class="w3-panel w3-red w3-padding-16">${error}</div>
+     </c:if>
+     <c:if test="${not empty mensaje}">
+            <div class="w3-panel w3-green w3-padding-16">${mensaje}</div>
+     </c:if>
+    
+    <form:form action="validar" method="POST"
                modelAttribute="validarCodigo"
                class="w3-container w3-card-4 w3-center w3-padding-16"
                style="width: 60%; margin: auto;">
 
         <p class="w3-center w3-margin-top">
-            <form:input path="nombre" id="nombre" type="nombre" class="w3-input"
-                        placeholder="Nombre" />
+            <form:input path="nombre" id="nombre" type="email" class="w3-input"
+                        placeholder="Email" required="true"/>
         </p>
         <p class="w3-center w3-margin-top">
-            <form:input path="codigo" type="codigo" id="codigo"
-                        class="w3-input" placeholder="Codigo" />
+            <form:input path="codigo" type="text" id="codigo"
+                        class="w3-input" placeholder="Codigo" required="true"/>
         </p>
         <p class="w3-center w3-margin-top">
-            <form:input path="lockerId" type="lockerId"
+            <form:input path="lockerId" type="number"
                         id="lockerId" class="w3-input"
-                        placeholder="Numero de Locker" />
-        </p>
-        <c:if test="${not empty error}">
-            <div class="w3-panel w3-red w3-padding-16">${error}</div>
-        </c:if>
-        <p>
+                        placeholder="Numero de Locker" required="true"/>
             <button class="w3-btn w3-section w3-red w3-ripple w3-block"
                     Type="Submit">Enviar</button>
         </p>

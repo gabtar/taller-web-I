@@ -26,11 +26,6 @@ public class ServicioProductoImpl implements ServicioProducto {
     }
     @Override
     public Boolean validacionDatos(String nombre, String codigo, int lockerId) {
-        //Locker locker = repositorioLocker.buscarLockersPorId(lockerId);
-        //Usuario usuario = repositorioUsuario.buscar(nombre);
-        if(repositorioLocker.validarCodigo(lockerId, nombre, codigo)) {
-            return true;
-        }
-        return false;
+        return null;
     }
 }

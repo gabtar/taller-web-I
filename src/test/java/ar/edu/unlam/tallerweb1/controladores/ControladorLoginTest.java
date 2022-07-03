@@ -29,7 +29,9 @@ public class ControladorLoginTest {
 
 	@Before
 	public void setUp() throws Exception {
-		datosLogin = mock(DatosLogin.class);
+		datosLogin = new DatosLogin();
+		datosLogin.setEmail("");
+		datosLogin.setPassword("");
 		servicioLogin = mock(ServicioLogin.class);
 		controladorLogin = new ControladorLogin(servicioLogin);
 		
@@ -60,8 +62,6 @@ public class ControladorLoginTest {
 
 		// When 
 		when(request.getSession()).thenReturn(session);
-		when(datosLogin.getEmail()).thenReturn("");		
-		when(datosLogin.getPassword()).thenReturn("");	
 		when(servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword())).thenReturn(new Usuario());
 		ModelAndView vistaObtenida = controladorLogin.validarLogin(datosLogin, request);
 		
@@ -76,9 +76,7 @@ public class ControladorLoginTest {
 		modeloEsperado.put("error", MENSAJE_USUARIO_O_CLAVE_INCORRECTA);
 		ModelAndView vistaEsperada = new ModelAndView("login", modeloEsperado);
 
-		// Then
-		when(datosLogin.getEmail()).thenReturn("");		
-		when(datosLogin.getPassword()).thenReturn("");	
+		// Then	
 		when(request.getSession()).thenReturn(session);
 		when(servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword())).thenReturn(null);
 		ModelAndView vistaObtenida = controladorLogin.validarLogin(datosLogin, request);

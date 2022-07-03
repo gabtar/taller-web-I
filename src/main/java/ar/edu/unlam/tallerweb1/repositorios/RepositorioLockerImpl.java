@@ -2,13 +2,13 @@ package ar.edu.unlam.tallerweb1.repositorios;
 
 import java.util.List;
 
-import ar.edu.unlam.tallerweb1.modelo.DatosGestorAlquiler;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import ar.edu.unlam.tallerweb1.modelo.Codigo;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
@@ -43,12 +43,15 @@ public class RepositorioLockerImpl implements RepositorioLocker {
 		final Session session = sessionFactory.getCurrentSession();
 		Locker locker = (Locker) session.createCriteria(Locker.class).add(Restrictions.eq("id", lockerId))
 				.uniqueResult();
-		if (locker.getUsuarioId() == null) {
+		Usuario usuario = (Usuario) session.createCriteria(Usuario.class).add(Restrictions.eq("id", usuarioId))
+				.uniqueResult();
+		
+		if (locker.getPropietario() == null) {
 
-			locker.setUsuario(usuarioId);
+			locker.setPropietario(usuario);
 		} else {
 
-			locker.setUsuario(null);
+			locker.setPropietario(null);
 		}
 		session.update(locker);
 	}
@@ -79,55 +82,27 @@ public class RepositorioLockerImpl implements RepositorioLocker {
 	}
 
 	@Override
-	public List<Locker> buscarLockers() {
+	public List<Locker> buscarLockersLibres() {
 		final Session session = sessionFactory.getCurrentSession();
 
 		return session.createCriteria(Locker.class).add(Restrictions.eq("ocupado", Boolean.FALSE)).list();
 	}
 
 	@Override
-	public Locker buscarLockersPorId(int id) {
+	public Locker buscarLockerPorId(int id) {
 		return (Locker) sessionFactory.getCurrentSession().createCriteria(Locker.class).add(Restrictions.eq("id", id))
 				.uniqueResult();
 
 	}
 
 	@Override
-	public List<Locker> buscarAlquileresActivosDeUsuario(Usuario usuario) {
-		final Session session = sessionFactory.getCurrentSession();
-		return session.createCriteria(Locker.class).add(Restrictions.eq("usuarioId", usuario.getId())).list();
+	public List<Locker> buscarLockersPorUsuario(Usuario usuario) {
+		return (List<Locker>) sessionFactory.getCurrentSession().createCriteria(Locker.class)
+				.add(Restrictions.eq("propietario", usuario)).list();
 	}
 
 	@Override
-	public Locker buscarLockersPorUsuario(Usuario usuario) {
-		return (Locker) sessionFactory.getCurrentSession().createCriteria(Locker.class)
-				.add(Restrictions.eq("usuarioId", usuario.getId())).uniqueResult();
-	}
-
-	@Override
-	public List<DatosGestorAlquiler> GestorAlquileresDelUsuario(Usuario usuario) {
-
-		// esto es lo que tenia que modificar gabriel
-		final Session session = sessionFactory.getCurrentSession();
-		long numero = usuario.getId();
-		String sql = "SELECT * FROM Locker JOIN Sucursal on locker.idSucursal = sucursal.id WHERE idSucursal=" + numero
-				+ ")";
-		return (List<DatosGestorAlquiler>) session.createNativeQuery(sql);
-	}
-
-	@Override
-	public String NotaDelLocker(long l) {
-		// String nota=
-		// String.valueOf(sessionFactory.getCurrentSession().createNativeQuery("select
-		// textoDelUsuario from locker where id=l").setParameter("l",l));
-		final Session session = sessionFactory.getCurrentSession();
-		Locker locker = (Locker) session.createCriteria(Locker.class).add(Restrictions.eq("id", l)).uniqueResult();
-		String nota = locker.getTextoDelUsuario();
-		return nota;
-	}
-
-	@Override
-	public void ModificarNotaDeLocker(int lockerId, String texto) {
+	public void modificarNotaDeLocker(int lockerId, String texto) {
 		final Session session = sessionFactory.getCurrentSession();
 		Locker locker = (Locker) session.createCriteria(Locker.class).add(Restrictions.eq("id", lockerId))
 				.uniqueResult();
@@ -164,19 +139,30 @@ public class RepositorioLockerImpl implements RepositorioLocker {
 		final Session session = sessionFactory.getCurrentSession();
 		Locker locker = (Locker) session.createCriteria(Locker.class).add(Restrictions.eq("id", lockerId))
 				.uniqueResult();
-
-		locker.setCodigo(codigo);
+		
+		// Tendria que ir en un repositorio de codigo como: Codigo codigo = repositorioCodigo.crearCodigo(String codigo);
+		// Si ya existe un código debería limpiarlo de la bd cuando lo genera en el servicio
+		Codigo codigoApertura = new Codigo();
+		if(locker.getCodigoApertura() != null) {
+			session.remove(locker.getCodigoApertura());
+		}
+		codigoApertura.setCodigo(codigo);
+		session.save(codigoApertura);		
+		
+		locker.setCodigoApertura(codigoApertura);
 		session.update(locker);
 	}
 
 	@Override
-	public Boolean validarCodigo(int lockerId, String nombre, String codigo) {
+	public void borrarCodigoALocker(Integer lockerId) {
 		final Session session = sessionFactory.getCurrentSession();
-		Locker locker =  (Locker) session.createCriteria(Locker.class)
-				.add(Restrictions.eq("id", lockerId))
-				.add(Restrictions.eq("codigo_agregar_producto", codigo))
-				.uniqueResult();
-		return locker != null;
+		
+		Locker locker = this.buscarLockerPorId(lockerId);
+		Codigo codigoApertura = locker.getCodigoApertura();
+		
+		locker.setCodigoApertura(null);
+		session.update(locker);
+		session.remove(codigoApertura);
 	}
 
 }

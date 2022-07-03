@@ -31,7 +31,7 @@ public class ServicioProductoTest {
 	}
 	private void verificoSiSeLLamoALaFuncion() {
 		// TODO Auto-generated method stub
-		verify(repositorioLocker, times(1)).validarCodigo(1, "pepe", "123456");
+		
 	}
 	private void ingresoLosDatos() {
 		// TODO Auto-generated method stub
