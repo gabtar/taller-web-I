@@ -49,12 +49,11 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 
 	@Override
 	public List<Locker> buscarAlquileresDisponibles() {
-		// TODO Auto-generated method stub
-		return (List) repositorioLockerDAO.buscarLockersLibres();
+		return (List<Locker>) repositorioLockerDAO.buscarLockersLibres();
 	}
 
 	@Override
-	public void ModificarNotaDeLocker(int lockerId, String texto) {
+	public void modificarNotaDeLocker(int lockerId, String texto) {
 		repositorioLockerDAO.modificarNotaDeLocker(lockerId, texto);
 	}
 
@@ -64,7 +63,7 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 	}
 
 	@Override
-	public List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(Long idSucursal, String tamanio) {
-		return repositorioLockerDAO.buscarLockersDisponiblesPorSucursalYTamanio(idSucursal, tamanio);
+	public List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(String localidad, String tamanio) {
+		return repositorioLockerDAO.buscarLockersDisponiblesPorSucursalYTamanio(localidad, tamanio);
 	}
 }

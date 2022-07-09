@@ -4,7 +4,7 @@ public class DatosValidarCodigo {
 
     private String nombre;
     private String codigo;
-    private int lockerId;
+    private Integer lockerId;
 
     public String getCodigo() {
         return codigo;
@@ -14,11 +14,11 @@ public class DatosValidarCodigo {
         this.codigo = codigo;
     }
 
-    public int getLockerId() {
+    public Integer getLockerId() {
         return lockerId;
     }
 
-    public void setLockerId(int lockerId) {
+    public void setLockerId(Integer lockerId) {
         this.lockerId = lockerId;
     }
 

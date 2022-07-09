@@ -2,8 +2,10 @@ package ar.edu.unlam.tallerweb1.repositorios;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -122,16 +124,23 @@ public class RepositorioLockerImpl implements RepositorioLocker {
 	}
 
 	@Override
-	public List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(Long idSucursal, String tamanio) {
-		// TODO Auto-generated method stub
+	public List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(String localidad, String tamanio) {
 		final Session session = sessionFactory.getCurrentSession();
 		
-		return session.createCriteria(Locker.class)
-				.createAlias("sucursal", "suc")
-				.add(Restrictions.eq("suc.id", idSucursal))
-				.add(Restrictions.eq("ocupado", false))
-				.add(Restrictions.eq("tamano", tamanio))
-				.list();
+		Criteria criteria = session.createCriteria(Locker.class);
+		
+		if(localidad != null) {
+			criteria.createAlias("sucursal", "suc")
+			.createAlias("suc.localidad", "loc")
+			.add(Restrictions.like("loc.nombre", localidad, MatchMode.ANYWHERE));
+		}
+	
+		if(tamanio != null) {
+			criteria.createAlias("tamanio", "tam")
+				.add(Restrictions.like("tam.tamanio", tamanio, MatchMode.ANYWHERE));
+		}
+		
+		return criteria.add(Restrictions.eq("ocupado", false)).list();
 	}
 
 	@Override

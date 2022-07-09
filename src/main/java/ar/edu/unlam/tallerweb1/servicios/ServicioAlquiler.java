@@ -16,9 +16,9 @@ public interface ServicioAlquiler {
 	List<Locker> verAlquileresPropios(Usuario usuario);
 	List<Locker> buscarAlquileresDisponibles();
 
-	void ModificarNotaDeLocker(int lockerId, String texto);
+	void modificarNotaDeLocker(int lockerId, String texto);
 	
 	List<Locker> buscarLockersDisponiblesPorSucursal(Long idSucursal);
 	
-	List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(Long idRamos, String tamanioChico);
+	List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(String localidad, String tamanioChico);
 }

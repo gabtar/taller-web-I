@@ -63,24 +63,24 @@
     
     <form:form action="validar" method="POST"
                modelAttribute="validarCodigo"
-               class="w3-container w3-card-4 w3-center w3-padding-16"
+               class="w3-container w3-card-4 w3-center w3-padding-32"
                style="width: 60%; margin: auto;">
 
-        <p class="w3-center w3-margin-top">
-            <form:input path="nombre" id="nombre" type="email" class="w3-input"
-                        placeholder="Email" required="true"/>
-        </p>
-        <p class="w3-center w3-margin-top">
+        
+            <form:input path="nombre" id="nombre" type="email" class="w3-input w3-round w3-border"
+                        placeholder="Email" required="true" style="padding: 12px 20px" />
+       
+        
             <form:input path="codigo" type="text" id="codigo"
-                        class="w3-input" placeholder="Codigo" required="true"/>
-        </p>
-        <p class="w3-center w3-margin-top">
+                        class="w3-input w3-border" placeholder="Código" required="true"/>
+       
+        
             <form:input path="lockerId" type="number"
-                        id="lockerId" class="w3-input"
-                        placeholder="Numero de Locker" required="true"/>
-            <button class="w3-btn w3-section w3-red w3-ripple w3-block"
+                        id="lockerId" class="w3-input w3-border w3-round"
+                        placeholder="Número de Locker" required="true" style="padding: 12px 20px" />
+        
+            <button class="w3-btn w3-section w3-red w3-ripple w3-block w3-margin-top"
                     Type="Submit">Enviar</button>
-        </p>
     </form:form>
 </div>
 

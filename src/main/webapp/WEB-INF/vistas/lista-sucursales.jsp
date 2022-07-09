@@ -36,7 +36,7 @@
 			</p>
 			<p>
 				<input class="w3-input" list="localidad" name="localidad"
-					autocomplete="off" />
+					autocomplete="off" value="${param.localidad}" placeholder="Ingrese localidad o dejar vacío para todos los registros"/>
 				<datalist id="localidad">
 					<c:forEach var="localidad" items="${localidades}">
 						<option value="${localidad.nombre}">
@@ -129,9 +129,6 @@
 								<th class="w3-center">Nro Sucursal</th>
 								<th class="w3-center">Localidad</th>
 								<th class="w3-center">Nombre de la Sucursal</th>
-								<c:if test="${not empty sessionScope.userId}">
-									<th class="w3-center">Lockers Disponibles</th>
-								</c:if>
 							</tr>
 						</thead>
 						<c:forEach var="sucursal" items="${sucursales}">
@@ -140,11 +137,6 @@
 								<td class="w3-center"><c:out
 										value="${sucursal.localidad.nombre}" /></td>
 								<td class="w3-center"><c:out value="${sucursal.nombre}" /></td>
-								<c:if test="${not empty sessionScope.userId}">
-									<td class="w3-center">
-										<a class="w3-button w3-black w3-small" href="alquileres/${sucursal.id}">Ver</a>
-									</td>
-								</c:if>
 							</tr>
 						</c:forEach>
 					</table>

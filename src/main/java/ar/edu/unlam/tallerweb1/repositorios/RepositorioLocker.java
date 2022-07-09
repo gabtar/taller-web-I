@@ -27,7 +27,7 @@ public interface RepositorioLocker {
 
 	List<Locker> buscarLockersDisponiblesPorSucursal(Long idSucursal);
 
-	List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(Long idRamos, String tamanio);
+	List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(String nombreSucursal, String tamanio);
 
 	void guardarCodigo(int lockerId, String codigo);
 

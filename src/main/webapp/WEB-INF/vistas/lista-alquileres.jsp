@@ -31,26 +31,38 @@ function Confirmar(){
 				Lockers Disponibles
 			</h2>
 			<div class="w3-row">
-				<div class="w3-col m8 l8">
-				   <p>Sucursal: ${sucursal.nombre}</p>
-				</div>
-				<div class="w3-col m4 l4  w3-right-align">
-				<form:form action="${homeUrl}alquileres/${sucursal.id}" method="GET" class="w3-margin-top">
-				<div class="w3-row-padding">
+				<form:form action="${homeUrl}alquileres/buscar?localidad=${localidad}" method="GET" class="w3-margin-top">
+				<p>
+					<label>Ingrese una localidad: </label>
+				</p>
+				<p>
+					<input class="w3-input" list="localidad" name="localidad"
+						autocomplete="off" value="${param.localidad}" placeholder="Ingrese localidad o dejar vacío para todos los registros" />
+					<datalist id="localidad">
+						<c:forEach var="localidad" items="${localidades}">
+							<option value="${localidad.nombre}">
+						</c:forEach>
+					</datalist>
+				</p>
+				<div class="w3-row">
 				  <div class="w3-half">
-				    <select class="w3-select" name="tamanio">
-					  <option value="" disabled selected>Tamaño</option>
-					  <option value="60x50x50">60x50x50</option>
-					  <option value="90x80x80">90x80x80</option>
-					  <option value="120x100x100">120x100x100</option>
+				    <label>Tamaño</label>
+				    <!-- TODO Tamaños fijos harcodeados, deberían venir de la bd -->
+				    <select class="w3-select" name="tamanio" style="width: fit-content;">
+					  <option value="" <c:if test="${empty param.tamanio}">selected</c:if> >Todos</option>
+					  <option value="60x50x50" <c:if test='${param.tamanio eq "60x50x50" }'>selected</c:if>>60x50x50</option>
+					  <option value="90x80x80" <c:if test='${param.tamanio eq "90x80x80" }'>selected</c:if>>90x80x80</option>
+					  <option value="120x100x100" <c:if test='${param.tamanio eq "120x100x100" }'>selected</c:if>>120x100x100</option>
 					</select>
+				  
 				  </div>
-				  <div class="w3-half">
-				    <button class="w3-button w3-white w3-border" type="submit">Filtrar</button>
+				  <div class="w3-half w3-right-align">
+				     <button class="w3-button w3-indigo w3-border w3-round" type="submit">Buscar</button>
 				  </div>
 				</div>
 				</form:form>
-				</div>		
+			  <br>
+					
 			</div>
 		
 			<c:choose>
@@ -62,6 +74,8 @@ function Confirmar(){
 					<thead>
 						<tr class="w3-red w3-center">
 							<th class="w3-center">Número Locker</th>
+							<th class="w3-center">Sucursal</th>
+							<th class="w3-center">Localidad</th>
 							<th class="w3-center">Tamaño</th>
 							<th class="w3-center">Alquilar</th>
 						</tr>
@@ -70,7 +84,9 @@ function Confirmar(){
 					<c:forEach var="locker" items="${alquileres}">
 						<tr>
 							<td class="w3-center"><c:out value="${locker.id}" /></td>
-							<td class="w3-center"><c:out value="${locker.tamano}" /></td>
+							<td class="w3-center"><c:out value="${locker.sucursal.nombre}" /></td>
+							<td class="w3-center"><c:out value="${locker.sucursal.localidad.nombre}" /></td>
+							<td class="w3-center"><c:out value="${locker.tamanio.tamanio}" /></td>
 							<td class="w3-center"><form:form action="${homeUrl}modificar-locker/${locker.id}"
 									method="POST">
 									<button class="w3-button w3-indigo" type="submit" onclick="Confirmar();">Elegir</button>
@@ -80,9 +96,6 @@ function Confirmar(){
 				</table>
 				</c:otherwise>
 			</c:choose>
-		</div>
-		<div class="w3-container w3-center w3-margin-top">
-			<a href="${homeUrl}sucursales" class="w3-button w3-indigo">Volver</a>
 		</div>
 		<!-- Overlay effect when opening sidebar on small screens -->
 		<div class="w3-overlay w3-hide-large" onclick="w3_close()"

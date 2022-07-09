@@ -32,6 +32,7 @@ import static org.mockito.Mockito.when;
 public class ControladorAlquilerTest {
 
 	private static final Long RAMOS = 1L;
+	private static final String LOCALIDAD_RAMOS = "Ramos";
 	private static final String TAMANIO_CHICO = "40x50x60";
 	private ServicioAlquiler servicioAlquiler;
     private ServicioSucursal servicioSucursal;
@@ -176,7 +177,7 @@ public class ControladorAlquilerTest {
 	}
 
 	private ModelAndView cuandoPidoMostrarLockersDisponiblesPorSucursal(Long idSucursal) {
-		ModelAndView mav = controladorAlquiler.mostrarLockersDisponiblesPorTamanio(request, RAMOS, null);
+		ModelAndView mav = controladorAlquiler.buscarLockersDisponibles(LOCALIDAD_RAMOS, null);
 		return mav;
 	}
 
@@ -193,7 +194,7 @@ public class ControladorAlquilerTest {
 	}
 	
 	private ModelAndView cuandoPidoMostrarLockersDisponiblesPorSucursalYTamanio(Long idSucursal, String tamanio) {
-		ModelAndView mav = controladorAlquiler.mostrarLockersDisponiblesPorTamanio(request, RAMOS, TAMANIO_CHICO);
+		ModelAndView mav = controladorAlquiler.buscarLockersDisponibles(LOCALIDAD_RAMOS, TAMANIO_CHICO);
 		return mav;
 	}
 }

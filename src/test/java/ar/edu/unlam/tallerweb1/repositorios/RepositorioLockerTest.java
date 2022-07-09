@@ -25,6 +25,7 @@ import ar.edu.unlam.tallerweb1.modelo.Codigo;
 import ar.edu.unlam.tallerweb1.modelo.Localidad;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Sucursal;
+import ar.edu.unlam.tallerweb1.modelo.Tamanio;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
 public class RepositorioLockerTest extends SpringTest {
@@ -38,6 +39,8 @@ public class RepositorioLockerTest extends SpringTest {
 	private RepositorioLocker repositorioLocker;
 	private int lockerId= 1;
 	private Long usuarioId = 1L;
+	private Tamanio tamanioChico;
+	private Tamanio tamanioGrande;
 
 	@Before
 	public void setUp() throws Exception {
@@ -204,6 +207,14 @@ public class RepositorioLockerTest extends SpringTest {
 	}
 
 	private Sucursal dadoQueTengoUnaSucursalConLockersDisponibles() {
+		tamanioChico = new Tamanio();
+		tamanioChico.setTamanio(TAMANIO_CHICO);
+		session().save(tamanioChico);
+		
+		tamanioGrande = new Tamanio();
+		tamanioGrande.setTamanio(TAMANIO_GRANDE);
+		session().save(tamanioGrande);
+		
 		Localidad ramos = new Localidad();
 		ramos.setNombre("Ramos");
 		ramos.setId(1L);
@@ -225,25 +236,25 @@ public class RepositorioLockerTest extends SpringTest {
 		Locker l1 = new Locker();
 		l1.setId(1);
 		l1.setSucursal(sucRamos);
-		l1.setTamano(TAMANIO_CHICO);
+		l1.setTamanio(tamanioChico);
 		session().save(l1);
 		Locker l2 = new Locker();
 		l2.setId(2);
 		l2.setOcupado(true);
 		l2.setSucursal(sucRamos);
-		l2.setTamano(TAMANIO_GRANDE);
+		l2.setTamanio(tamanioGrande);
 		session().save(l2);
 		Locker l3 = new Locker();
 		l3.setId(3);
 		l3.setSucursal(sucRamos);
-		l2.setTamano(TAMANIO_GRANDE);
+		l2.setTamanio(tamanioGrande);
 		session().save(l3);
 
 		// En haedo
 		Locker l4 = new Locker();
 		l4.setId(4);
 		l4.setSucursal(sucHaedo);
-		l4.setTamano(TAMANIO_CHICO);
+		l4.setTamanio(tamanioChico);
 		session().save(l4);
 		
 		return sucRamos;
@@ -255,13 +266,13 @@ public class RepositorioLockerTest extends SpringTest {
 	public void testQueSePuedanBuscarLockersPorSucursalYTamanio() {
 		Sucursal sucRamos = dadoQueTengoUnaSucursalConLockersDisponibles();
 		
-		List<Locker> lockersEncontrados = cuandoBuscoLockersDisponiblesPorSucursalYTamanio(sucRamos.getId(), TAMANIO_CHICO);
+		List<Locker> lockersEncontrados = cuandoBuscoLockersDisponiblesPorSucursalYTamanio(sucRamos.getLocalidad().getNombre(), TAMANIO_CHICO);
 
 		entoncesEncuentroLockersDisponibles(lockersEncontrados, 1);
 	}
 
-	private List<Locker> cuandoBuscoLockersDisponiblesPorSucursalYTamanio(Long id, String tamanioChico) {
-		return repositorioLocker.buscarLockersDisponiblesPorSucursalYTamanio(id, tamanioChico);
+	private List<Locker> cuandoBuscoLockersDisponiblesPorSucursalYTamanio(String localidad, String tamanioChico) {
+		return repositorioLocker.buscarLockersDisponiblesPorSucursalYTamanio(localidad, tamanioChico);
 	}
 	@Test
 	@Transactional
@@ -286,7 +297,10 @@ public class RepositorioLockerTest extends SpringTest {
 	}
 
 	private Locker dadoQueTengoElCodigoYElLocker() {
-		// TODO Auto-generated method stub
+		tamanioChico = new Tamanio();
+		tamanioChico.setTamanio(TAMANIO_CHICO);
+		session().save(tamanioChico);
+		
 		Localidad ramos = new Localidad();
 		ramos.setNombre("Ramos");
 		ramos.setId(1L);
@@ -298,13 +312,17 @@ public class RepositorioLockerTest extends SpringTest {
 		Locker locker=new Locker();
 		locker.setId(1);
 		locker.setSucursal(sucRamos);
-		locker.setTamano(TAMANIO_CHICO);
+		locker.setTamanio(tamanioChico);
 		session().save(locker);
 		String codigo="123456";
 		return locker;
 	}
 
 	private Locker dadoQueTengoElLockerConElSiguienteCodigo(String codigo) {
+		
+		tamanioChico = new Tamanio();
+		tamanioChico.setTamanio(TAMANIO_CHICO);
+		session().save(tamanioChico);
 		
 		Codigo codigoApertura = new Codigo();
 		codigoApertura.setCodigo(codigo);
@@ -323,7 +341,7 @@ public class RepositorioLockerTest extends SpringTest {
 		Locker locker=new Locker();
 		locker.setId(1);
 		locker.setSucursal(sucRamos);
-		locker.setTamano(TAMANIO_CHICO);
+		locker.setTamanio(tamanioChico);
 		locker.setCodigoApertura(codigoApertura);
 		
 		session().save(locker);

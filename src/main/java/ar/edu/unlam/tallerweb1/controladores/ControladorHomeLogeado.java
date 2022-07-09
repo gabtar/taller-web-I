@@ -66,7 +66,7 @@ public class ControladorHomeLogeado {
 
 		String textoAModificar = datosModificarTextoLocker.getTextoModificado();
 		int id= Math.toIntExact(lockerId);
-		servicioAlquiler.ModificarNotaDeLocker(id,textoAModificar);
+		servicioAlquiler.modificarNotaDeLocker(id,textoAModificar);
 
 		return new ModelAndView("redirect:/homeLogeado");
 	}

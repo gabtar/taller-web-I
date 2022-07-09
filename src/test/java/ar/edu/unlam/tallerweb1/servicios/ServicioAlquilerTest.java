@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServicioAlquilerTest {
+	private static final String LOCALIDAD_RAMOS = "Ramos";
 	private static final Long ID_RAMOS = 1L;
 	private static final String TAMANIO_CHICO = "20x50x60";
 	ServicioAlquiler servicioAlquiler;
@@ -166,7 +167,7 @@ public class ServicioAlquilerTest {
 	
 	@Test
 	public void testQueSePuedanBuscarLockersDisponiblesPorSucursalYTamanio() {
-		servicioAlquiler.buscarLockersDisponiblesPorSucursalYTamanio(ID_RAMOS, TAMANIO_CHICO);
-		verify(repositorioLockerDAO, times(1)).buscarLockersDisponiblesPorSucursalYTamanio(ID_RAMOS, TAMANIO_CHICO);
+		servicioAlquiler.buscarLockersDisponiblesPorSucursalYTamanio(LOCALIDAD_RAMOS, TAMANIO_CHICO);
+		verify(repositorioLockerDAO, times(1)).buscarLockersDisponiblesPorSucursalYTamanio(LOCALIDAD_RAMOS, TAMANIO_CHICO);
 	}
 }

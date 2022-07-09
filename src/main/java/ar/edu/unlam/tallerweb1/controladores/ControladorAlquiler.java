@@ -1,9 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.modelo.DatosModificarTextoLocker;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
-import ar.edu.unlam.tallerweb1.modelo.Sucursal;
-import ar.edu.unlam.tallerweb1.modelo.Usuario;
 import ar.edu.unlam.tallerweb1.servicios.ServicioAlquiler;
 import ar.edu.unlam.tallerweb1.servicios.ServicioEmail;
 import ar.edu.unlam.tallerweb1.servicios.ServicioSucursal;
@@ -14,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -47,30 +43,21 @@ public class ControladorAlquiler {
         return new ModelAndView("lista-alquileres", modelo);
     }
     
-    @RequestMapping("/alquileres/{idSucursal}")
-    public ModelAndView mostrarLockersDisponiblesPorTamanio(
-    		HttpServletRequest request, 
-    		@PathVariable("idSucursal") Long idSucursal,
-    		@RequestParam(required = false) String tamanio) {
+    @RequestMapping("/alquileres/buscar")
+    public ModelAndView buscarLockersDisponibles(
+    		@RequestParam(required = false) String localidad,
+    		@RequestParam(required = false) String tamanio
+    		) {
+    	
     	ModelMap modelo = new ModelMap();
-    	Sucursal sucursal;
-    	List<Locker> listaLockers;
     	
-    	sucursal = this.servicioSucursal.buscarSucursalPorId(idSucursal);
-    	modelo.addAttribute("sucursal", sucursal);
+    	List<Locker> listaLockers = servicioAlquiler.buscarLockersDisponiblesPorSucursalYTamanio(localidad, tamanio);
     	
-    	if (tamanio != null) {
-    		listaLockers = servicioAlquiler.buscarLockersDisponiblesPorSucursalYTamanio(idSucursal, tamanio);
-    	} else {
-    		listaLockers = servicioAlquiler.buscarLockersDisponiblesPorSucursal(idSucursal);
+    	if (listaLockers.isEmpty()) {
+    		modelo.put("error", "No se encontraron lockers");
     	}
     	
-  
     	modelo.addAttribute("alquileres", listaLockers);
-    	
-    	if (listaLockers.isEmpty() || sucursal == null) {
-            modelo.put("error", "No se encontraron lockers");
-        }
     	
     	return new ModelAndView("lista-alquileres", modelo);
     }

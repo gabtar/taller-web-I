@@ -50,7 +50,7 @@ function Confirmar(){
 				<div class="w3-container w3-center">
 					<h1 class="w3-text-red w3-margin-bottom">No posee alquileres
 						activos.</h1>
-					<a href="${homeUrl}sucursales" style="text-decoration: none;">
+					<a href="${homeUrl}alquileres/buscar" style="text-decoration: none;">
 						<button class="w3-button w3-indigo w3-round">Buscar Lockers</button>
 					</a>
 				</div>
@@ -66,7 +66,7 @@ function Confirmar(){
 							<td class="w3-center">Número locker: <c:out
 									value="${locker.id}" /></td>
 							<td class="w3-center">Tipo de locker: <c:out
-									value="${locker.tamano}" /></td>
+									value="${locker.tamanio.tamanio}" /></td>
 							<td class="w3-center">$0.0</td>
 							<td class="w3-center"><a href="codigo/generar/${locker.id}"
 								class="w3-button w3-light-blue">Codigo Producto</a></td>

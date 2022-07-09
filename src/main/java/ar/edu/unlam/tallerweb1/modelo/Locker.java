@@ -17,11 +17,14 @@ public class Locker {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	
-	private String tamano;
+	private Integer id;
 	private boolean ocupado;
 	private Date fechaInicioAlquiler;
+
+	@OneToOne
+	@JoinColumn(name = "tamanio_id")
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
+	private Tamanio tamanio;
 
 	@OneToOne
 	@JoinColumn(name = "sucursal_id")
@@ -48,19 +51,19 @@ public class Locker {
 		this.sucursal = sucursal;
 	}
 
-	public String getTamano() {
-		return tamano;
+	public Tamanio getTamanio() {
+		return tamanio;
 	}
 
-	public void setTamano(String tamano) {
-		this.tamano = tamano;
+	public void setTamanio(Tamanio tamanio) {
+		this.tamanio = tamanio;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
