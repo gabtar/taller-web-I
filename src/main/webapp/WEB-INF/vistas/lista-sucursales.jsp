@@ -4,6 +4,14 @@
 <head>
 <!-- esta linea llama al jsp de la carpeta vistaGEnerales-->
 <%@ include file="vistaGenerales/head.jsp"%>
+<link rel="stylesheet"
+	href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+<style>
+html, body, #map {
+    height: 100%;
+}
+</style>
 </head>
 <body>
 	<!-- Sidebar/menu   de esta forma se llaman los jsp por partes-->
@@ -25,7 +33,7 @@
 
 	<div class="w3-main w3-margin-top"
 		style="margin-left: 340px; margin-right: 40px">
-		
+
 		<c:if test="${not empty sessionScope.userId}">
 			<h2 class="w3-center">Buscar Lockers disponibles por Sucursal</h2>
 		</c:if>
@@ -36,7 +44,8 @@
 			</p>
 			<p>
 				<input class="w3-input" list="localidad" name="localidad"
-					autocomplete="off" value="${param.localidad}" placeholder="Ingrese localidad o dejar vacío para todos los registros"/>
+					autocomplete="off" value="${param.localidad}"
+					placeholder="Ingrese localidad o dejar vacío para todos los registros" />
 				<datalist id="localidad">
 					<c:forEach var="localidad" items="${localidades}">
 						<option value="${localidad.nombre}">
@@ -63,64 +72,47 @@
 								<p>Sucursales para ${busqueda}</p>
 							</c:otherwise>
 						</c:choose>
-						  <div id="mapdiv"></div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.11/lib/OpenLayers.js"></script> 
-  <script type="text/javascript">
-    map = new OpenLayers.Map("mapdiv");
-    map.addLayer(new OpenLayers.Layer.OSM());
-    
-    epsg4326 =  new OpenLayers.Projection("EPSG:4326"); //WGS 1984 projection
-    projectTo = map.getProjectionObject(); //The map projection (Spherical Mercator)
-   
-    // Centro fijo Cerca de Ramos
-    var lonLat = new OpenLayers.LonLat( -58.54906, -34.64014 ).transform(epsg4326, projectTo);
-          
-    var zoom=14;
-    map.setCenter (lonLat, zoom);
-
-    var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
-    
-    // Por cada sucursal encontrala la agrega al mapa
-    <c:forEach var="sucursal" items="${sucursales}">
-        var feature = new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.Point( '<c:out value="${sucursal.longitud}"/>', '<c:out value="${sucursal.latitud}"/>'  ).transform(epsg4326, projectTo),
-                {description:'<c:out value="${sucursal.nombre}"/>'} ,
-                {externalGraphic: 'img/location.png', graphicHeight: 25, graphicWidth: 21, graphicXOffset:-12, graphicYOffset:-25  }
-            );    
-        vectorLayer.addFeatures(feature);
-    </c:forEach>
-   
-    map.addLayer(vectorLayer);
- 
-    //Add a selector control to the vectorLayer with popup functions
-    var controls = {
-      selector: new OpenLayers.Control.SelectFeature(vectorLayer, { onSelect: createPopup, onUnselect: destroyPopup })
-    };
-
-    function createPopup(feature) {
-      feature.popup = new OpenLayers.Popup.FramedCloud("pop",
-          feature.geometry.getBounds().getCenterLonLat(),
-          null,
-          '<div class="markerContent">'+feature.attributes.description+'</div>',
-          null,
-          true,
-          function() { controls['selector'].unselectAll(); }
-      );
-      //feature.popup.closeOnMove = true;
-      map.addPopup(feature.popup);
-    }
-
-    function destroyPopup(feature) {
-      feature.popup.destroy();
-      feature.popup = null;
-    }
-    
-    map.addControl(controls['selector']);
-    controls['selector'].activate();
-      
-  </script>
+						<div id="map"></div>
+						<script>
+							// Creo un array de objetos en js con los valores de latitud, longitud y datos de las sucursales
+							var listaSucursales = []; 
+							<c:forEach var="sucursal" items="${sucursales}">
+								listaSucursales.push({
+									id: '<c:out value="${sucursal.id}"/>',
+									nombre : '<c:out value="${sucursal.nombre}"/>',
+							 		latitud : '<c:out value="${sucursal.latitud}"/>',
+							 		longitud : '<c:out value="${sucursal.longitud}"/>'
+								});
+    						</c:forEach>
 						
-						
+							// Calculo del centro del mapa
+							const centro = listaSucursales.reduce(
+  								(sum, suc) => [sum[0] + parseFloat(suc.latitud), sum[1] + parseFloat(suc.longitud)],
+  								[0,0]
+							)
+              				.map((num) => num/listaSucursales.length);
+							
+							var map = L.map('map').setView([ centro[0], centro[1] ],
+									14);
+
+							var tiles = L
+									.tileLayer(
+											'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+											{
+												maxZoom : 19,
+												attribution : '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+											}).addTo(map);
+
+							// Agrego todas las sucursales encontradas al mapa							
+							listaSucursales.forEach((suc) => {
+								// No toma bien las template strings de js
+								let popupInfo = '<b>#' + suc.id + ': ' + suc.nombre + '</b>';
+								L.marker([ suc.latitud, suc.longitud ])
+								.addTo(map)
+								.bindPopup(popupInfo);
+							});
+					
+						</script>
 					</h2>
 					<table class="w3-table-all">
 						<thead>
