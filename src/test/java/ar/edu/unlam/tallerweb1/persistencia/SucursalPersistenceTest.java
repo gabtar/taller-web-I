@@ -27,11 +27,46 @@ public class SucursalPersistenceTest extends SpringTest {
 		sucRamos.setNombre("Ramos Lockers");
 		session().save(sucRamos);
 
-		Sucursal sucursalBuscada = session().get(Sucursal.class, sucRamos.getId());
+		Sucursal sucursalBuscada = cuandoBuscoLaSucursal(sucRamos.getId());
 
 		assertThat(sucursalBuscada).isEqualTo(sucRamos);
 		assertThat(sucursalBuscada.getLocalidad()).isEqualTo(ramos);
 		assertThat(sucursalBuscada.getNombre()).isEqualTo(sucRamos.getNombre());
+	}
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void testQueSeCreeUnaSucursalYObtengaLatitudYLongitud() {
+		
+		Sucursal sucRamos = dadoQueExisteUnaSucursalConLatitudYLongitud();
+		
+		Sucursal sucursalBuscada = cuandoBuscoLaSucursal(sucRamos.getId());
+		
+		entoncesLaSucursalPosee(sucursalBuscada.getLatitud(), sucRamos.getLatitud());
+		entoncesLaSucursalPosee(sucursalBuscada.getLongitud(), sucRamos.getLongitud());
+	}
+
+	private void entoncesLaSucursalPosee(Double valorObtenido, Double valorEsperado) {
+		assertThat(valorEsperado).isEqualTo(valorObtenido);
+	}
+
+	private Sucursal cuandoBuscoLaSucursal(Long sucursalId) {
+		return session().get(Sucursal.class, sucursalId);
+	}
+
+	private Sucursal dadoQueExisteUnaSucursalConLatitudYLongitud() {
+		Localidad ramos = new Localidad();
+		ramos.setNombre("ramos");
+		session().save(ramos);
+
+		Sucursal sucRamos = new Sucursal();
+		sucRamos.setLocalidad(ramos);
+		sucRamos.setNombre("Ramos Lockers");
+		sucRamos.setLatitud(0.0);
+		sucRamos.setLongitud(0.0);
+		session().save(sucRamos);
+		return sucRamos;
 	}
 
 }

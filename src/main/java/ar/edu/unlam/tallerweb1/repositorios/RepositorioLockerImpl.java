@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ejb.access.SimpleRemoteStatelessSessionProxyFactoryBean;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.unlam.tallerweb1.modelo.Codigo;
@@ -174,4 +175,8 @@ public class RepositorioLockerImpl implements RepositorioLocker {
 		session.remove(codigoApertura);
 	}
 
+	@Override
+	public void actualizarLocker(Locker locker) {
+		sessionFactory.getCurrentSession().update(locker);
+	}
 }

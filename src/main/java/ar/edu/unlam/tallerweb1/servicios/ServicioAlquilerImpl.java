@@ -1,31 +1,59 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.unlam.tallerweb1.modelo.Alquiler;
+import ar.edu.unlam.tallerweb1.modelo.EstadoAlquiler;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioAlquiler;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioLocker;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 
 @Service("servicioHome")
 @Transactional
 public class ServicioAlquilerImpl implements ServicioAlquiler {
 	
 	private RepositorioLocker repositorioLockerDAO;
+	private RepositorioAlquiler repositorioAlquilerDAO;
+	private RepositorioUsuario repositorioUsuarioDAO;
 	
 	@Autowired
-	public ServicioAlquilerImpl(RepositorioLocker repositorioLockerDAO){
+	public ServicioAlquilerImpl(RepositorioLocker repositorioLockerDAO, RepositorioAlquiler repositorioAlquilerDAO, RepositorioUsuario repositorioUsuarioDAO){
 		this.repositorioLockerDAO = repositorioLockerDAO;
+		this.repositorioAlquilerDAO = repositorioAlquilerDAO;
+		this.repositorioUsuarioDAO = repositorioUsuarioDAO;
 	}
 	
 	@Override
 	public Boolean alquilarLocker(int lockerId, Long usuarioId) {
+		// TODO, el método debería ser void y lanzar exception si el locker
+		// ya está alquilado
+		
 		if(!repositorioLockerDAO.getEstadoLocker(lockerId)) {
+			
+			Alquiler alquilerLocker = new Alquiler();
+			Locker locker = repositorioLockerDAO.buscarLockerPorId(lockerId);
+			Usuario usuario = repositorioUsuarioDAO.buscarUsuarioPorId(usuarioId);
+			alquilerLocker.setUsuario(usuario);
+			alquilerLocker.setLocker(locker);
+			
+			repositorioAlquilerDAO.nuevoAlquiler(alquilerLocker);
+			
+			// Asocio el alquiler al locker y hago update al locker en la db
+			// Asi después cuando se finaliza el alquiler se puede moficar la fecha
+			locker.setAlquilerActivo(alquilerLocker);
+			repositorioLockerDAO.actualizarLocker(locker);
+			
 			repositorioLockerDAO.alquilarLocker(lockerId, usuarioId);
+			
 			return true;
 		}
 		return false;
@@ -33,7 +61,19 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 	@Override
 	public Boolean cancelarLocker(int lockerId, Long usuarioId) {
 		if(repositorioLockerDAO.getEstadoLocker(lockerId)) {
+			
+			Locker locker = repositorioLockerDAO.buscarLockerPorId(lockerId);
+			Alquiler alquilerActual = locker.getAlquilerActivo();
+			
+			// Libera el locker y escribe los datos del alquiler
+			locker.setAlquilerActivo(null);
+			alquilerActual.setFechaFinalizacion(new Date(Calendar.getInstance().getTimeInMillis()));
+			alquilerActual.setEstadoAlquiler(EstadoAlquiler.FINALIZADO);
+			repositorioAlquilerDAO.modificar(alquilerActual);
+			repositorioLockerDAO.actualizarLocker(locker);
+			
 			repositorioLockerDAO.cancelarLocker(lockerId, usuarioId);
+			
 			return true;
 		}
 

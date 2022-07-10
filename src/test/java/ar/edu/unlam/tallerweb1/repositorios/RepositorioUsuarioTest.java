@@ -114,5 +114,33 @@ public class RepositorioUsuarioTest extends SpringTest {
 		// Then
 		assertThat(usuarioModificado.getEmail()).isEqualTo(MAIL_MODIFICADO);
 	}
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void testQueSePuedaBuscarUnUsuarioPorId() {
+		Usuario usuarioExistente = dadoQueExisteUnUsuarioConId();
+		Usuario usuarioEncontrado = cuandoBuscoElUsuarioPorId(usuarioExistente.getId());
+		entoncesEncuentroAlUsuario(usuarioEncontrado, usuarioExistente);
+	}
+
+	private void entoncesEncuentroAlUsuario(Usuario usuarioEncontrado, Usuario usuarioExistente) {
+		assertThat(usuarioEncontrado).isEqualTo(usuarioExistente);
+		assertThat(usuarioEncontrado.getId()).isEqualTo(usuarioExistente.getId());
+	}
+
+	private Usuario cuandoBuscoElUsuarioPorId(Long usuarioId) {
+		return repositorioUsuarios.buscarUsuarioPorId(usuarioId);
+	}
+
+	private Usuario dadoQueExisteUnUsuarioConId() {
+		Usuario user1 = new Usuario();
+		user1.setEmail(MAIL);
+		user1.setPassword(PASSWORD);
+		user1.setActivo(true);
+		
+		session().save(user1);
+		return user1;
+	}
 
 }

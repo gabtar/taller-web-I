@@ -30,12 +30,17 @@ public class Locker {
 	@JoinColumn(name = "sucursal_id")
 	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	private Sucursal sucursal;
-	
+
 	@OneToOne
 	@JoinColumn(name = "usuario_id")
 	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	private Usuario propietario;
-	
+
+	@OneToOne
+	@JoinColumn(name = "alquiler_id")
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
+	private Alquiler alquilerActivo;
+
 	@OneToOne
 	@JoinColumn(name = "codigo_id")
 	@Cascade(org.hibernate.annotations.CascadeType.ALL)
@@ -82,7 +87,7 @@ public class Locker {
 	public void setTextoDelUsuario(String textoDelUsuario) {
 		this.textoDelUsuario = textoDelUsuario;
 	}
-	
+
 	public Codigo getCodigoApertura() {
 		return codigoApertura;
 	}
@@ -105,5 +110,13 @@ public class Locker {
 
 	public void setPropietario(Usuario propietario) {
 		this.propietario = propietario;
+	}
+
+	public Alquiler getAlquilerActivo() {
+		return alquilerActivo;
+	}
+
+	public void setAlquilerActivo(Alquiler alquilerActivo) {
+		this.alquilerActivo = alquilerActivo;
 	}
 }

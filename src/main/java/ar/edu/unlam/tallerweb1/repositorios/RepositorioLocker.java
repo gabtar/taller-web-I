@@ -32,5 +32,7 @@ public interface RepositorioLocker {
 	void guardarCodigo(int lockerId, String codigo);
 
 	void borrarCodigoALocker(Integer lockerId);
+
+	void actualizarLocker(Locker locker);
 	
 }
