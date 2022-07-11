@@ -134,14 +134,10 @@ public class RepositorioLockerTest extends SpringTest {
 	}
 
 	private void dadoQueTengoLosSiguienteLockersDisponibles() {
-		int id= 1;
 		Locker locker = new Locker();
-		locker.setId(id);
 		locker.setOcupado(false);
 		session().save(locker);
-		int id2 = 2;
 		Locker locker2 = new Locker();
-		locker.setId(id);
 		locker.setOcupado(false);
 		session().save(locker2);
 	}

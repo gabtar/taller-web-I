@@ -96,7 +96,6 @@ public class ControladorAlquiler {
     	Long usuarioId = (Long) request.getSession().getAttribute("userId");
     	
     	List<Alquiler> registroAlquileres = servicioAlquiler.obtenerRegistroDeAlquileres(usuarioId);
-    	System.out.println(registroAlquileres);
     	
     	if(registroAlquileres.isEmpty()) {
     		modelo.put("error", "No se encontraron alquilres");

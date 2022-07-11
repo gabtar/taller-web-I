@@ -207,7 +207,7 @@ public class ControladorAlquilerTest {
 		dadoQueHayUnRegistroDelAlquilres();
 		ModelAndView mav = cuandoQuieroVerElRegistroHistoricoDeAlquileres();
 		entoncesMeLLevaALaVista(VISTA_REGISTRO_ALQUILRES, mav.getViewName());
-		entoncesEncuentroAlquileres(((List<Alquiler>) mav.getModelMap().get("registroAlquileres")).size(), 0);
+		entoncesEncuentroAlquileres(((List) mav.getModelMap().get("registro")).size(), 0);
 		
 	}
 
