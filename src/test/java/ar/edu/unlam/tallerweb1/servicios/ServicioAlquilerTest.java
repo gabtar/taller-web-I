@@ -237,4 +237,10 @@ public class ServicioAlquilerTest {
 	private Alquiler dadoQueTengoUnLockerAsociadoAUnAlquiler() {
 		return alquiler;
 	}
+	
+	@Test
+	public void testQueSePuedanObtenerElRegistroDeAlquileresDeUnUsuario() {
+		servicioAlquiler.obtenerRegistroDeAlquileres(USUARIO_ID);
+		verify(repositorioAlquilerDAO, times(1)).listarAlquileresDelUsuario(USUARIO_ID);
+	}
 }

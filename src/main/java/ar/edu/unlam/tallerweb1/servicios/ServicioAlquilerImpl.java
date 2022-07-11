@@ -106,4 +106,9 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 	public List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(String localidad, String tamanio) {
 		return repositorioLockerDAO.buscarLockersDisponiblesPorSucursalYTamanio(localidad, tamanio);
 	}
+
+	@Override
+	public List<Alquiler> obtenerRegistroDeAlquileres(Long usuarioId) {
+		return repositorioAlquilerDAO.listarAlquileresDelUsuario(usuarioId);
+	}
 }

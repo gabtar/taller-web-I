@@ -20,7 +20,9 @@
 	<div class="w3-bar-block ">
 		<p>Bienvenido ${nombreUsuario}</p>
 		<a href="${homeUrl}homeLogeado" onclick="w3_close()"
-			class="w3-bar-item w3-button w3-hover-white ">Mis Alquileres</a> <a
+			class="w3-bar-item w3-button w3-hover-white ">Mis Lockers</a> <a
+			href="${homeUrl}alquileres/registro" onclick="w3_close()"
+			class="w3-bar-item w3-button w3-hover-white ">Registro Alquileres</a> <a
 			href="${homeUrl}alquileres/buscar" onclick="w3_close()"
 			class="w3-bar-item w3-button w3-hover-white ">Buscar Lockers</a> <a
 			href="${homeUrl}sucursales" onclick="w3_close()"

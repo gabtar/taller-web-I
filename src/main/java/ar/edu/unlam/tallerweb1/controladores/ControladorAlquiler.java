@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.modelo.Alquiler;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.servicios.ServicioAlquiler;
 import ar.edu.unlam.tallerweb1.servicios.ServicioEmail;
@@ -86,5 +87,23 @@ public class ControladorAlquiler {
         servicioAlquiler.cancelarLocker(lockerId, usuarioId);
         modelo.put("error", "Cancelacion exitosa");
         return new ModelAndView("redirect:/homeLogeado", modelo);
+    }
+    
+    @RequestMapping(path = "/alquileres/registro") 
+    public ModelAndView mostarRegistrosDelAlquileres(HttpServletRequest request){
+    	ModelMap modelo = new ModelMap();
+    	
+    	Long usuarioId = (Long) request.getSession().getAttribute("userId");
+    	
+    	List<Alquiler> registroAlquileres = servicioAlquiler.obtenerRegistroDeAlquileres(usuarioId);
+    	System.out.println(registroAlquileres);
+    	
+    	if(registroAlquileres.isEmpty()) {
+    		modelo.put("error", "No se encontraron alquilres");
+    	}
+    	
+    	modelo.addAttribute("registro", registroAlquileres);
+    	
+    	return new ModelAndView("registro-alquileres", modelo);
     }
 }

@@ -4,6 +4,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import java.util.List;
 
+import ar.edu.unlam.tallerweb1.modelo.Alquiler;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
@@ -12,7 +13,7 @@ public interface ServicioAlquiler {
 
 	Boolean alquilarLocker(int lockerId, Long usuarioId);
 	Boolean cancelarLocker(int lockerId, Long usuarioId);
-	 Boolean getEstadoLocker(int lockerId);
+	Boolean getEstadoLocker(int lockerId);
 	List<Locker> verAlquileresPropios(Usuario usuario);
 	List<Locker> buscarAlquileresDisponibles();
 
@@ -21,4 +22,6 @@ public interface ServicioAlquiler {
 	List<Locker> buscarLockersDisponiblesPorSucursal(Long idSucursal);
 	
 	List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(String localidad, String tamanioChico);
+	
+	List<Alquiler> obtenerRegistroDeAlquileres(Long usuarioId);
 }

@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.modelo.Alquiler;
 import ar.edu.unlam.tallerweb1.modelo.Locker;
 import ar.edu.unlam.tallerweb1.modelo.Sucursal;
 import ar.edu.unlam.tallerweb1.modelo.Usuario;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -42,6 +44,7 @@ public class ControladorAlquilerTest {
     private static int lockerId= 1;
     private static Long usuarioId = 1L;
     private static final String TEXTO_EMAIL_REGISTRO = "usted a alquilado el locker " + lockerId + " gracias pepe@pepe por elegirnos RENTLOCK";
+	private static final String VISTA_REGISTRO_ALQUILRES = "registro-alquileres";
     private static String error="Alquiler exitoso";
     HttpServletRequest request;
     HttpSession session;
@@ -196,5 +199,29 @@ public class ControladorAlquilerTest {
 	private ModelAndView cuandoPidoMostrarLockersDisponiblesPorSucursalYTamanio(Long idSucursal, String tamanio) {
 		ModelAndView mav = controladorAlquiler.buscarLockersDisponibles(LOCALIDAD_RAMOS, TAMANIO_CHICO);
 		return mav;
+	}
+	
+	@Test
+	public void testQueSeMuestreElRegistroHistoriocoDeAlquileresDelUsuario() {
+		
+		dadoQueHayUnRegistroDelAlquilres();
+		ModelAndView mav = cuandoQuieroVerElRegistroHistoricoDeAlquileres();
+		entoncesMeLLevaALaVista(VISTA_REGISTRO_ALQUILRES, mav.getViewName());
+		entoncesEncuentroAlquileres(((List<Alquiler>) mav.getModelMap().get("registroAlquileres")).size(), 0);
+		
+	}
+
+	private void entoncesEncuentroAlquileres(Integer valorObtenido, Integer valorEsperado) {
+		assertThat(valorObtenido).isEqualTo(valorEsperado);
+	}
+
+	private ModelAndView cuandoQuieroVerElRegistroHistoricoDeAlquileres() {
+		when(request.getSession()).thenReturn(session);
+        when(request.getSession().getAttribute("userId")).thenReturn(1L);
+		return controladorAlquiler.mostarRegistrosDelAlquileres(request);
+	}
+
+	private void dadoQueHayUnRegistroDelAlquilres() {
+		when(servicioAlquiler.obtenerRegistroDeAlquileres(1L)).thenReturn(new ArrayList<Alquiler>());
 	}
 }
