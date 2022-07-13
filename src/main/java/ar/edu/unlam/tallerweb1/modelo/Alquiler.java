@@ -43,9 +43,15 @@ public class Alquiler {
 	public EstadoAlquiler estadoAlquiler;
 	// TODO field @transient con el precio segun diferencia de fechas y
 	// multiplicador segun tamanio del locker
+	
 
+
+	
+
+	private Integer precio;
 	public Alquiler() {
 		this.fechaInicio = new Date(Calendar.getInstance().getTimeInMillis());
+		
 		this.estadoAlquiler = EstadoAlquiler.ACTIVO;
 	}
 
@@ -96,4 +102,12 @@ public class Alquiler {
 	public void setEstadoAlquiler(EstadoAlquiler estadoAlquiler) {
 		this.estadoAlquiler = estadoAlquiler;
 	}
+	public void setPrecio(Integer precio2) {
+		this.precio=precio2;
+	}
+	public Integer getPrecio() {
+		return precio;
+	}
+	
+	
 }

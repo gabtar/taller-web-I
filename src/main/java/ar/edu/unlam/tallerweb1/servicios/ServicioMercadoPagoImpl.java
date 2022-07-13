@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +17,28 @@ import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
 
+import ar.edu.unlam.tallerweb1.modelo.Alquiler;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioAlquiler;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioLocker;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
+
 @Service("servicioMercadoPago")
 @Transactional
 public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
+	private RepositorioAlquiler repositorioAlquiler;
+   
 
+    @Autowired
+    public ServicioMercadoPagoImpl(RepositorioAlquiler repositorioAlquiler) {
+        super();
+        this.repositorioAlquiler = repositorioAlquiler;
+    }
 	@Override
-	public Preference generarPago() {
-		
+	public Preference generarPago(Long alquilerId) {
+		Alquiler alquiler= repositorioAlquiler.buscarAlquilerPorId(alquilerId);
 		// Ac� va la clave privada(Access Token) que se genera en la cuenta de MercadoPago del vendedor
-		MercadoPagoConfig.setAccessToken("TEST-1032568009922245-071219-8dbd2f5e364c3b093e654948b2b20ed2-1159572865");
-
+		MercadoPagoConfig.setAccessToken("APP_USR-1032568009922245-071219-223a7b5e2f6caaea96d5d50b59a1e889-1159572865");
+		
 		// Crea datos del cliente
 		PreferenceClient client = new PreferenceClient();
 
@@ -35,7 +48,7 @@ public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
 		   PreferenceItemRequest.builder()
 		       .title("Locker") 
 		       .quantity(1) 
-		       .unitPrice(new BigDecimal("1")) // Deber�a obtenerse del precio del alquiler. Queda harcodeado para pruebas
+		       .unitPrice(new BigDecimal(alquiler.getPrecio())) // Deber�a obtenerse del precio del alquiler. Queda harcodeado para pruebas
 		       .build();
 		
 		items.add(item);
@@ -44,16 +57,18 @@ public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
 		redireccionar despues del pago si es exitoso o no */
 		PreferenceBackUrlsRequest backUrls =
 				   PreferenceBackUrlsRequest.builder()
-				       .success("http://localhost:8080/proyecto-spring-limpio/payment/success")
+				       .success("http://localhost:8080/proyecto-limpio-spring/payment/success/"+alquilerId)
 				       //.pending("http://localhost:8080/prueba-spring-limpio-mercadopago/payment/pending")
-				       .failure("http://localhost:8080/proyecto-spring-limpio/payment/failure")
+				       .failure("http://localhost:8080/proyecto-limpio-spring/payment/failure")
 				       .build();
 
 		// Genera la petici�n para la preferencia
 		PreferenceRequest request = PreferenceRequest.builder()
 				.items(items)
 				.backUrls(backUrls)
+				.externalReference("alquilerId")
 				.build();
+		
 
 		Preference preference = null;
 		

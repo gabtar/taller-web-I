@@ -14,6 +14,7 @@ public interface ServicioAlquiler {
 	Boolean alquilarLocker(int lockerId, Long usuarioId);
 	Boolean cancelarLocker(int lockerId, Long usuarioId);
 	Boolean getEstadoLocker(int lockerId);
+	void setEstadoAlquiler(Long alquilerId);
 	List<Locker> verAlquileresPropios(Usuario usuario);
 	List<Locker> buscarAlquileresDisponibles();
 
@@ -24,4 +25,5 @@ public interface ServicioAlquiler {
 	List<Locker> buscarLockersDisponiblesPorSucursalYTamanio(String localidad, String tamanioChico);
 	
 	List<Alquiler> obtenerRegistroDeAlquileres(Long usuarioId);
+	
 }

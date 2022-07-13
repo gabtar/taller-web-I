@@ -14,6 +14,8 @@ public class Tamanio {
 	
 	private String tamanio;
 
+	private Integer precio;
+
 	public Long getId() {
 		return id;
 	}
@@ -29,5 +31,10 @@ public class Tamanio {
 	public void setTamanio(String tamanio) {
 		this.tamanio = tamanio;
 	}
-	
+	public void setPrecio(Integer precio) {
+		this.precio=precio;
+	}
+	public Integer getPrecio() {
+		return this.precio;
+	}
 }

@@ -46,14 +46,15 @@
 								</c:otherwise>
 					      	</c:choose>	
 					      </td>
+					      
 					      <td>
-					      	<c:if test="${alquiler.estadoAlquiler != 'PAGADO'}">
-								$
+					      	<c:if test="${alquiler.estadoAlquiler == 'FINALIZADO'}">
+								$${alquiler.precio}
 							</c:if> 	
 					      </td>
 					      <td>
-							<c:if test="${alquiler.estadoAlquiler != 'PAGADO'}">
-								<a href="${homeUrl}payment" onclick="w3_close()" class="w3-button w3-indigo w3-round">Pagar</a>
+							<c:if test="${alquiler.estadoAlquiler == 'FINALIZADO'}">
+								<a href="${homeUrl}payment/${alquiler.id}" onclick="w3_close()" class="w3-button w3-indigo w3-round">Pagar</a>
 							</c:if>
 					      </td>
 					    </tr>

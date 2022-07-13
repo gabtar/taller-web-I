@@ -4,22 +4,33 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ include file="vistaGenerales/head.jsp"%>
 <meta charset="ISO-8859-1">
 <title>Pago Locker</title>
 </head>
 <body>
-
-	// Prueba SDK MercadoPago.js V2
+<%@ include file="vistaGenerales/navLogeado.jsp"%>
+	<div class="w3-row w3-margin-top">
+		<div class="w3-col s3 w3-center">
+			<p>
+				<br>.
+			</p>
+		</div>
+		<div class="w3-col s9 w3-padding-top-64 w3-center w3-">
+		
+			<a class="cho-container w3-btn w3-blue"></a>
+			<img src="${homeUrl}/img/mercadoPago.png" alt="mpz" />
+		</div>
+	</div>
 	<br>
 	<!-- Renderiza el botón de pago en la etiqueta que tenga la clase especificada en el script js -->
-	<a class="cho-container"></a>
 	
 	<script src="https://sdk.mercadopago.com/js/v2"></script>
 	<script>
 		// Agrega credenciales de SDK
 		// Acá va la Public Key de la cuenta de mercadopago que voy a usar como
 		// vendedor
-		const mp = new MercadoPago("TEST-6b0dd4e9-da61-4a95-9f3d-927610acd8bf", {
+		const mp = new MercadoPago("APP_USR-83a82121-8efa-4078-9db0-7f3e4082fdd7", {
 			locale : "es-AR",
 		});
 

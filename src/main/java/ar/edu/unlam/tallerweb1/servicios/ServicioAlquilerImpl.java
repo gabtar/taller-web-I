@@ -4,6 +4,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,6 +70,11 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 			locker.setAlquilerActivo(null);
 			alquilerActual.setFechaFinalizacion(new Date(Calendar.getInstance().getTimeInMillis()));
 			alquilerActual.setEstadoAlquiler(EstadoAlquiler.FINALIZADO);
+			Long duracionAlquiler=(long) (alquilerActual.getFechaFinalizacion().getTime()-alquilerActual.getFechaInicio().getTime());
+			TimeUnit time = TimeUnit.DAYS; 
+	        long diffrence = time.convert(duracionAlquiler, TimeUnit.MILLISECONDS);
+			Integer precio=(int) (diffrence*alquilerActual.getLocker().getTamanio().getPrecio());
+			alquilerActual.setPrecio(precio);
 			repositorioAlquilerDAO.modificar(alquilerActual);
 			repositorioLockerDAO.actualizarLocker(locker);
 			
@@ -110,5 +116,13 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 	@Override
 	public List<Alquiler> obtenerRegistroDeAlquileres(Long usuarioId) {
 		return repositorioAlquilerDAO.listarAlquileresDelUsuario(usuarioId);
+	}
+
+	@Override
+	public void setEstadoAlquiler(Long alquilerId) {
+		// TODO Auto-generated method stub
+		Alquiler alquiler= repositorioAlquilerDAO.buscarAlquilerPorId(alquilerId);
+		alquiler.setEstadoAlquiler(EstadoAlquiler.PAGADO);
+		repositorioAlquilerDAO.modificar(alquiler);
 	}
 }

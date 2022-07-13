@@ -12,4 +12,6 @@ public interface RepositorioAlquiler {
 
 	List<Alquiler> listarAlquileresDelUsuario(Long usuarioId);
 
+	Alquiler buscarAlquilerPorId(Long alquilerId);
+
 }

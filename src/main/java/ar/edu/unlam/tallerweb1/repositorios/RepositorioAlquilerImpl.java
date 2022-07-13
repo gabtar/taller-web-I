@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.unlam.tallerweb1.modelo.Alquiler;
+import ar.edu.unlam.tallerweb1.modelo.Usuario;
 
 @Repository("repositorioAlquiler")
 public class RepositorioAlquilerImpl implements RepositorioAlquiler {
@@ -36,4 +37,15 @@ public class RepositorioAlquilerImpl implements RepositorioAlquiler {
 				.add(Restrictions.eq("user.id", usuarioId))
 				.list();
 		}
+
+	@Override
+	public Alquiler buscarAlquilerPorId(Long alquilerId) {
+
+	
+			return (Alquiler) sessionFactory.getCurrentSession().createCriteria(Alquiler.class)
+					.add(Restrictions.eq("id", alquilerId))
+					.uniqueResult();
+	
+
+	}
 }
