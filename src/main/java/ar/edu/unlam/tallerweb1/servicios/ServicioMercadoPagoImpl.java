@@ -23,19 +23,19 @@ public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
 	@Override
 	public Preference generarPago() {
 		
-		// Acá va la clave privada(Access Token) que se genera en la cuenta de MercadoPago del vendedor
+		// Acï¿½ va la clave privada(Access Token) que se genera en la cuenta de MercadoPago del vendedor
 		MercadoPagoConfig.setAccessToken("TEST-1032568009922245-071219-8dbd2f5e364c3b093e654948b2b20ed2-1159572865");
 
 		// Crea datos del cliente
 		PreferenceClient client = new PreferenceClient();
 
-		// Crea un ítem en la preferencia para el pago
+		// Crea un ï¿½tem en la preferencia para el pago
 		List<PreferenceItemRequest> items = new ArrayList<>();
 		PreferenceItemRequest item =
 		   PreferenceItemRequest.builder()
 		       .title("Locker") 
 		       .quantity(1) 
-		       .unitPrice(new BigDecimal("1")) // Debería obtenerse del precio del alquiler. Queda harcodeado para pruebas
+		       .unitPrice(new BigDecimal("1")) // Deberï¿½a obtenerse del precio del alquiler. Queda harcodeado para pruebas
 		       .build();
 		
 		items.add(item);
@@ -49,7 +49,7 @@ public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
 				       .failure("http://localhost:8080/proyecto-spring-limpio/payment/failure")
 				       .build();
 
-		// Genera la petición para la preferencia
+		// Genera la peticiï¿½n para la preferencia
 		PreferenceRequest request = PreferenceRequest.builder()
 				.items(items)
 				.backUrls(backUrls)
@@ -58,9 +58,9 @@ public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
 		Preference preference = null;
 		
 		try {
-			/* Creo que esto hace una petición post a un endpoint de mercadopago
+			/* Creo que esto hace una peticiï¿½n post a un endpoint de mercadopago
 			 para generar el pago en la cuenta del vendedor y devuelve el id y datos
-			 de la preferencia. Después desde el frontend se genera el botón del pago 
+			 de la preferencia. Despuï¿½s desde el frontend se genera el botï¿½n del pago 
 			 con ese id de preferencia. Con eso redirigo al usuario a un sitio de mercado
 			 pago para que pague con su tarjeta el item solicitado */
 			preference = client.create(request);

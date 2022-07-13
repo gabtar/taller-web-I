@@ -5,7 +5,6 @@
 	<head>
 	<%@ include file="vistaGenerales/head.jsp"%>
 	</head>
-</head>
 <body>
 	<%@ include file="vistaGenerales/navLogeado.jsp"%>
 	<div class="w3-main " style="margin-left: 340px; margin-right: 40px">
@@ -53,9 +52,9 @@
 							</c:if> 	
 					      </td>
 					      <td>
-					      	<c:if test="${alquiler.estadoAlquiler != 'PAGADO'}">
-								<button class="w3-button w3-indigo w3-round">Pagar</button>
-							</c:if> 	
+							<c:if test="${alquiler.estadoAlquiler != 'PAGADO'}">
+								<a href="${homeUrl}payment" onclick="w3_close()" class="w3-button w3-indigo w3-round">Pagar</a>
+							</c:if>
 					      </td>
 					    </tr>
 					    <tr>
