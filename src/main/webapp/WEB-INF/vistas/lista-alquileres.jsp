@@ -88,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 							<th class="w3-center">Sucursal</th>
 							<th class="w3-center">Localidad</th>
 							<th class="w3-center">Tamaño</th>
+							<th class="w3-center">dia</th>
 							<th class="w3-center">Alquilar</th>
 						</tr>
 					</thead>
@@ -98,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 							<td class="w3-center"><c:out value="${locker.sucursal.nombre}" /></td>
 							<td class="w3-center"><c:out value="${locker.sucursal.localidad.nombre}" /></td>
 							<td class="w3-center"><c:out value="${locker.tamanio.tamanio}" /></td>
+							<td class="w3-center">$<c:out value="${locker.tamanio.precio}" /></td>
 							<td class="w3-center"><form:form action="${homeUrl}modificar-locker/${locker.id}"
 									method="POST">
 									<button class="w3-button w3-indigo loading" type="submit" onclick="Confirmar();">Elegir</button>
