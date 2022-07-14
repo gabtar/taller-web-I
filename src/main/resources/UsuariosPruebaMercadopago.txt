@@ -1,0 +1,77 @@
+PeticiÛn para generar usuarios de prueba desde la terminal 
+o cualquier cliente REST
+
+curl -X POST \
+-H "Content-Type: application/json" \
+-H 'Authorization: Bearer ${TEST_ACCESS_TOKEN}' \
+"https://api.mercadopago.com/users/test" \
+-d '{"site_id":"MLA","description" : "a description"}'
+
+El token se genera desde la cuenta de MercadoPago que se quiere asociar como vendedor, ej
+TEST_ACCESS_TOKEN = TEST-2326172027190510-071114-df8f9f8021020944f9e5e81771bf247e-294672640
+
+Usuario prueba como vendedor
+---------------------------------------------------
+
+{
+"id":1159572865,
+"nickname":"TETE180465",
+"password":"qatest3004",
+"site_status":"active",
+"site_id":"MLA","description":"a description",
+"date_created":"2022-07-12T18:44:35-04:00",
+"date_last_updated":"2022-07-12T18:44:35-04:00"
+}
+
+Generar las claves de api para mercadopago con el usuario vendedor de test logueado desde:
+
+https://www.mercadopago.com.ar/settings/account/credentials
+
+Usar las claves para producciÛn del usuario: 
+
+Public Key: APP_USR-83a82121-8efa-4078-9db0-7f3e4082fdd7 
+(va en el lado de javascript) -> pago.jsp
+
+Access Token: APP_USR-1032568009922245-071219-223a7b5e2f6caaea96d5d50b59a1e889-1159572865
+(va del lado de spring) -> ServicioMercadoPago.java
+
+
+Usuario prueba como comprador
+---------------------------------------------------
+
+{ "id":1159588875,
+"nickname":"TESTQ1Y2ENTJ",
+"password":"qatest8557",
+"site_status":"active",
+"site_id":"MLA","description":"a description",
+"date_created":"2022-07-12T19:08:56-04:00",
+"date_last_updated":"2022-07-12T19:08:56-04:00"
+}
+
+Loguearse en mercadopago con el usuario de prueba como comprador y obtengo:
+
+DNI 	01111111
+email 	test_user_15521188@testuser.com
+
+
+Tarjetas de prueba:
+https://www.mercadopago.com.ar/developers/es/docs/checkout-pro/test-integration#bookmark_tarjetas_de_prueba
+
+Tarjetas de prueba	Numero					CVV		Vencimiento
+Mastercard			5031 7557 3453 0604		123		11/25
+Visa				4509 9535 6623 3704		123		11/25
+American Express	3711 803032 57522		1234	11/25
+
+
+Prueba para distintos estados del pago, completando en el nombre de la tarjeta:
+APRO	Pago aprobado											DNI del usuario de prueba
+OTHE	Rechazado por error general								DNI del usuario de prueba
+CONT	Pendiente de pago													-
+CALL	Rechazado con validaci√≥n para autorizar								-
+FUND	Rechazado por importe insuficiente									-
+SECU	Rechazado por c√≥digo de seguridad inv√°lido							-
+EXPI	Rechazado debido a un problema de fecha de vencimiento				-
+FORM	Rechazado debido a un error de formulario							-
+
+Cuando pide el dni en el proceso de pago hay usar el mismo que te dan del usuario de prueba, sino falla.
+

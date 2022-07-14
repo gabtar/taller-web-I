@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -64,27 +65,29 @@ public class ControladorAlquiler {
     }
 
     @RequestMapping(path = "/modificar-locker/{lockerId}", method = RequestMethod.POST)
-    public ModelAndView alquilarLocker(HttpServletRequest request, @PathVariable("lockerId") int lockerId) {
+    public ModelAndView alquilarLocker(HttpServletRequest request, @PathVariable("lockerId") int lockerId, RedirectAttributes redirectAttributes) {
     	
         Long usuarioId = (Long) request.getSession().getAttribute("userId");
         ModelMap modelo = new ModelMap();
         if(servicioAlquiler.alquilarLocker(lockerId, usuarioId)){
         	String usuario= (String) request.getSession().getAttribute("nombreUsuario");
         	final String TEXTO_EMAIL_REGISTRO = "usted a alquilado el locker " + lockerId + " gracias "+ usuario +" por elegirnos RENTLOCK";
+        	redirectAttributes.addFlashAttribute("mensaje", "Alquiler exitoso");
         	modelo.put("error", "Alquiler exitoso");
             servicioEmail.enviarMail(usuario, "Rent-Lock", TEXTO_EMAIL_REGISTRO);
             return new ModelAndView("redirect:/homeLogeado", modelo);
         }
-
+        redirectAttributes.addFlashAttribute("error", "Locker no disponible");
         modelo.put("error", "Locker no disponible");
         return new ModelAndView("redirect:/homeLogeado", modelo);
     }
 
     @RequestMapping(path = "/cancelar-locker/{lockerId}", method = RequestMethod.POST)
-    public ModelAndView cancelarLocker(HttpServletRequest request, @PathVariable("lockerId") int lockerId) {
+    public ModelAndView cancelarLocker(HttpServletRequest request, @PathVariable("lockerId") int lockerId, RedirectAttributes redirectAttributes) {
         Long usuarioId = (Long) request.getSession().getAttribute("userId");
         ModelMap modelo = new ModelMap();
         servicioAlquiler.cancelarLocker(lockerId, usuarioId);
+        redirectAttributes.addFlashAttribute("mensaje", "Cancelacion exitosa. Puede pagar mediante MercadoPago desde el registro de alquileres");
         modelo.put("error", "Cancelacion exitosa");
         return new ModelAndView("redirect:/homeLogeado", modelo);
     }

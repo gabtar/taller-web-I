@@ -12,6 +12,17 @@ function Confirmar(){
         return false;
     }
 }
+document.addEventListener('DOMContentLoaded', () => {
+	const botones = document.getElementsByClassName("loading");
+	
+	
+	for(button of botones) {
+		button.addEventListener('click', (e) => {
+			console.log(button.innerHTML);
+			e.target.innerHTML = "<i class='fa fa-spinner fa-spin'></i> Procesando";
+		});
+	}
+});
 </script>
 
 <head>
@@ -89,7 +100,7 @@ function Confirmar(){
 							<td class="w3-center"><c:out value="${locker.tamanio.tamanio}" /></td>
 							<td class="w3-center"><form:form action="${homeUrl}modificar-locker/${locker.id}"
 									method="POST">
-									<button class="w3-button w3-indigo" type="submit" onclick="Confirmar();">Elegir</button>
+									<button class="w3-button w3-indigo loading" type="submit" onclick="Confirmar();">Elegir</button>
 								</form:form></td>
 						</tr>
 					</c:forEach>

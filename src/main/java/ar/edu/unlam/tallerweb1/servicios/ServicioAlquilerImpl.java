@@ -68,11 +68,16 @@ public class ServicioAlquilerImpl implements ServicioAlquiler {
 			
 			// Libera el locker y escribe los datos del alquiler
 			locker.setAlquilerActivo(null);
+			locker.setCodigoApertura(null);
 			alquilerActual.setFechaFinalizacion(new Date(Calendar.getInstance().getTimeInMillis()));
 			alquilerActual.setEstadoAlquiler(EstadoAlquiler.FINALIZADO);
 			Long duracionAlquiler=(long) (alquilerActual.getFechaFinalizacion().getTime()-alquilerActual.getFechaInicio().getTime());
 			TimeUnit time = TimeUnit.DAYS; 
 	        long diffrence = time.convert(duracionAlquiler, TimeUnit.MILLISECONDS);
+	        if(diffrence < 1) {
+	        	diffrence = 1;
+	        }
+	        
 			Integer precio=(int) (diffrence*alquilerActual.getLocker().getTamanio().getPrecio());
 			alquilerActual.setPrecio(precio);
 			repositorioAlquilerDAO.modificar(alquilerActual);

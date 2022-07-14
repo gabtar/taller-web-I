@@ -104,5 +104,22 @@ public class RepositorioAlquilerTest extends SpringTest {
 		
 		return usuario;
 	}
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void testQuePuedaBuscarUnAlquilerPorId() {
+		Alquiler alquilerEsperado = dadoQueExisteUnAlquiler();
+		Alquiler alquilerObtendio = cuandoBuscoUnAlquilerPorId(alquilerEsperado.getId());
+		entoncesObtengo(alquilerEsperado, alquilerObtendio);
+	}
+
+	private void entoncesObtengo(Alquiler alquilerEsperado, Alquiler alquilerObtendio) {
+		assertThat(alquilerEsperado).isEqualTo(alquilerObtendio);
+	}
+
+	private Alquiler cuandoBuscoUnAlquilerPorId(Long id) {
+		return repositorioAlquiler.buscarAlquilerPorId(id);
+	}
 
 }

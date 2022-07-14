@@ -14,6 +14,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -40,6 +41,7 @@ public class ControladorAlquilerTest {
     private ServicioSucursal servicioSucursal;
     private ServicioEmail servicioEmail;
     private ControladorAlquiler controladorAlquiler;
+    private RedirectAttributes redirectAttributes;
     private Usuario usuario;
     private static int lockerId= 1;
     private static Long usuarioId = 1L;
@@ -54,6 +56,7 @@ public class ControladorAlquilerTest {
 		servicioAlquiler = mock(ServicioAlquiler.class);
 		servicioSucursal = mock(ServicioSucursal.class);
 		servicioEmail = mock(ServicioEmail.class);
+		redirectAttributes = mock(RedirectAttributes.class);
 		request = mock(HttpServletRequest.class);
 		session = mock(HttpSession.class);
 		controladorAlquiler = new ControladorAlquiler(servicioAlquiler, servicioSucursal, servicioEmail);
@@ -81,7 +84,7 @@ public class ControladorAlquilerTest {
         when(request.getSession()).thenReturn(session);
         when(request.getSession().getAttribute("userId")).thenReturn(usuarioId);
         when(request.getSession().getAttribute("nombreUsuario")).thenReturn("pepe@pepe");
-        return controladorAlquiler.alquilarLocker(request, lockerId);
+        return controladorAlquiler.alquilarLocker(request, lockerId, redirectAttributes);
     }
 
     private void entoncesMeLlevaALaVista(ModelAndView mav) {
@@ -152,7 +155,7 @@ public class ControladorAlquilerTest {
     }
 
     private ModelAndView cuandoQuieroCancelarElLocker() {
-        return controladorAlquiler.cancelarLocker(request, lockerId);
+        return controladorAlquiler.cancelarLocker(request, lockerId, redirectAttributes);
     }
 
     private void entoncesPuedoCancelarElLockerYMeLlevaALaSiguienteVista(ModelAndView mav) {

@@ -46,7 +46,7 @@ public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
 		List<PreferenceItemRequest> items = new ArrayList<>();
 		PreferenceItemRequest item =
 		   PreferenceItemRequest.builder()
-		       .title("Locker") 
+		       .title("Locker")
 		       .quantity(1) 
 		       .unitPrice(new BigDecimal(alquiler.getPrecio())) // Deber�a obtenerse del precio del alquiler. Queda harcodeado para pruebas
 		       .build();

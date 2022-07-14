@@ -12,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import ar.edu.unlam.tallerweb1.modelo.Sucursal;
+import ar.edu.unlam.tallerweb1.modelo.Tamanio;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioSucursal;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioUsuario;
 
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ServicioAlquilerTest {
@@ -37,6 +39,7 @@ public class ServicioAlquilerTest {
 	private static final String TAMANIO_CHICO = "20x50x60";
 	private static final Integer LOCKER_ID = 1;
 	private static final Long USUARIO_ID = 1L;
+	private static final Long ALQUILER_ID = 5L;
 	private RepositorioAlquiler repositorioAlquilerDAO;
 	private RepositorioUsuario repositorioUsuario;
 	private ServicioAlquilerImpl servicioAlquiler;
@@ -51,6 +54,7 @@ public class ServicioAlquilerTest {
 
 	HttpServletRequest request;
 	HttpSession session;
+	private Tamanio tamanioPrueba;
 
 	@Before
 	public void setUp() throws Exception {
@@ -62,6 +66,7 @@ public class ServicioAlquilerTest {
 		usuario = mock(Usuario.class);
 		lockerPrueba = mock(Locker.class);
 		alquiler = mock(Alquiler.class);
+		tamanioPrueba = mock(Tamanio.class);
 		servicioAlquiler = new ServicioAlquilerImpl(repositorioLockerDAO, repositorioAlquilerDAO, repositorioUsuario);
 		repositorioSucursal = mock(RepositorioSucursal.class);
 		servicioSucursal = new ServicioSucursalImpl(repositorioSucursal);
@@ -169,6 +174,11 @@ public class ServicioAlquilerTest {
 	private Boolean cuandoQuieroCancelar(){
 		when(repositorioLockerDAO.buscarLockerPorId(LOCKER_ID)).thenReturn(lockerPrueba);
 		when(lockerPrueba.getAlquilerActivo()).thenReturn(alquiler);
+		when(alquiler.getFechaFinalizacion()).thenReturn(new Date());
+		when(alquiler.getFechaInicio()).thenReturn(new Date());
+		when(alquiler.getLocker()).thenReturn(lockerPrueba);
+		when(lockerPrueba.getTamanio()).thenReturn(tamanioPrueba);
+		when(tamanioPrueba.getPrecio()).thenReturn(1);
 		
 		boolean actual = servicioAlquiler.cancelarLocker(LOCKER_ID, USUARIO_ID);
 		return actual;
@@ -232,6 +242,12 @@ public class ServicioAlquilerTest {
 		when(repositorioLockerDAO.buscarLockerPorId(LOCKER_ID)).thenReturn(lockerPrueba);
 		when(repositorioLockerDAO.buscarLockerPorId(LOCKER_ID)).thenReturn(lockerPrueba);
 		when(lockerPrueba.getAlquilerActivo()).thenReturn(alquiler);
+		when(alquiler.getFechaFinalizacion()).thenReturn(new Date());
+		when(alquiler.getFechaInicio()).thenReturn(new Date());
+		when(alquiler.getLocker()).thenReturn(lockerPrueba);
+		when(lockerPrueba.getTamanio()).thenReturn(tamanioPrueba);
+		when(tamanioPrueba.getPrecio()).thenReturn(1);
+		
 		servicioAlquiler.cancelarLocker(LOCKER_ID, USUARIO_ID);
 	}
 	private Alquiler dadoQueTengoUnLockerAsociadoAUnAlquiler() {
@@ -242,5 +258,12 @@ public class ServicioAlquilerTest {
 	public void testQueSePuedanObtenerElRegistroDeAlquileresDeUnUsuario() {
 		servicioAlquiler.obtenerRegistroDeAlquileres(USUARIO_ID);
 		verify(repositorioAlquilerDAO, times(1)).listarAlquileresDelUsuario(USUARIO_ID);
+	}
+	
+	@Test
+	public void testQueSePuedaEstablecerElEstadoDelAlquiler() {
+		when(repositorioAlquilerDAO.buscarAlquilerPorId(ALQUILER_ID)).thenReturn(alquiler);
+		servicioAlquiler.setEstadoAlquiler(ALQUILER_ID);
+		verify(repositorioAlquilerDAO, times(1)).modificar(any(Alquiler.class));
 	}
 }

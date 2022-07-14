@@ -10,10 +10,10 @@ INSERT INTO `localidad` (`id`, `nombre`) VALUES
 (5, 'Ciudadela');
 
 -- Tamanios de Lockers
-INSERT INTO `tamanio` (`id`, `tamanio`) VALUES
-(1, '60x50x50'),
-(2, '90x80x80'),
-(3, '120x100x100');
+INSERT INTO `tamanio` (`id`, `tamanio`, `precio`) VALUES
+(1, '60x50x50', 1),
+(2, '90x80x80', 5),
+(3, '120x100x100', 10);
 
 -- Sucursales
 INSERT INTO `sucursal` (`id`, `nombre`, `localidad_id`, `latitud`, `longitud`) VALUES
